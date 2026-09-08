@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "upstream_version": "8.0.1",
+  "upstream_commit": "f30496d66c42e1d0a4de56b00b1e4041dbd543ab",
+  "source_tree_sha256": "ce0d9393bd69c997aceeb3f7035123544529a2ec6605c950cac65b6ecd310c68",
+  "entries": [
+    {"module": "lib/idx/idxState/v1/actionParser.ts", "symbol": "divideActionParamsByMutability"},
+    {"module": "lib/idx/remediators/GenericRemediator/util.ts", "symbol": "unwrapFormValue"}
+  ],
+  "constants": {}
+}

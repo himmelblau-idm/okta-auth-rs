@@ -1,0 +1,298 @@
+/*!
+ * Copyright (c) 2015-present, Okta, Inc. and/or its affiliates. All rights reserved.
+ * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
+ *
+ * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * 
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
+
+import { startTransaction } from '../../../lib/idx/startTransaction';
+import { IdxFeature, IdxStatus } from '../../../lib/idx/types';
+
+import { 
+  IdxResponseFactory,
+  SelectEnrollProfileRemediationFactory,
+  RedirectIdpRemediationFactory,
+  IdentifyRemediationFactory,
+  RawIdxResponseFactory,
+  IdxAuthenticatorFactory,
+} from '@okta/test.support/idx';
+import util from '@okta/test.support/util';
+
+const mocked = {
+  interact: require('../../../lib/idx/interact'),
+  introspect: require('../../../lib/idx/introspect'),
+  remediate: require('../../../lib/idx/remediate'),
+  transactionMeta: require('../../../lib/idx/transactionMeta'),
+  run: require('../../../lib/idx/run'),
+};
+
+describe('idx/startTransaction', () => {
+  beforeAll(() => {
+    util.setRemediatorsCtx();
+  });
+
+  let testContext;
+
+  beforeEach(() => {
+    const stateHandle = 'test-stateHandle';
+
+    const issuer = 'test-issuer';
+    const clientId = 'test-clientId';
+    const redirectUri = 'test-redirectUri';
+    const transactionMeta = {
+      issuer,
+      clientId,
+      redirectUri,
+      state: 'meta-state',
+      codeVerifier: 'meta-code',
+      scopes: ['meta'],
+      urls: { authorizeUrl: 'meta-authorizeUrl' },
+      ignoreSignature: true,
+    };
+    const authClient = {
+      options: {
+        issuer,
+        clientId,
+        redirectUri
+      },
+      transactionManager: {
+        exists: () => true,
+        load: () => transactionMeta,
+        clear: () => {},
+        save: () => {},
+        saveIdxResponse: () => {}
+      },
+      idx: {
+        getFlow: () => {},
+        setFlow: () => {}
+      },
+      token: {
+        exchangeCodeForTokens: () => {}
+      }
+    };
+
+    const idxResponse = IdxResponseFactory.build({
+      neededToProceed: [
+        IdentifyRemediationFactory.build(),
+      ]
+    });
+    jest.spyOn(mocked.interact, 'interact').mockResolvedValue({
+      meta: transactionMeta,
+      interactionHandle: 'meta-interactionHandle',
+      state: transactionMeta.state
+    });
+    jest.spyOn(mocked.introspect, 'introspect').mockResolvedValue(idxResponse);
+    jest.spyOn(mocked.remediate, 'remediate').mockResolvedValue({ idxResponse });
+    jest.spyOn(mocked.transactionMeta, 'getSavedTransactionMeta').mockReturnValue(undefined);
+    testContext = {
+      issuer,
+      clientId,
+      redirectUri,
+      stateHandle,
+      transactionMeta,
+      authClient,
+      idxResponse
+    };
+  });
+
+  it('clears transaction data', async () => {
+    const { authClient } = testContext;
+    jest.spyOn(authClient.transactionManager, 'clear');
+    await startTransaction(authClient);
+    expect(authClient.transactionManager.clear).toHaveBeenCalledWith();
+  });
+
+  it('calls interact, introspect, and remediate', async () => {
+    const { authClient, idxResponse } = testContext;
+    await startTransaction(authClient, { enableLegacyMode: true });
+    expect(mocked.interact.interact).toHaveBeenCalledWith(authClient, { withCredentials: true });
+    expect(mocked.introspect.introspect).toHaveBeenCalledWith(authClient, { 
+      withCredentials: true,
+      interactionHandle: 'meta-interactionHandle' 
+    });
+    expect(mocked.remediate.remediate).toHaveBeenCalledWith(
+      authClient,
+      // IDX response
+      idxResponse,
+      // values
+      {
+        stateHandle: 'unknown-stateHandle'
+      },
+      // flowMonitor
+      expect.any(Object)
+    );
+  });
+
+  describe('enableLegacyMode', () => {
+    it('defaults to step mode (autoRemediate: false) when enableLegacyMode is not set', async () => {
+      const runSpy = jest.spyOn(mocked.run, 'run');
+      const { authClient } = testContext;
+      await startTransaction(authClient);
+      expect(mocked.remediate.remediate).not.toHaveBeenCalled();
+      expect(runSpy).toHaveBeenCalledWith(authClient, {
+        exchangeCodeForTokens: false,
+        autoRemediate: false,
+      });
+    });
+    it('does not set autoRemediate when enableLegacyMode is true', async () => {
+      const runSpy = jest.spyOn(mocked.run, 'run');
+      const { authClient } = testContext;
+      await startTransaction(authClient, { enableLegacyMode: true });
+      expect(mocked.remediate.remediate).toHaveBeenCalled();
+      expect(runSpy).toHaveBeenCalledWith(authClient, {
+        exchangeCodeForTokens: false,
+        enableLegacyMode: true,
+      });
+    });
+    it('sets autoRemediate: false when enableLegacyMode is explicitly false', async () => {
+      const runSpy = jest.spyOn(mocked.run, 'run');
+      const { authClient } = testContext;
+      await startTransaction(authClient, { enableLegacyMode: false });
+      expect(mocked.interact.interact).toHaveBeenCalledWith(authClient, { withCredentials: true });
+      expect(mocked.introspect.introspect).toHaveBeenCalledWith(authClient, {
+        withCredentials: true,
+        interactionHandle: 'meta-interactionHandle'
+      });
+      expect(mocked.remediate.remediate).not.toHaveBeenCalled();
+      expect(runSpy).toHaveBeenCalledWith(authClient, {
+        exchangeCodeForTokens: false,
+        autoRemediate: false,
+        enableLegacyMode: false
+      });
+    });
+  });
+
+  it('does not attempt to exchange code for tokens', async () => {
+    const { authClient, idxResponse } = testContext;
+    idxResponse.interactionCode = 'fake';
+    jest.spyOn(authClient.token, 'exchangeCodeForTokens');
+    await startTransaction(authClient);
+    expect(authClient.token.exchangeCodeForTokens).not.toHaveBeenCalled();
+  });
+
+  describe('response', () => {
+    it('returns a transaction object', async () => {
+      const { authClient, idxResponse, transactionMeta } = testContext;
+      const res = await startTransaction(authClient);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { toPersist, ...rest } = idxResponse;
+      expect(res).toEqual(Object.assign({}, rest, {
+        status: 'PENDING',
+        availableSteps: [{
+          inputs: [{
+            label: 'Username',
+            name: 'username',
+            required: true,
+          }],
+          name: 'identify'
+        }],
+        enabledFeatures: [],
+        meta: transactionMeta,
+      }));
+    });
+    it('exposes transaction meta in the response', async () => {
+      const { authClient, transactionMeta } = testContext;
+      const res = await startTransaction(authClient);
+      expect(res.meta).toEqual(transactionMeta);
+    });
+  
+    it('if there is no interactionCode on the response, returns transaction in pending status', async () => {
+      const { authClient } = testContext;
+      const res = await startTransaction(authClient);
+      expect(res.status).toEqual(IdxStatus.PENDING);
+    });
+
+    it('if there is an interactionCode on the response, returns transaction with status=SUCCESS', async () => {
+      const { authClient, idxResponse } = testContext;
+      idxResponse.interactionCode = 'fake';
+  
+      const res = await startTransaction(authClient);
+      expect(res.status).toEqual(IdxStatus.SUCCESS);
+    });
+
+  });
+
+
+  it('has password-recovery feature enabled with currentAuthenticator-recover action', async () => {
+    const idxResponse = IdxResponseFactory.build({
+      actions: { 
+        'currentAuthenticator-recover': (() => {})
+      },
+      rawIdxState: RawIdxResponseFactory.build({
+        currentAuthenticator: {
+          type: 'object',
+          value: IdxAuthenticatorFactory.build({
+            recover: {}
+          }),
+        },
+      }),
+    });
+    jest.spyOn(mocked.introspect, 'introspect').mockResolvedValue(idxResponse);
+    jest.spyOn(mocked.remediate, 'remediate').mockResolvedValue({ idxResponse });
+    const { authClient } = testContext;
+    const res = await startTransaction(authClient);
+    expect(res.enabledFeatures!.includes(IdxFeature.PASSWORD_RECOVERY)).toBeTruthy();
+  });
+
+  it('has registration feature enabled with RegistrationEnabledResponseFactory', async () => {
+    const idxResponse = IdxResponseFactory.build({
+      neededToProceed: [
+        SelectEnrollProfileRemediationFactory.build()
+      ]
+    });
+    jest.spyOn(mocked.introspect, 'introspect').mockResolvedValue(idxResponse);
+    jest.spyOn(mocked.remediate, 'remediate').mockResolvedValue({ idxResponse });
+    const { authClient } = testContext;
+    const res = await startTransaction(authClient);
+    expect(res.enabledFeatures!.includes(IdxFeature.REGISTRATION)).toBeTruthy();
+  });
+
+  it('has social idp feature enabled with SocialIDPEnabledResponseFactory', async () => {
+    const idxResponse = IdxResponseFactory.build({
+      neededToProceed: [
+        RedirectIdpRemediationFactory.build()
+      ]
+    });
+    jest.spyOn(mocked.introspect, 'introspect').mockResolvedValue(idxResponse);
+    jest.spyOn(mocked.remediate, 'remediate').mockResolvedValue({ idxResponse });
+    const { authClient } = testContext;
+    const res = await startTransaction(authClient);
+    expect(res.enabledFeatures!.includes(IdxFeature.SOCIAL_IDP)).toBeTruthy();
+  });
+
+  it('maps remediations to availableSteps', async () => {
+    const idxResponse = IdxResponseFactory.build({
+      neededToProceed: [
+        IdentifyRemediationFactory.build(),
+        SelectEnrollProfileRemediationFactory.build()
+      ]
+    });
+    jest.spyOn(mocked.introspect, 'introspect').mockResolvedValue(idxResponse);
+    jest.spyOn(mocked.remediate, 'remediate').mockResolvedValue({ idxResponse });
+    const { authClient } = testContext;
+    const res = await startTransaction(authClient);
+    expect(res.availableSteps).toEqual([
+      {
+        inputs: [
+          { 
+            label: 'Username', 
+            name: 'username',
+            required: true,
+          }
+        ], 
+        name: 'identify'
+      }, 
+      {
+        inputs: [],
+        name: 'select-enroll-profile'
+      }
+    ]);
+  });
+
+});

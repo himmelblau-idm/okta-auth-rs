@@ -1,0 +1,318 @@
+/*!
+ * Copyright (c) 2015-present, Okta, Inc. and/or its affiliates. All rights reserved.
+ * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
+ *
+ * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * 
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+ 
+
+import { AuthSdkError } from '../errors';
+import {
+  EVENT_ADDED,
+  EVENT_REMOVED,
+  OAuthStorageManagerInterface,
+  OAuthTransactionMeta,
+  OktaAuthOAuthInterface
+} from '../oidc';
+import {
+  AuthState,
+  AuthStateLogOptions,
+  OktaAuthCoreOptions,
+} from './types';
+import { PromiseQueue, getConsole } from '../util';
+
+export const INITIAL_AUTH_STATE = null;
+const DEFAULT_PENDING = {
+  updateAuthStatePromise: null,
+  canceledTimes: 0
+};
+const EVENT_AUTH_STATE_CHANGE = 'authStateChange';
+const MAX_PROMISE_CANCEL_TIMES = 10;
+
+// only compare first level of authState
+const isSameAuthState = (prevState: AuthState | null, state: AuthState) => {
+  // initial state is null
+  if (!prevState) {
+    return false;
+  }
+
+  return prevState.isAuthenticated === state.isAuthenticated 
+    && JSON.stringify(prevState.idToken) === JSON.stringify(state.idToken)
+    && JSON.stringify(prevState.accessToken) === JSON.stringify(state.accessToken)
+    && prevState.error === state.error;
+};
+
+type CancelablePromiseState = 'PENDING' | 'CANCELED' | 'SETTLED';
+
+/**
+ * Based on https://www.npmjs.com/package/p-cancelable, which was used in previous versions of authjs
+ * `p-cancelable` has been deprecated in favor of `AbortController` and is sometimes flagged on dependency scans
+ * as not being supported. Unfortunately, `AbortController` is not supported in IE11
+ *
+ * tldr; This class aims to replace `p-cancelable` to maintain IE11 support
+ */
+class CancelablePromise<T = any> implements PromiseLike<T> {
+  #_state: CancelablePromiseState = 'PENDING';
+  #promise: Promise<T>;
+  // eslint-disable-next-line no-use-before-define
+  #cancelHandlers: Parameters<Parameters<ConstructorParameters<typeof CancelablePromise>[0]>[2]>[0][] = [];
+
+  // defaults to no-op to satisfy TS, will be re-set in `executor` when construct is invoked
+  #rejector: Parameters<ConstructorParameters<typeof Promise<T>>[0]>[1] = () => {};
+
+  constructor (
+    executor: (
+      ...args: [
+        resolve: Parameters<ConstructorParameters<typeof Promise<T>>[0]>[0],
+        reject: Parameters<ConstructorParameters<typeof Promise<T>>[0]>[1],
+        onCancel: (callback: () => void) => void
+      ]
+    ) => void
+  ) {
+
+    this.#promise = new Promise((resolve, reject) => {
+      this.#rejector = reject;
+
+      const onResolve = (result) => {
+        resolve(result);
+        this.#state = 'SETTLED';
+      };
+
+      const onReject = (error) => {
+        reject(error);
+        this.#state = 'SETTLED';
+      };
+
+      const onCancel = handler => {
+        this.#cancelHandlers.push(handler);
+      };
+
+      executor(onResolve, onReject, onCancel);
+    });
+  }
+
+  get #state (): CancelablePromiseState {
+    return this.#_state;
+  }
+
+  set #state (state: CancelablePromiseState) {
+    if (this.#state === 'PENDING') {
+      this.#_state = state;
+    }
+  }
+
+  // @ts-expect-error - the type for `Promise.then` is unnecessarily complex
+  then (...args: Parameters<Promise<T>['then']>): ReturnType<Promise<T>['then']> {
+    return this.#promise.then(...args);
+  }
+
+  catch (...args: Parameters<Promise<T>['catch']>): ReturnType<Promise<T>['catch']> {
+    return this.#promise.catch(...args);
+  }
+
+  finally (...args: Parameters<Promise<T>['finally']>): ReturnType<Promise<T>['finally']> {
+    return this.#promise.finally(...args);
+  }
+
+  cancel () {
+    if (this.#state !== 'PENDING') {
+      return;
+    }
+
+    this.#state = 'CANCELED';
+
+    if (this.#cancelHandlers.length > 0) {
+      try {
+				for (const handler of this.#cancelHandlers) {
+					handler();
+				}
+			}
+      catch (error) {
+				this.#rejector(error);
+				return;
+			}
+    }
+  }
+
+  get isCanceled (): boolean {
+    return this.#state === 'CANCELED';
+  }
+}
+
+// Used for `instanceof` checks
+Object.setPrototypeOf(CancelablePromise.prototype, Promise.prototype);
+
+export class AuthStateManager
+<
+  M extends OAuthTransactionMeta,
+  S extends OAuthStorageManagerInterface<M>,
+  O extends OktaAuthCoreOptions
+>
+{
+  _sdk: OktaAuthOAuthInterface<M, S, O>;
+  _pending: { 
+    updateAuthStatePromise: any;
+    canceledTimes: number; 
+  };
+  _authState: AuthState | null;
+  _prevAuthState: AuthState | null;
+  _logOptions: AuthStateLogOptions;
+  _transformQueue: PromiseQueue;
+
+  constructor(sdk: OktaAuthOAuthInterface<M, S, O>) {
+    if (!sdk.emitter) {
+      throw new AuthSdkError('Emitter should be initialized before AuthStateManager');
+    }
+
+    this._sdk = sdk;
+    this._pending = { ...DEFAULT_PENDING };
+    this._authState = INITIAL_AUTH_STATE;
+    this._logOptions = {};
+    this._prevAuthState = null;
+    this._transformQueue = new PromiseQueue({
+      quiet: true
+    });
+
+    // Listen on tokenManager events to start updateState process
+    // "added" event is emitted in both add and renew process
+    // Only listen on "added" event to update auth state
+    sdk.tokenManager.on(EVENT_ADDED, (key, token) => {
+      this._setLogOptions({ event: EVENT_ADDED, key, token });
+      this.updateAuthState();
+    });
+    sdk.tokenManager.on(EVENT_REMOVED, (key, token) => {
+      this._setLogOptions({ event: EVENT_REMOVED, key, token });
+      this.updateAuthState();
+    });
+  }
+
+  _setLogOptions(options) {
+    this._logOptions = options;
+  }
+
+  getAuthState(): AuthState | null {
+    return this._authState;
+  }
+
+  getPreviousAuthState(): AuthState | null {
+    return this._prevAuthState;
+  }
+
+  async updateAuthState(): Promise<AuthState> {
+    const { transformAuthState, devMode } = this._sdk.options;
+
+    const log = (status) => {
+      const { event, key, token } = this._logOptions;
+      getConsole().group(`OKTA-AUTH-JS:updateAuthState: Event:${event} Status:${status}`);
+      getConsole().log(key, token);
+      getConsole().log('Current authState', this._authState);
+      getConsole().groupEnd();
+      
+      // clear log options after logging
+      this._logOptions = {};
+    };
+
+    const emitAuthStateChange = (authState) => {
+      if (isSameAuthState(this._authState, authState)) {
+        devMode && log('unchanged'); 
+        return;
+      }
+      this._prevAuthState = this._authState;
+      this._authState = authState;
+      // emit new authState object
+      this._sdk.emitter.emit(EVENT_AUTH_STATE_CHANGE, { ...authState });
+      devMode && log('emitted');
+    };
+
+    const finalPromise = (origPromise) => {       
+      return this._pending.updateAuthStatePromise.then(() => {
+        const curPromise = this._pending.updateAuthStatePromise;
+        if (curPromise && curPromise !== origPromise) {
+          return finalPromise(curPromise);
+        }
+        return this.getAuthState();
+      });
+    };
+
+    if (this._pending.updateAuthStatePromise) {
+      if (this._pending.canceledTimes >= MAX_PROMISE_CANCEL_TIMES) {
+        // stop canceling then starting a new promise
+        // let existing promise finish to prevent running into loops
+        devMode && log('terminated');
+        return finalPromise(this._pending.updateAuthStatePromise);
+      } else {
+        this._pending.updateAuthStatePromise.cancel();
+      }
+    }
+
+    /* eslint-disable complexity */
+    const cancelablePromise = new CancelablePromise((resolve, _, onCancel) => {
+      onCancel(() => {
+        this._pending.updateAuthStatePromise = null;
+        this._pending.canceledTimes = this._pending.canceledTimes + 1;
+        devMode && log('canceled');
+      });
+
+      const emitAndResolve = (authState) => {
+        if (cancelablePromise.isCanceled) {
+          resolve(undefined);
+          return;
+        }
+        // emit event and resolve promise 
+        emitAuthStateChange(authState);
+        resolve(undefined);
+
+        // clear pending states after resolve
+        this._pending = { ...DEFAULT_PENDING };
+      };
+
+      this._sdk.isAuthenticated()
+        .then((isAuthenticated) => {
+          if (cancelablePromise.isCanceled) {
+            resolve(undefined);
+            return;
+          }
+
+          const { accessToken, idToken, refreshToken } = this._sdk.tokenManager.getTokensSync();
+          const authState = {
+            accessToken,
+            idToken,
+            refreshToken,
+            isAuthenticated
+          };
+
+          // Enqueue transformAuthState so that it does not run concurrently
+          const promise: Promise<AuthState> = transformAuthState
+            ? this._transformQueue.push(transformAuthState, null, this._sdk, authState) as Promise<AuthState>
+            : Promise.resolve(authState);
+
+          promise
+            .then(authState => emitAndResolve(authState))
+            .catch(error => emitAndResolve({
+              accessToken, 
+              idToken, 
+              refreshToken,
+              isAuthenticated: false, 
+              error
+            }));
+        });
+    });
+    /* eslint-enable complexity */
+    this._pending.updateAuthStatePromise = cancelablePromise;
+
+    return finalPromise(cancelablePromise);
+  }
+
+  subscribe(handler): void {
+    this._sdk.emitter.on(EVENT_AUTH_STATE_CHANGE, handler);
+  }
+
+  unsubscribe(handler?): void {
+    this._sdk.emitter.off(EVENT_AUTH_STATE_CHANGE, handler);
+  }
+}

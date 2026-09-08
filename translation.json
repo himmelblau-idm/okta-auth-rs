@@ -1,0 +1,157 @@
+{
+  "schema": 1,
+  "upstream_version": "8.0.1",
+  "upstream_commit": "f30496d66c42e1d0a4de56b00b1e4041dbd543ab",
+  "source_tree_sha256": "ce0d9393bd69c997aceeb3f7035123544529a2ec6605c950cac65b6ecd310c68",
+  "entries": [
+    {
+      "module": "lib/idx/idxState/v1/actionParser.ts",
+      "symbol": "divideActionParamsByMutability"
+    },
+    {
+      "module": "lib/idx/remediators/GenericRemediator/util.ts",
+      "symbol": "unwrapFormValue"
+    },
+    {
+      "module": "lib/idx/startTransaction.ts",
+      "symbol": "startTransaction"
+    },
+    {
+      "module": "lib/idx/proceed.ts",
+      "symbol": "proceed"
+    },
+    {
+      "module": "lib/idx/introspect.ts",
+      "symbol": "introspect"
+    },
+    {
+      "module": "lib/idx/idxState/v1/makeIdxState.ts",
+      "symbol": "makeIdxState",
+      "export_as": "makeIdxStateV1"
+    },
+    {
+      "module": "lib/idx/transactionMeta.ts",
+      "symbol": "createTransactionMeta"
+    },
+    {
+      "module": "lib/idx/transactionMeta.ts",
+      "symbol": "getSavedTransactionMeta"
+    },
+    {
+      "module": "lib/idx/webauthn.ts",
+      "symbol": "buildCredentialCreationOptions"
+    },
+    {
+      "module": "lib/idx/webauthn.ts",
+      "symbol": "buildCredentialRequestOptions"
+    },
+    {
+      "module": "lib/idx/webauthn.ts",
+      "symbol": "getAttestation"
+    },
+    {
+      "module": "lib/idx/webauthn.ts",
+      "symbol": "getAssertion"
+    },
+    {
+      "module": "lib/oidc/exchangeCodeForTokens.ts",
+      "symbol": "exchangeCodeForTokens"
+    },
+    {
+      "module": "lib/oidc/verifyToken.ts",
+      "symbol": "verifyToken"
+    },
+    {
+      "module": "lib/oidc/renewTokensWithRefresh.ts",
+      "symbol": "renewTokensWithRefresh"
+    },
+    {
+      "module": "lib/oidc/revokeToken.ts",
+      "symbol": "revokeToken"
+    },
+    {
+      "module": "lib/oidc/getUserInfo.ts",
+      "symbol": "getUserInfo"
+    },
+    {
+      "module": "lib/idx/handleInteractionCodeRedirect.ts",
+      "symbol": "handleInteractionCodeRedirect"
+    },
+    {
+      "module": "lib/idx/emailVerify.ts",
+      "symbol": "parseEmailVerifyCallback"
+    },
+    {
+      "module": "lib/util/jsonpath.ts",
+      "symbol": "jsonpath"
+    },
+    {
+      "module": "lib/crypto/oidcHash.ts",
+      "symbol": "getOidcHash"
+    },
+    {
+      "module": "lib/crypto/verifyToken.ts",
+      "symbol": "verifyToken",
+      "export_as": "verifySignature"
+    },
+    {
+      "module": "lib/crypto/base64.ts",
+      "symbol": "base64UrlToString"
+    },
+    {
+      "module": "lib/oidc/util/validateClaims.ts",
+      "symbol": "validateClaims"
+    },
+    {
+      "module": "lib/util/url.ts",
+      "symbol": "toQueryString"
+    },
+    {
+      "module": "lib/oidc/endpoints/token.ts",
+      "symbol": "getPostData"
+    },
+    {
+      "module": "lib/oidc/util/prepareTokenParams.ts",
+      "symbol": "prepareTokenParams"
+    },
+    {
+      "module": "lib/fetch/fetchRequest.ts",
+      "symbol": "default",
+      "export_as": "fetchRequest"
+    },
+    {
+      "module": "lib/idx/idxState/index.ts",
+      "symbol": "makeIdxState"
+    },
+    {
+      "module": "lib/idx/IdxTransactionManager.ts",
+      "symbol": "createIdxTransactionManager"
+    },
+    {
+      "module": "lib/oidc/decodeToken.ts",
+      "symbol": "decodeToken"
+    },
+    {
+      "module": "lib/idx/run.ts",
+      "symbol": "getTokens"
+    },
+    {
+      "module": "lib/oidc/util/oauth.ts",
+      "symbol": "getOAuthUrls"
+    },
+    {
+      "module": "lib/idx/emailVerify.ts",
+      "symbol": "isEmailVerifyCallback"
+    },
+    {
+      "module": "lib/idx/emailVerify.ts",
+      "symbol": "handleEmailVerifyCallback"
+    },
+    {
+      "module": "lib/idx/proceed.ts",
+      "symbol": "canProceed"
+    }
+  ],
+  "constants": {},
+  "native_profile": true
+}

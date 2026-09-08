@@ -1,0 +1,11 @@
+okta-auth-rs translator
+
+Original Rust code is licensed under the GNU Lesser General Public License,
+version 3 or (at your option) any later version. See LICENSE and LICENSE-GPL.
+
+This product includes vendored and translated portions of Okta Auth JS,
+Copyright (c) 2015-present, Okta, Inc. and/or its affiliates, licensed under
+the Apache License, Version 2.0. See vendor/okta-auth-js/LICENSE and
+vendor/okta-auth-js/THIRD-PARTY-NOTICES.
+
+Other dependencies retain their respective copyrights and licenses.

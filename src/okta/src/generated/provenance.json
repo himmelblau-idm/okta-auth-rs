@@ -1,0 +1,814 @@
+{
+  "schema": 1,
+  "upstream_version": "8.0.1",
+  "upstream_commit": "f30496d66c42e1d0a4de56b00b1e4041dbd543ab",
+  "manifest_sha256": "21d86935a65cccec0f1a3a55fea8b3e6033f6c0d48c0b6733459db8542a427a4",
+  "syntax": {
+    "ArrayExpression": 58,
+    "ArrayPattern": 7,
+    "ArrowFunctionExpression": 72,
+    "AssignmentExpression": 232,
+    "AssignmentPattern": 38,
+    "AwaitExpression": 35,
+    "BinaryExpression": 227,
+    "BlockStatement": 600,
+    "BreakStatement": 5,
+    "CallExpression": 623,
+    "CatchClause": 9,
+    "ChainExpression": 43,
+    "ClassBody": 10,
+    "ClassDeclaration": 8,
+    "ClassExpression": 2,
+    "ConditionalExpression": 17,
+    "ContinueStatement": 3,
+    "EmptyStatement": 4,
+    "ExpressionStatement": 324,
+    "ForInStatement": 3,
+    "ForOfStatement": 12,
+    "ForStatement": 3,
+    "FunctionDeclaration": 134,
+    "FunctionExpression": 65,
+    "Identifier": 5728,
+    "IfStatement": 291,
+    "Literal": 520,
+    "LogicalExpression": 227,
+    "MemberExpression": 1265,
+    "MetaProperty": 1,
+    "MethodDefinition": 39,
+    "NewExpression": 69,
+    "ObjectExpression": 241,
+    "ObjectPattern": 70,
+    "ParenthesizedExpression": 69,
+    "Property": 615,
+    "PropertyDefinition": 34,
+    "RestElement": 3,
+    "ReturnStatement": 296,
+    "SpreadElement": 91,
+    "Super": 8,
+    "SwitchCase": 8,
+    "SwitchStatement": 2,
+    "TSAsExpression": 64,
+    "TSEnumBody": 2,
+    "TSEnumDeclaration": 2,
+    "TSEnumMember": 9,
+    "TSNonNullExpression": 76,
+    "TemplateElement": 41,
+    "TemplateLiteral": 19,
+    "ThisExpression": 111,
+    "ThrowStatement": 55,
+    "TryStatement": 10,
+    "UnaryExpression": 162,
+    "UpdateExpression": 4,
+    "VariableDeclaration": 444,
+    "VariableDeclarator": 457,
+    "WhileStatement": 4
+  },
+  "regexes": [
+    "{\"pattern\":\"(?:,|, )?([a-zA-Z0-9!#$%&'*+\\\\-.^_`|~]+)=(?:\\\"([a-zA-Z0-9!#$%&'*+\\\\-.,^_`|~ /:]+)\\\"|([a-zA-Z0-9!#$%&'*+\\\\-.^_`|~/:]+))\",\"flags\":\"g\"}",
+    "{\"pattern\":\"([^&=]+)=?([^&]*)\",\"flags\":\"g\"}",
+    "{\"pattern\":\"(otp=)\",\"flags\":\"i\"}",
+    "{\"pattern\":\"(state=)\",\"flags\":\"i\"}",
+    "{\"pattern\":\"-\",\"flags\":\"g\"}",
+    "{\"pattern\":\"=+$\",\"flags\":\"\"}",
+    "{\"pattern\":\"[^0-9a-zA-Z._-]\",\"flags\":\"\"}",
+    "{\"pattern\":\"\\\\$?(?<step>\\\\w+)|(?:\\\\[(?<index>\\\\d+)\\\\])\",\"flags\":\"g\"}",
+    "{\"pattern\":\"\\\\+\",\"flags\":\"g\"}",
+    "{\"pattern\":\"\\\\/\",\"flags\":\"g\"}",
+    "{\"pattern\":\"\\\\/+$\",\"flags\":\"\"}",
+    "{\"pattern\":\"^[a-z][a-z0-9+.-]*:\",\"flags\":\"i\"}",
+    "{\"pattern\":\"^\\\\s+|\\\\s+$\",\"flags\":\"gm\"}",
+    "{\"pattern\":\"_\",\"flags\":\"g\"}",
+    "{\"pattern\":\"application\\\\/\\\\w*\\\\+?json\",\"flags\":\"\"}"
+  ],
+  "native_profile": true,
+  "profile_changes": {
+    "lib/features.ts": [
+      {
+        "start": 848,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 883,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 848,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 957,
+        "reason": "native environment has no document/window"
+      },
+      {
+        "start": 956,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 952,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 1346,
+        "reason": "native environment has no document/window"
+      },
+      {
+        "start": 1345,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 1341,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 2083,
+        "reason": "native environment has no document/window"
+      },
+      {
+        "start": 2082,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 2078,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 2256,
+        "reason": "native environment has no document/window"
+      },
+      {
+        "start": 2256,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 2639,
+        "reason": "native environment has no document/window"
+      },
+      {
+        "start": 2639,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 2639,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 2639,
+        "reason": "constant branch evaluation"
+      }
+    ],
+    "lib/http/OktaUserAgent.ts": [
+      {
+        "start": 1146,
+        "reason": "native environment has no document/window"
+      },
+      {
+        "start": 1146,
+        "reason": "constant branch evaluation"
+      }
+    ],
+    "lib/http/request.ts": [
+      {
+        "start": 1279,
+        "reason": "native environment has no document/window"
+      },
+      {
+        "start": 1275,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 5381,
+        "reason": "native environment has no document/window"
+      },
+      {
+        "start": 5364,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 5360,
+        "reason": "constant branch evaluation"
+      }
+    ],
+    "lib/oidc/endpoints/token.ts": [
+      {
+        "start": 2866,
+        "reason": "native public-client dpop=false"
+      },
+      {
+        "start": 2862,
+        "reason": "constant branch evaluation"
+      }
+    ],
+    "lib/oidc/exchangeCodeForTokens.ts": [
+      {
+        "start": 1945,
+        "reason": "native public-client dpop=false"
+      },
+      {
+        "start": 2690,
+        "reason": "native public-client dpop=false"
+      },
+      {
+        "start": 2909,
+        "reason": "native public-client dpop=false"
+      },
+      {
+        "start": 3141,
+        "reason": "native public-client dpop=false"
+      },
+      {
+        "start": 2686,
+        "reason": "constant branch evaluation"
+      }
+    ],
+    "lib/oidc/getUserInfo.ts": [
+      {
+        "start": 1816,
+        "reason": "native public-client dpop=false"
+      },
+      {
+        "start": 1812,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 2586,
+        "reason": "native public-client dpop=false"
+      },
+      {
+        "start": 2585,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 2811,
+        "reason": "native public-client dpop=false"
+      },
+      {
+        "start": 2810,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 2806,
+        "reason": "constant branch evaluation"
+      }
+    ],
+    "lib/oidc/mixin/index.ts": [
+      {
+        "start": 8349,
+        "reason": "native public-client dpop=false"
+      },
+      {
+        "start": 8345,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 9081,
+        "reason": "native public-client dpop=false"
+      },
+      {
+        "start": 9077,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 12435,
+        "reason": "native public-client dpop=false"
+      },
+      {
+        "start": 12435,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 12431,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 13892,
+        "reason": "native public-client dpop=false"
+      },
+      {
+        "start": 13891,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 13887,
+        "reason": "constant branch evaluation"
+      }
+    ],
+    "lib/oidc/options/OAuthOptionsConstructor.ts": [
+      {
+        "start": 4237,
+        "reason": "native environment has no document/window"
+      },
+      {
+        "start": 4233,
+        "reason": "constant branch evaluation"
+      }
+    ],
+    "lib/oidc/renewTokensWithRefresh.ts": [
+      {
+        "start": 1750,
+        "reason": "native public-client dpop=false"
+      },
+      {
+        "start": 1944,
+        "reason": "native public-client dpop=false"
+      },
+      {
+        "start": 1746,
+        "reason": "constant branch evaluation"
+      }
+    ],
+    "lib/oidc/util/defaultEnrollAuthenticatorParams.ts": [
+      {
+        "start": 1055,
+        "reason": "native environment has no document/window"
+      },
+      {
+        "start": 1055,
+        "reason": "constant branch evaluation"
+      }
+    ],
+    "lib/oidc/util/defaultTokenParams.ts": [
+      {
+        "start": 1153,
+        "reason": "native environment has no document/window"
+      },
+      {
+        "start": 1153,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 1534,
+        "reason": "native public-client dpop=false"
+      }
+    ],
+    "lib/util/console.ts": [
+      {
+        "start": 690,
+        "reason": "constant branch evaluation"
+      },
+      {
+        "start": 686,
+        "reason": "constant branch evaluation"
+      }
+    ]
+  },
+  "module_effects": {},
+  "frontend": {
+    "oxc": "0.75.0",
+    "resolver": "11.9.0"
+  },
+  "sources": {
+    "lib/constants.ts": "d806286b00543751bcc7885e9237901c77a5abd2d1d0c7af08faf33a8e2d21d5",
+    "lib/crypto/base64.ts": "c1fe9664fd0d248e37b20d8cb72e4352c241deb9fadc3365cf4980c70506ffd5",
+    "lib/crypto/index.ts": "8bcd27c9ff729dd11d5f4798b98aded8cb9a131d82471230573739f98b4c143a",
+    "lib/crypto/oidcHash.ts": "0327313a39c3b0bfecb177bb21462db2a5a00bd703830a29dd6fe22eb5b6588c",
+    "lib/crypto/types.ts": "fe4fe408c96cf8c012fcb8fa2d4e8ea6fad2346f2c92b697dc6e04969a4421db",
+    "lib/crypto/verifyToken.ts": "59836636867db9c9f0b236b5ca6efdad12c2ab9d04b4509c66390aca9ada63bd",
+    "lib/errors/AuthApiError.ts": "c5091e45d653b377ccc1312bae9d37ae5bd9534fdfbba79b9f5339ff23636b0c",
+    "lib/errors/AuthSdkError.ts": "3c2e8dafcfad58b625c32605ba9e054d98abd7abb55b33eb7acbc4165c850fb2",
+    "lib/errors/CustomError.ts": "6aa3f78a2572610fe9ac7d9fae99bb229936ed0b7ebecea3815f1bc693f2481d",
+    "lib/errors/OAuthError.ts": "5510b18378efa741d0d91f3dcce9d23460f8a18dc649819f93aa37d8eb444fe7",
+    "lib/errors/WWWAuthError.ts": "d8233e07149e116c7d919c2096b45f537674bbef891712ab07a4e17e740ce928",
+    "lib/errors/index.ts": "e9868dedb6e3132e8adcc70ea4cf3e2974e5bb15bb3324bd16b85496f065e68a",
+    "lib/features.ts": "a1b38fd402d74326df1ef0c5d3c6b39ebd626fd6339242594c7a76c86ecbec31",
+    "lib/fetch/fetchRequest.ts": "a110930bd6082418c70fea94bfec04b7f96497a5ac094eec0250a60cc6f70102",
+    "lib/http/OktaUserAgent.ts": "717f3cbc07bc3849e441aae25be3ebb9cd20c2296e0dfdb32af91138011c9828",
+    "lib/http/headers.ts": "2e24b1443a2b901296f622dea65605c53721aa7c833beabcfb85bcca82c22834",
+    "lib/http/index.ts": "3ebf3736cdf56466c940454f64b2fccface7665d9f26c7d1085b5560399830d0",
+    "lib/http/mixin.ts": "0ff7cdb0064820d12bec30192f4c96798ec0334eb74712e70d459f69717d6a9d",
+    "lib/http/options.ts": "dcb5dc45149cc99f533e4042ae24f79e6f8e88b338674365abc54e015e7b83d5",
+    "lib/http/request.ts": "8e3b2a4072e034efc36bf5f48339b7d022c885aebff89c91bfc8bf2bd9001b74",
+    "lib/http/types.ts": "faf70b66e859e0f4f805fbb0430d55a9bda9505609db30ded1a52a99cbf17c1e",
+    "lib/idx/IdxTransactionManager.ts": "9007cdbba9e05341bdb0fe16fc3989d93a6a7ceb908ccae71654a52a466fbe07",
+    "lib/idx/authenticator/util.ts": "0de368fb613f37d8fce1832484cf6c8f8a492044153eb63d3c23f17444f86504",
+    "lib/idx/emailVerify.ts": "4b3f3167e8ecf9f32b3c8f457e41df20b29167f52e487bd84ac19e77128b5bfa",
+    "lib/idx/handleInteractionCodeRedirect.ts": "9ac4b7a311726b4c66bc917ec6700f35f1dbc6da4836724d0cc617a975cb7f8a",
+    "lib/idx/idxState/index.ts": "50b5306be0216dfd08ecfd492d36be84285c9a1f1b4f5750037eb96de3a51bef",
+    "lib/idx/idxState/v1/actionParser.ts": "d07df57bc08f3fadb0b39d69954f891d185c289e1b8b365a376b0c33227ccae1",
+    "lib/idx/idxState/v1/generateIdxAction.ts": "163651425606d1f0db27b3cee34bece89acc2c7c0b05fe6aa900f7f2d4fda21f",
+    "lib/idx/idxState/v1/idxResponseParser.ts": "416eb0f66af8aa08774d42ae57e27b685c530da13377de0601855ad8874eab7d",
+    "lib/idx/idxState/v1/makeIdxState.ts": "3902326e7c5556e0576d35d8bd39d365b7c1733919601fac47b5dc765c6bd1c6",
+    "lib/idx/idxState/v1/parsers.ts": "0021a70faf9d548eae1d56a9703fa86aa8855e2a570335dcfdbe1aa851935040",
+    "lib/idx/idxState/v1/remediationParser.ts": "5ebfbbf82cd06fbb9ea3760f64ad555322581b715fd63f830d470cd38d58e38b",
+    "lib/idx/interact.ts": "319155e784fa30517a34b89082b1e87c81b92af0c540f7bec914da92e4b09b3c",
+    "lib/idx/introspect.ts": "3d6eac2e4d2f4bd49359f63b759958b7f418cbdb30d509b641acf90840253590",
+    "lib/idx/proceed.ts": "79623267a868f5bef8307a5045a4e53947954793810f1c185a1a2e64995e5a84",
+    "lib/idx/remediate.ts": "3aaf32780efbd92a56c88c20e5453e398320853a195f1c3b8600036735e7e3b4",
+    "lib/idx/remediators/AuthenticatorEnrollmentData.ts": "fd2387a14b2ed549d5230a00a1592b7c9a6406ab66db10135e6fc677b1c76231",
+    "lib/idx/remediators/AuthenticatorVerificationData.ts": "fb9ab17db7227c625bab80860f8f0449e2e7a16e6e200861dd3a59f5347837c2",
+    "lib/idx/remediators/Base/Remediator.ts": "167b806c04f565c773cb73740d465e5a3c54a6aaf09620faab7373e1e5e10ce4",
+    "lib/idx/remediators/ChallengeAuthenticator.ts": "76a40fefd18187952fb4106d66f3b3b8987348bd2283fb8132c47f3c232e9e18",
+    "lib/idx/remediators/ChallengePoll.ts": "6237b6bc8c26e1b36300e60cdfcfee2c86a7f7f15df912bbddcfa370adccfa58",
+    "lib/idx/remediators/EnrollAuthenticator.ts": "eb97d3675732f8e8300e6f38f69b76cfffe8f4f11e9af34dacd11a6da9eb2222",
+    "lib/idx/remediators/EnrollPoll.ts": "944850fcab97647a42638740c035a6fe42efb623e463c4b045522de7b74c9f8b",
+    "lib/idx/remediators/EnrollProfile.ts": "54ef321f31b6216803850a06fc58fd3e3f848b04a598bd320e68253f153332d0",
+    "lib/idx/remediators/EnrollmentChannelData.ts": "0bf54ab26d440970bdd4740e83cb5ede7a0bb06b25ce56b845bb3daa4648b131",
+    "lib/idx/remediators/GenericRemediator/GenericRemediator.ts": "f190135860bee6d776bb5189f73ea877922e4f62fb51f1b2abffc4f43743f06e",
+    "lib/idx/remediators/GenericRemediator/index.ts": "44b0efe14575c6dcef3da5ef397a39eae9b010394a2fcb8c863e6d676b672ac7",
+    "lib/idx/remediators/GenericRemediator/util.ts": "3d6f9c31861e2e2cf7b66a82a087b01e4fa75b785465c99edf001942d2d0516f",
+    "lib/idx/remediators/Identify.ts": "eab68850b8e533fa87558c14b1ae5c6fc827cabfa9f04f670f112b1ab2126d08",
+    "lib/idx/remediators/ReEnrollAuthenticator.ts": "9defdb436140b3604bd20c92a74cf5647c176dfefa0f665345c9f8fe6cbb7614",
+    "lib/idx/remediators/ReEnrollAuthenticatorWarning.ts": "31950c416938325b7eee6f1020b0172761769269363ccc84cae1147f13269283",
+    "lib/idx/remediators/RedirectIdp.ts": "72fbc7d1466623963adea57593a0871bc981550edd7ab124778d9e6617a13726",
+    "lib/idx/remediators/ResetAuthenticator.ts": "86f2dfd2917fd29b101ffa03fca79b4711757b55bfeda0454c89d1f3378c64e3",
+    "lib/idx/remediators/SelectAuthenticatorAuthenticate.ts": "38be4c287c592f8165c2ef13268984ff227008fa73054d5cf860082fd24ab75d",
+    "lib/idx/remediators/SelectAuthenticatorEnroll.ts": "92db3cf17f86cb71b1ac083457f84dc02437ba62d74b0e0831a7b92d18b7c466",
+    "lib/idx/remediators/SelectAuthenticatorUnlockAccount.ts": "ae0aef6403a743bd148d2eded619b57c2fa32646614012d65bef941b3cd0ebef",
+    "lib/idx/remediators/SelectEnrollProfile.ts": "5cc9d3ccb7339bc98591bf4803bcda1bfd0fc41d0ee93dcf4026c8d1fb64b4b5",
+    "lib/idx/remediators/SelectEnrollmentChannel.ts": "c556233c8e75f7992f38e532f86b27d1c55b2acb9c5a643bd3082cea0952df81",
+    "lib/idx/remediators/Skip.ts": "2f735acec45796fb2b2d030ee7aadf26570319c67edcec5d0fb25a02f86b8b26",
+    "lib/idx/remediators/index.ts": "3bd0367ba088f733dd8afc6202a7405550417c44a92472564dcc418b40258600",
+    "lib/idx/remediators/util.ts": "b998632dbc2da9769bc4556f73429ed79d45a575d61b479d70c41e0419d015bb",
+    "lib/idx/run.ts": "7e4b83eae815fd339fdd23d70c7493f0b81cc9c493c45f9a02b7d1802044500e",
+    "lib/idx/startTransaction.ts": "3759ec7573636212664f496a31cd24ca5750527772970725fff1200b21ee4ab1",
+    "lib/idx/transactionMeta.ts": "6a8912f07ba2dab86a5d09ecca5ceda89f7ca8a9951e7206635524d2cdc91449",
+    "lib/idx/types/api.ts": "f670a04ba412328bcea26b2323ef732a6a3884065fa029d1378592ded27d61cb",
+    "lib/idx/types/idx-js.ts": "ba756dd334bee0aae424a5d1ab8332cc2533419155fde90f15d4eaa9403ded11",
+    "lib/idx/types/index.ts": "459d9a844439515b1cdc05ae2ffa168d05507987700632c5aa0848005814f642",
+    "lib/idx/types/meta.ts": "ec4eec696b296e6c99175790df307031b1a089fe23874894bca701439cd9bbf5",
+    "lib/idx/types/options.ts": "e7d4f75cdfaeb9502dc52459b13384b630d50ef387e16fcd69706d553d9dc1db",
+    "lib/idx/types/storage.ts": "661a0cbbe7bbfe12d09c839c6471ff6612ffda2a0b2dba956a967ca14889bfd5",
+    "lib/idx/util.ts": "049a1f4f8b924b033324084707fe6cd3b2b2d6359cb901c05f29494ee4ae0589",
+    "lib/idx/webauthn.ts": "50e428437028571d6209508743a601ea043b245722b4d30880547b5e34b8e392",
+    "lib/oidc/TokenManager.ts": "7cef89114e47ed1ef0b9dc11e7e7de487124a1ef5ea47755ff818c9b748c7828",
+    "lib/oidc/TransactionManager.ts": "700343d7bba19af9a30e68cc22ee62a14d43a86d50db0dd9d55b54f98947cfe1",
+    "lib/oidc/decodeToken.ts": "d6d788beb5ec75e89983d8187302048d00b80483c998c8c1c92a74fac0d94d0e",
+    "lib/oidc/dpop.ts": "3db9c89c22940a7a8ca5ed144dd47db66602571d2301a1f89be0ae22522e105b",
+    "lib/oidc/endpoints/authorize.ts": "ed3acece8dc7947cf527728e72cf02392e135ef7da4eb2632546e47deba13c3c",
+    "lib/oidc/endpoints/index.ts": "6f628310980046ce07e6814b5703fd545c470697249da6a04cf005cb8cfa583b",
+    "lib/oidc/endpoints/token.ts": "02fb728aa2cfd8605bc9643c07bc4c7b1e16d0bb4010482343149f93d36c522b",
+    "lib/oidc/endpoints/well-known.ts": "4a9c61c6a0f53163d1a5e0ffa5802a1581abfcdcf13b95ed7aad5566fa7a7aff",
+    "lib/oidc/exchangeCodeForTokens.ts": "8c7eb7eccccf3adb729e9da4e9e275b4dc4290626071dd52ce05856f2d08d575",
+    "lib/oidc/factory/OktaAuthOAuth.ts": "ea1ffef471103803b3e4bae55bbf9b64a781615f197f66eb95916707490d2431",
+    "lib/oidc/factory/api.ts": "616b2e00b154c934a3192ca61903c71f78f3df32761f5c238560a4fc8a2bcc99",
+    "lib/oidc/factory/index.ts": "98f4824aae9803d01ad7b7fd01a97338f02f56c4377a558fb83c3297f87b23dd",
+    "lib/oidc/getUserInfo.ts": "f3be3887c5445b4921390455ee1b8f86311566a87cf47916167fad530e9d3d1f",
+    "lib/oidc/handleOAuthResponse.ts": "c8f1d3a56eb0c242bc14ece8c637a33f5f9872deba5c6292c30aca1d6098d06e",
+    "lib/oidc/index.ts": "b534528431e65b49b97136867478f9dca90e5773ba188d2b7d96cb37defb2d1c",
+    "lib/oidc/mixin/index.ts": "33dc12b178cc0c88be49e0d0c9f41b91b63922c5080f798c61e40378aff6f640",
+    "lib/oidc/options/OAuthOptionsConstructor.ts": "0d801559383b3e7c29c3c17e9bdcac25f65f16c0d8509b09e9a1be0395a60008",
+    "lib/oidc/options/index.ts": "44a1f19b76fe42c5157ab94240c592df55038b617e4be33c9dec4fa5943006b2",
+    "lib/oidc/renewTokensWithRefresh.ts": "3f99e47c1d20b44a6e872cc3ca7cfb3b21f33555296e0f1dd90e2b12d43bea15",
+    "lib/oidc/revokeToken.ts": "51e22dfdd67824cb0f0eb794ef151e70d089931a4e0e7f400275fa17aadfdebf",
+    "lib/oidc/storage.ts": "0ceba302e1d1b666f63a43e53f0d51f5257d2eeeeceed9c11debba5c79b1ff36",
+    "lib/oidc/types/JWT.ts": "f8449b8cd1c9ff631b6e3d889b2266f53c8bdfc58312065643b2def41e88ae8f",
+    "lib/oidc/types/Token.ts": "ad90a57b3e9081290173e66b139fcbecda15bde865c02db93a1c7ed3f257e1ea",
+    "lib/oidc/types/TokenManager.ts": "ad670bb009da4b5ffb23a3a4b250eed593ddc677fc6c83287d58272be674606d",
+    "lib/oidc/types/Transaction.ts": "944e97bd14d5e39aae1a8f6de7371b292845280611c4511068b9159b1111ddc4",
+    "lib/oidc/types/TransactionManager.ts": "58c72863545b2987a084b80417ab57569199cc696afb251f9ae4415e7de15f47",
+    "lib/oidc/types/UserClaims.ts": "308e678e6244370982b3e2649210c2df95868fa9a44054565a07ec12a85c6fc2",
+    "lib/oidc/types/api.ts": "1c197e0be13ae054eb5fadc199bd9edf283f8a679abe7cbc4734e54956797d0c",
+    "lib/oidc/types/endpoints.ts": "1c31412dd1d1fb882d30b548d201740ef3534f25061077b50961572dfd11d7c4",
+    "lib/oidc/types/index.ts": "48a62b1deed7eba93eb7d256a6ee0ee11f1f72d4adb3b90ea3ae4a1ebfa8e342",
+    "lib/oidc/types/meta.ts": "8f8ed4da4d690f305e7b270cf9f47c1bb45bd812611542ff624f3cedd4f2f3fb",
+    "lib/oidc/types/options.ts": "3d45688f39d5813a5fe98ea6c814fc3616128501b5ef44b83868769c25eb073e",
+    "lib/oidc/types/proto.ts": "eface73ce9a58f40cb4396640c556a1a569e5a1242a88e933b6646558be923bf",
+    "lib/oidc/types/storage.ts": "19096f492ec6c38964b4b5c0ebcdb1294152620dfbd3a49be38a0a0df8a3e0c0",
+    "lib/oidc/util/browser.ts": "a34b6f7b43db554dfa7bb5cab80eb0b26614ff4760b9b7b6abed04bbe13ede0f",
+    "lib/oidc/util/defaultEnrollAuthenticatorParams.ts": "e0fba9c049b0215a69c778b425b784c465efc65269c825a30d7abc27baa1e247",
+    "lib/oidc/util/defaultTokenParams.ts": "c392019a403d101a3901ed5e7f6c1a765d108cd327cccfcbcab4c7faf79a0a8a",
+    "lib/oidc/util/enrollAuthenticatorMeta.ts": "6ed0deaee684941a52e99a37c56b34c0291cc7773027c726cb883e1d9218698a",
+    "lib/oidc/util/errors.ts": "c1578fcf20a53ec1eb1089e1df7d0d91415dee66e4ba79c15702a7c16ed72b72",
+    "lib/oidc/util/index.ts": "199915374e5c7705689e8e51f5ccabc56ac174c4f7662964e86e59151981eccb",
+    "lib/oidc/util/loginRedirect.ts": "8565a49f3fc18e5080738a90b01fdd892f0779061ffa68a9a21bd6c0647bb3c5",
+    "lib/oidc/util/oauth.ts": "010106a356c2ca9d2a8df29bdf87646fa164176f76619a6808c9a85f1d73bdf7",
+    "lib/oidc/util/oauthMeta.ts": "6546993cf752bad340cec38e4c48efb1718ba7125a6dad26897dcbe19e3c5e9e",
+    "lib/oidc/util/pkce.ts": "bcb0a2ce829aa9b0f556f50b0bed2f23a7606cf06d9486763b7f99240b050bbe",
+    "lib/oidc/util/prepareEnrollAuthenticatorParams.ts": "8b4fc70cab4a12a008c6a1164dc2f5c5e7876b5a3f9f82d4afb7baaaaba78a4b",
+    "lib/oidc/util/prepareTokenParams.ts": "18beb366456ae4fa113029022916d40f59cd930c82238131ccdf68524b108e0e",
+    "lib/oidc/util/refreshToken.ts": "0b0f245f64fbeb40bef0b83ee6ebce1c91af22114e771e3d3a3447ad610c284f",
+    "lib/oidc/util/sharedStorage.ts": "da7a15631486f8367fae9ffe671f402212d0c9c9ece112fc9744d8f2014e2ad4",
+    "lib/oidc/util/urlParams.ts": "110c409349510d8e38a9956ea705eedd6f4b56da2acf9615275874da6651db1b",
+    "lib/oidc/util/validateClaims.ts": "b59325c37419df90a8cae9e6397f78ca0cfbd5b72d55743bc73a105ca83d69d1",
+    "lib/oidc/util/validateToken.ts": "4aff2c022e11bfedfa7e5903a84ddb8935598fac3b149deb26fc6d5ff4b4f21f",
+    "lib/oidc/verifyToken.ts": "a8d692652ff4e1ef025ada7abd6f45af96bd646039934efd10ad884bd67eb063",
+    "lib/util/PromiseQueue.ts": "c2c5fa9c40c9a3444688303c178c0c97244127971b6d8a429d7a1130131a1b87",
+    "lib/util/console.ts": "6ac67eb9f81458cf8a7f01db2df210e1588e08bd4ac69c2087af5aa2f92e1ede",
+    "lib/util/index.ts": "c7acb1b7a33cb431134ec72fe39f3f1db979ab60c0ae05f582833ab8931f9879",
+    "lib/util/jsonpath.ts": "565fca24768ebb0da3f6ac1d22422bb9c1d4f52a5244e60e518ce23920859468",
+    "lib/util/misc.ts": "f2f5d236602f149f0ca4b66b768e3af4853ba17a2c24db6338823bc652381d1e",
+    "lib/util/object.ts": "5d2ba12eeccf98ca1dcc192a9fd47afa4a7515922d8ace3963c84e90b730ae1b",
+    "lib/util/types.ts": "93f6cd37d91446a703548ea6148e1e6616787ef28fe779f94aa9f3f0eb094502",
+    "lib/util/url.ts": "b4e6cd433a7e5d4abb325b01e596d97e192e2eaa37cea547b49402b364e78ed5"
+  },
+  "selected": [
+    "lib/constants.ts::DEFAULT_CACHE_DURATION",
+    "lib/constants.ts::DEFAULT_CODE_CHALLENGE_METHOD",
+    "lib/constants.ts::IDX_API_VERSION",
+    "lib/constants.ts::MAX_VERIFIER_LENGTH",
+    "lib/constants.ts::MIN_VERIFIER_LENGTH",
+    "lib/constants.ts::STATE_TOKEN_KEY_NAME",
+    "lib/crypto/base64.ts::base64ToBase64Url",
+    "lib/crypto/base64.ts::base64UrlDecode",
+    "lib/crypto/base64.ts::base64UrlToBase64",
+    "lib/crypto/base64.ts::base64UrlToBuffer",
+    "lib/crypto/base64.ts::base64UrlToString",
+    "lib/crypto/base64.ts::bufferToBase64Url",
+    "lib/crypto/base64.ts::stringToBase64Url",
+    "lib/crypto/base64.ts::stringToBuffer",
+    "lib/crypto/oidcHash.ts::getOidcHash",
+    "lib/crypto/verifyToken.ts::verifyToken",
+    "lib/errors/AuthApiError.ts::default",
+    "lib/errors/AuthSdkError.ts::default",
+    "lib/errors/CustomError.ts::default",
+    "lib/errors/OAuthError.ts::default",
+    "lib/errors/WWWAuthError.ts::default",
+    "lib/errors/index.ts::isAuthApiError",
+    "lib/errors/index.ts::isOAuthError",
+    "lib/errors/index.ts::isWWWAuthError",
+    "lib/fetch/fetchRequest.ts::appJsonContentTypeRegex",
+    "lib/fetch/fetchRequest.ts::fetchRequest",
+    "lib/fetch/fetchRequest.ts::formatResult",
+    "lib/fetch/fetchRequest.ts::readData",
+    "lib/http/request.ts::formatError",
+    "lib/http/request.ts::get",
+    "lib/http/request.ts::httpRequest",
+    "lib/http/request.ts::post",
+    "lib/idx/IdxTransactionManager.ts::createIdxTransactionManager",
+    "lib/idx/authenticator/util.ts::compareAuthenticators",
+    "lib/idx/authenticator/util.ts::formatAuthenticator",
+    "lib/idx/emailVerify.ts::EmailVerifyCallbackError",
+    "lib/idx/emailVerify.ts::handleEmailVerifyCallback",
+    "lib/idx/emailVerify.ts::isEmailVerifyCallback",
+    "lib/idx/emailVerify.ts::parseEmailVerifyCallback",
+    "lib/idx/handleInteractionCodeRedirect.ts::handleInteractionCodeRedirect",
+    "lib/idx/idxState/index.ts::makeIdxState",
+    "lib/idx/idxState/index.ts::parsersForVersion",
+    "lib/idx/idxState/index.ts::validateVersionConfig",
+    "lib/idx/idxState/v1/actionParser.ts::divideActionParamsByMutability",
+    "lib/idx/idxState/v1/actionParser.ts::divideSingleActionParamsByMutability",
+    "lib/idx/idxState/v1/actionParser.ts::isFieldMutable",
+    "lib/idx/idxState/v1/generateIdxAction.ts::generateDirectFetch",
+    "lib/idx/idxState/v1/generateIdxAction.ts::generateIdxAction",
+    "lib/idx/idxState/v1/idxResponseParser.ts::SKIP_FIELDS",
+    "lib/idx/idxState/v1/idxResponseParser.ts::convertRemediationAction",
+    "lib/idx/idxState/v1/idxResponseParser.ts::expandRelatesTo",
+    "lib/idx/idxState/v1/idxResponseParser.ts::parseIdxResponse",
+    "lib/idx/idxState/v1/idxResponseParser.ts::parseNonRemediations",
+    "lib/idx/idxState/v1/makeIdxState.ts::makeIdxState",
+    "lib/idx/idxState/v1/parsers.ts::default",
+    "lib/idx/idxState/v1/remediationParser.ts::generateRemediationFunctions",
+    "lib/idx/interact.ts::getResponse",
+    "lib/idx/interact.ts::interact",
+    "lib/idx/introspect.ts::introspect",
+    "lib/idx/proceed.ts::canProceed",
+    "lib/idx/proceed.ts::proceed",
+    "lib/idx/remediate.ts::getActionFromValues",
+    "lib/idx/remediate.ts::getGenericNextStep",
+    "lib/idx/remediate.ts::remediate",
+    "lib/idx/remediate.ts::removeActionFromOptions",
+    "lib/idx/remediate.ts::removeActionFromValues",
+    "lib/idx/remediators/Base/Remediator.ts::Remediator",
+    "lib/idx/remediators/GenericRemediator/GenericRemediator.ts::GenericRemediator",
+    "lib/idx/remediators/GenericRemediator/util.ts::unwrapFormValue",
+    "lib/idx/remediators/util.ts::getAllValues",
+    "lib/idx/remediators/util.ts::getAuthenticatorFromRemediation",
+    "lib/idx/remediators/util.ts::getRequiredValues",
+    "lib/idx/remediators/util.ts::titleCase",
+    "lib/idx/run.ts::finalizeData",
+    "lib/idx/run.ts::getDataFromIntrospect",
+    "lib/idx/run.ts::getDataFromRemediate",
+    "lib/idx/run.ts::getTokens",
+    "lib/idx/run.ts::initializeData",
+    "lib/idx/run.ts::initializeValues",
+    "lib/idx/run.ts::run",
+    "lib/idx/startTransaction.ts::startTransaction",
+    "lib/idx/transactionMeta.ts::createTransactionMeta",
+    "lib/idx/transactionMeta.ts::getSavedTransactionMeta",
+    "lib/idx/transactionMeta.ts::isTransactionMetaValid",
+    "lib/idx/transactionMeta.ts::isTransactionMetaValidForFlow",
+    "lib/idx/transactionMeta.ts::isTransactionMetaValidForOptions",
+    "lib/idx/transactionMeta.ts::saveTransactionMeta",
+    "lib/idx/types/api.ts::IdxFeature",
+    "lib/idx/types/api.ts::IdxStatus",
+    "lib/idx/types/api.ts::isAuthenticator",
+    "lib/idx/types/idx-js.ts::isRawIdxResponse",
+    "lib/idx/util.ts::canResendFn",
+    "lib/idx/util.ts::canSkipFn",
+    "lib/idx/util.ts::ctx",
+    "lib/idx/util.ts::filterValuesForRemediation",
+    "lib/idx/util.ts::getAvailableSteps",
+    "lib/idx/util.ts::getEnabledFeatures",
+    "lib/idx/util.ts::getFlowSpecification",
+    "lib/idx/util.ts::getMessagesFromIdxRemediationValue",
+    "lib/idx/util.ts::getMessagesFromResponse",
+    "lib/idx/util.ts::getNextStep",
+    "lib/idx/util.ts::getRemediator",
+    "lib/idx/util.ts::getRemediatorClass",
+    "lib/idx/util.ts::handleFailedResponse",
+    "lib/idx/util.ts::isTerminalResponse",
+    "lib/idx/webauthn.ts::buildCredentialCreationOptions",
+    "lib/idx/webauthn.ts::buildCredentialRequestOptions",
+    "lib/idx/webauthn.ts::getAssertion",
+    "lib/idx/webauthn.ts::getAttestation",
+    "lib/idx/webauthn.ts::getEnrolledCredentials",
+    "lib/oidc/TransactionManager.ts::createTransactionManager",
+    "lib/oidc/decodeToken.ts::decodeToken",
+    "lib/oidc/dpop.ts::isDPoPNonceError",
+    "lib/oidc/endpoints/token.ts::getPostData",
+    "lib/oidc/endpoints/token.ts::makeTokenRequest",
+    "lib/oidc/endpoints/token.ts::postRefreshToken",
+    "lib/oidc/endpoints/token.ts::postToTokenEndpoint",
+    "lib/oidc/endpoints/token.ts::validateOptions",
+    "lib/oidc/endpoints/well-known.ts::getKey",
+    "lib/oidc/endpoints/well-known.ts::getWellKnown",
+    "lib/oidc/exchangeCodeForTokens.ts::exchangeCodeForTokens",
+    "lib/oidc/getUserInfo.ts::getUserInfo",
+    "lib/oidc/handleOAuthResponse.ts::handleOAuthResponse",
+    "lib/oidc/handleOAuthResponse.ts::validateResponse",
+    "lib/oidc/renewTokensWithRefresh.ts::renewTokensWithRefresh",
+    "lib/oidc/revokeToken.ts::revokeToken",
+    "lib/oidc/types/Token.ts::isAccessToken",
+    "lib/oidc/types/Token.ts::isIDToken",
+    "lib/oidc/types/Transaction.ts::isCustomAuthTransactionMeta",
+    "lib/oidc/types/Transaction.ts::isOAuthTransactionMeta",
+    "lib/oidc/types/Transaction.ts::isObjectWithProperties",
+    "lib/oidc/types/Transaction.ts::isTransactionMeta",
+    "lib/oidc/util/defaultTokenParams.ts::getDefaultTokenParams",
+    "lib/oidc/util/errors.ts::isRefreshTokenInvalidError",
+    "lib/oidc/util/oauth.ts::generateNonce",
+    "lib/oidc/util/oauth.ts::generateState",
+    "lib/oidc/util/oauth.ts::getIssuer",
+    "lib/oidc/util/oauth.ts::getOAuthBaseUrl",
+    "lib/oidc/util/oauth.ts::getOAuthDomain",
+    "lib/oidc/util/oauth.ts::getOAuthUrls",
+    "lib/oidc/util/oauthMeta.ts::createOAuthMeta",
+    "lib/oidc/util/pkce.ts::computeChallenge",
+    "lib/oidc/util/pkce.ts::dec2hex",
+    "lib/oidc/util/pkce.ts::default",
+    "lib/oidc/util/pkce.ts::generateVerifier",
+    "lib/oidc/util/pkce.ts::getRandomString",
+    "lib/oidc/util/prepareTokenParams.ts::assertPKCESupport",
+    "lib/oidc/util/prepareTokenParams.ts::preparePKCE",
+    "lib/oidc/util/prepareTokenParams.ts::prepareTokenParams",
+    "lib/oidc/util/prepareTokenParams.ts::validateCodeChallengeMethod",
+    "lib/oidc/util/refreshToken.ts::isSameRefreshToken",
+    "lib/oidc/util/sharedStorage.ts::MAX_ENTRY_LIFETIME",
+    "lib/oidc/util/sharedStorage.ts::clearTransactionFromSharedStorage",
+    "lib/oidc/util/sharedStorage.ts::loadTransactionFromSharedStorage",
+    "lib/oidc/util/sharedStorage.ts::pruneSharedStorage",
+    "lib/oidc/util/sharedStorage.ts::saveTransactionToSharedStorage",
+    "lib/oidc/util/urlParams.ts::urlParamsToObject",
+    "lib/oidc/util/validateClaims.ts::validateClaims",
+    "lib/oidc/verifyToken.ts::verifyToken",
+    "lib/util/console.ts::getConsole",
+    "lib/util/console.ts::getNativeConsole",
+    "lib/util/console.ts::warn",
+    "lib/util/jsonpath.ts::jsonpath",
+    "lib/util/jsonpath.ts::jsonpathRegex",
+    "lib/util/misc.ts::genRandomString",
+    "lib/util/misc.ts::split2",
+    "lib/util/object.ts::clone",
+    "lib/util/object.ts::find",
+    "lib/util/object.ts::removeNils",
+    "lib/util/types.ts::isFunction",
+    "lib/util/types.ts::isString",
+    "lib/util/url.ts::isAbsoluteUrl",
+    "lib/util/url.ts::removeTrailingSlash",
+    "lib/util/url.ts::toQueryString"
+  ],
+  "unselected": [
+    "lib/constants.ts::ACCESS_TOKEN_STORAGE_KEY",
+    "lib/constants.ts::CACHE_STORAGE_NAME",
+    "lib/constants.ts::DEFAULT_MAX_CLOCK_SKEW",
+    "lib/constants.ts::DEFAULT_POLLING_DELAY",
+    "lib/constants.ts::IDX_RESPONSE_STORAGE_NAME",
+    "lib/constants.ts::ID_TOKEN_STORAGE_KEY",
+    "lib/constants.ts::IOS_MAX_RETRY_COUNT",
+    "lib/constants.ts::ORIGINAL_URI_STORAGE_NAME",
+    "lib/constants.ts::PKCE_STORAGE_NAME",
+    "lib/constants.ts::REFERRER_PATH_STORAGE_KEY",
+    "lib/constants.ts::REFRESH_TOKEN_STORAGE_KEY",
+    "lib/constants.ts::SHARED_TRANSACTION_STORAGE_NAME",
+    "lib/constants.ts::TOKEN_STORAGE_NAME",
+    "lib/constants.ts::TRANSACTION_STORAGE_NAME",
+    "lib/features.ts::getUserAgent",
+    "lib/features.ts::hasTextEncoder",
+    "lib/features.ts::isBrowser",
+    "lib/features.ts::isDPoPSupported",
+    "lib/features.ts::isFingerprintSupported",
+    "lib/features.ts::isHTTPS",
+    "lib/features.ts::isIE11OrLess",
+    "lib/features.ts::isIOS",
+    "lib/features.ts::isLocalhost",
+    "lib/features.ts::isPKCESupported",
+    "lib/features.ts::isPopupPostMessageSupported",
+    "lib/features.ts::isTokenVerifySupported",
+    "lib/features.ts::isWebCryptoSubtleSupported",
+    "lib/features.ts::isWindowsPhone",
+    "lib/http/OktaUserAgent.ts::OktaUserAgent",
+    "lib/http/headers.ts::setRequestHeader",
+    "lib/http/mixin.ts::mixinHttp",
+    "lib/http/options.ts::createHttpOptionsConstructor",
+    "lib/http/request.ts::dateDocumentBecameVisible",
+    "lib/http/request.ts::trackDateDocumentBecameVisible",
+    "lib/idx/authenticator/util.ts::findMatchedOption",
+    "lib/idx/emailVerify.ts::isEmailVerifyCallbackError",
+    "lib/idx/remediators/AuthenticatorEnrollmentData.ts::AuthenticatorEnrollmentData",
+    "lib/idx/remediators/AuthenticatorVerificationData.ts::AuthenticatorVerificationData",
+    "lib/idx/remediators/ChallengeAuthenticator.ts::ChallengeAuthenticator",
+    "lib/idx/remediators/ChallengePoll.ts::ChallengePoll",
+    "lib/idx/remediators/EnrollAuthenticator.ts::EnrollAuthenticator",
+    "lib/idx/remediators/EnrollPoll.ts::EnrollPoll",
+    "lib/idx/remediators/EnrollProfile.ts::EnrollProfile",
+    "lib/idx/remediators/EnrollmentChannelData.ts::EnrollmentChannelData",
+    "lib/idx/remediators/GenericRemediator/util.ts::hasValidInputValue",
+    "lib/idx/remediators/Identify.ts::Identify",
+    "lib/idx/remediators/ReEnrollAuthenticator.ts::ReEnrollAuthenticator",
+    "lib/idx/remediators/ReEnrollAuthenticatorWarning.ts::ReEnrollAuthenticatorWarning",
+    "lib/idx/remediators/RedirectIdp.ts::RedirectIdp",
+    "lib/idx/remediators/ResetAuthenticator.ts::ResetAuthenticator",
+    "lib/idx/remediators/SelectAuthenticatorAuthenticate.ts::SelectAuthenticatorAuthenticate",
+    "lib/idx/remediators/SelectAuthenticatorEnroll.ts::SelectAuthenticatorEnroll",
+    "lib/idx/remediators/SelectAuthenticatorUnlockAccount.ts::SelectAuthenticatorUnlockAccount",
+    "lib/idx/remediators/SelectEnrollProfile.ts::SelectEnrollProfile",
+    "lib/idx/remediators/SelectEnrollmentChannel.ts::SelectEnrollmentChannel",
+    "lib/idx/remediators/Skip.ts::Skip",
+    "lib/idx/transactionMeta.ts::clearTransactionMeta",
+    "lib/idx/transactionMeta.ts::getTransactionMeta",
+    "lib/idx/transactionMeta.ts::hasSavedInteractionHandle",
+    "lib/idx/types/api.ts::AuthenticatorKey",
+    "lib/idx/types/idx-js.ts::isIdxResponse",
+    "lib/idx/util.ts::setRemediatorsCtx",
+    "lib/oidc/TokenManager.ts::DEFAULT_OPTIONS",
+    "lib/oidc/TokenManager.ts::TokenManager",
+    "lib/oidc/TokenManager.ts::defaultState",
+    "lib/oidc/dpop.ts::DB_KEY",
+    "lib/oidc/dpop.ts::INDEXEDDB_NAME",
+    "lib/oidc/dpop.ts::clearAllDPoPKeyPairs",
+    "lib/oidc/dpop.ts::clearDPoPKeyPair",
+    "lib/oidc/dpop.ts::clearDPoPKeyPairAfterRevoke",
+    "lib/oidc/dpop.ts::createDPoPKeyPair",
+    "lib/oidc/dpop.ts::createJwt",
+    "lib/oidc/dpop.ts::cryptoRandomValue",
+    "lib/oidc/dpop.ts::findKeyPair",
+    "lib/oidc/dpop.ts::generateDPoPForTokenRequest",
+    "lib/oidc/dpop.ts::generateDPoPProof",
+    "lib/oidc/dpop.ts::generateKeyPair",
+    "lib/oidc/dpop.ts::hashAccessToken",
+    "lib/oidc/dpop.ts::invokeStoreMethod",
+    "lib/oidc/dpop.ts::keyStore",
+    "lib/oidc/dpop.ts::storeKeyPair",
+    "lib/oidc/endpoints/authorize.ts::buildAuthorizeParams",
+    "lib/oidc/endpoints/authorize.ts::convertTokenParamsToOAuthParams",
+    "lib/oidc/factory/OktaAuthOAuth.ts::createOktaAuthOAuth",
+    "lib/oidc/factory/api.ts::createEndpoints",
+    "lib/oidc/factory/api.ts::createTokenAPI",
+    "lib/oidc/mixin/index.ts::mixinOAuth",
+    "lib/oidc/options/OAuthOptionsConstructor.ts::assertValidConfig",
+    "lib/oidc/options/OAuthOptionsConstructor.ts::createOAuthOptionsConstructor",
+    "lib/oidc/storage.ts::createOAuthStorageManager",
+    "lib/oidc/types/Token.ts::TokenKind",
+    "lib/oidc/types/Token.ts::isRefreshToken",
+    "lib/oidc/types/Token.ts::isToken",
+    "lib/oidc/types/TokenManager.ts::EVENT_ADDED",
+    "lib/oidc/types/TokenManager.ts::EVENT_ERROR",
+    "lib/oidc/types/TokenManager.ts::EVENT_EXPIRED",
+    "lib/oidc/types/TokenManager.ts::EVENT_REMOVED",
+    "lib/oidc/types/TokenManager.ts::EVENT_RENEWED",
+    "lib/oidc/types/TokenManager.ts::EVENT_SET_STORAGE",
+    "lib/oidc/types/Transaction.ts::isIdxTransactionMeta",
+    "lib/oidc/types/Transaction.ts::isPKCETransactionMeta",
+    "lib/oidc/util/browser.ts::DEFAULT_TIMEOUT",
+    "lib/oidc/util/browser.ts::addIDPPopupLisenter",
+    "lib/oidc/util/browser.ts::addListener",
+    "lib/oidc/util/browser.ts::addPostMessageListener",
+    "lib/oidc/util/browser.ts::loadFrame",
+    "lib/oidc/util/browser.ts::loadPopup",
+    "lib/oidc/util/browser.ts::removeListener",
+    "lib/oidc/util/defaultEnrollAuthenticatorParams.ts::getDefaultEnrollAuthenticatorParams",
+    "lib/oidc/util/enrollAuthenticatorMeta.ts::createEnrollAuthenticatorMeta",
+    "lib/oidc/util/errors.ts::isAuthorizationCodeError",
+    "lib/oidc/util/errors.ts::isInteractionRequiredError",
+    "lib/oidc/util/loginRedirect.ts::getHashOrSearch",
+    "lib/oidc/util/loginRedirect.ts::hasAuthorizationCode",
+    "lib/oidc/util/loginRedirect.ts::hasErrorInUrl",
+    "lib/oidc/util/loginRedirect.ts::hasInteractionCode",
+    "lib/oidc/util/loginRedirect.ts::hasResponseType",
+    "lib/oidc/util/loginRedirect.ts::hasTokensInHash",
+    "lib/oidc/util/loginRedirect.ts::isCodeFlow",
+    "lib/oidc/util/loginRedirect.ts::isInteractionRequired",
+    "lib/oidc/util/loginRedirect.ts::isLoginRedirect",
+    "lib/oidc/util/loginRedirect.ts::isRedirectUri",
+    "lib/oidc/util/prepareEnrollAuthenticatorParams.ts::prepareEnrollAuthenticatorParams",
+    "lib/oidc/util/prepareEnrollAuthenticatorParams.ts::prepareParams",
+    "lib/oidc/util/refreshToken.ts::isRefreshTokenError",
+    "lib/oidc/util/validateToken.ts::validateToken",
+    "lib/util/PromiseQueue.ts::PromiseQueue",
+    "lib/util/console.ts::deprecate",
+    "lib/util/console.ts::deprecateWrap",
+    "lib/util/misc.ts::delay",
+    "lib/util/misc.ts::isoToUTCString",
+    "lib/util/object.ts::bind",
+    "lib/util/object.ts::extend",
+    "lib/util/object.ts::getLink",
+    "lib/util/object.ts::omit",
+    "lib/util/types.ts::isNumber",
+    "lib/util/types.ts::isObject",
+    "lib/util/types.ts::isPromise",
+    "lib/util/url.ts::toAbsoluteUrl",
+    "lib/util/url.ts::toRelativeUrl"
+  ],
+  "compiler_sha256": "c8547de9ea2b8c0f9fcf6ac0cb4ac510c36dc67ad27843fd3d5be33ca6eba452",
+  "native_support_sha256": "5f3a9d394792efd3183dff98b8c8673d7180af12b3edd80527e7efa7dbf9adfb",
+  "generated_sha256": "347113fb44f7565525fc98aa73b3efe961fe6bba7c37089f0a8fae16fd8139b2"
+}
