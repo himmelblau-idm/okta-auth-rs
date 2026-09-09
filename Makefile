@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := build
 
-.PHONY: help build release test test-hsm parity generate check-generated inspect source-hash fmt fmt-check clean publish publish-dry-run
+.PHONY: help build build-mfa-example run-mfa-example release test test-hsm parity generate check-generated inspect source-hash fmt fmt-check clean publish publish-dry-run
 
 help: ## Show available maintenance commands
 	@printf 'Usage: make [target]\n\n'
@@ -11,6 +11,20 @@ help: ## Show available maintenance commands
 
 build: ## Build the workspace in the development profile
 	cargo build --locked --workspace
+
+build-mfa-example: ## Build the interactive MFA example
+	cargo build --locked -p okta-auth-rs --example okta-mfa
+
+run-mfa-example: export ISSUER := $(ISSUER)
+run-mfa-example: export CLIENT_ID := $(CLIENT_ID)
+run-mfa-example: export REDIRECT_URI := $(REDIRECT_URI)
+run-mfa-example: build-mfa-example ## Run MFA example (ISSUER=... CLIENT_ID=... REDIRECT_URI=...)
+	@if [ -z "$$ISSUER" ] || [ -z "$$CLIENT_ID" ] || [ -z "$$REDIRECT_URI" ]; then \
+		printf '%s\n' 'Error: ISSUER, CLIENT_ID, and REDIRECT_URI are all required.' \
+			'Usage: make run-mfa-example ISSUER=https://YOUR_ORG.okta.com/oauth2/default CLIENT_ID=YOUR_CLIENT_ID REDIRECT_URI=http://127.0.0.1:8765/callback' >&2; \
+		exit 1; \
+	fi
+	cargo run --locked -p okta-auth-rs --example okta-mfa -- "$$ISSUER" "$$CLIENT_ID" "$$REDIRECT_URI"
 
 release: ## Build the workspace in the release profile
 	cargo build --locked --workspace --release

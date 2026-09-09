@@ -54,11 +54,11 @@ https://example.okta.com/oauth2/default
 
 ## Add the library
 
-The merged public API is not yet published to crates.io. Add it as a path dependency from a checkout of this repository:
+Add the library from [crates.io](https://crates.io/crates/okta-auth-rs):
 
 ```toml
 [dependencies]
-okta = { package = "okta-auth-rs", path = "../okta-auth-rs/src/okta" }
+okta = { package = "okta-auth-rs", version = "8.0.1001" }
 serde_json = "1"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 ```
@@ -74,6 +74,23 @@ cargo build --locked -p okta-auth-rs
 The included terminal client displays the complete schema for every step and accepts form values as a JSON object:
 
 ```sh
+make build-mfa-example
+make run-mfa-example \
+  ISSUER='https://example.okta.com/oauth2/default' \
+  CLIENT_ID='YOUR_CLIENT_ID' \
+  REDIRECT_URI='http://127.0.0.1:8765/callback'
+```
+
+`run-mfa-example` depends on `build-mfa-example`, so it builds the example
+automatically. All three variables are required; missing or empty values produce
+an error and a usage message. `ISSUER` is the Okta organization or authorization
+server URL described above, and `REDIRECT_URI` must match a registered sign-in
+redirect URI for your application.
+
+Alternatively, build and run directly with Cargo:
+
+```sh
+cargo build --locked -p okta-auth-rs --example okta-mfa
 cargo run --locked -p okta-auth-rs --example okta-mfa -- \
   https://example.okta.com/oauth2/default \
   YOUR_CLIENT_ID \
@@ -278,7 +295,7 @@ For direct USB CTAP2 support, enable `webauthn-usb`:
 ```toml
 okta = {
     package = "okta-auth-rs",
-    path = "../okta-auth-rs/src/okta",
+    version = "8.0.1001",
     features = ["webauthn-usb"],
 }
 ```
@@ -310,7 +327,7 @@ Enable `hsm` to seal refresh credentials and authentication continuations with a
 ```toml
 okta = {
     package = "okta-auth-rs",
-    path = "../okta-auth-rs/src/okta",
+    version = "8.0.1001",
     features = ["hsm"],
 }
 ```
