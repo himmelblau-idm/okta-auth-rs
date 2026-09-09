@@ -1369,7 +1369,7 @@ dependencies = [
 
 [[package]]
 name = "okta-auth-rs"
-version = "8.0.1001"
+version = "8.0.1002"
 dependencies = [
  "authenticator",
  "base64 0.22.1",
@@ -1393,7 +1393,7 @@ dependencies = [
 
 [[package]]
 name = "okta-translator"
-version = "8.0.1001"
+version = "8.0.1002"
 dependencies = [
  "oxc_allocator",
  "oxc_ast",
