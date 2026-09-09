@@ -69,6 +69,17 @@ The repository's `rust-toolchain.toml` selects Rust 1.88 automatically. Build th
 cargo build --locked -p okta-auth-rs
 ```
 
+### Versioning
+
+`okta-auth-rs` versions track the upstream `okta-auth-js` version, with three
+digits appended to the upstream patch number to identify Rust revisions. This
+allows minor Rust fixes to be released while continuing to track the same
+upstream version.
+
+For example, the version `8.0.1001` would track `okta-auth-js` `8.0.1`:
+the final `001` identifies the first Rust revision following that upstream
+release. A second Rust revision would be `8.0.1002`.
+
 ## Try the terminal client
 
 The included terminal client displays the complete schema for every step and accepts form values as a JSON object:
