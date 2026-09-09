@@ -9,6 +9,9 @@ fn q(s: &str) -> String {
 }
 struct Emitter {
     module: String,
+    symbol: String,
+    function_depth: usize,
+    diagnostics: bool,
     functions: Vec<String>,
     next: usize,
     in_try: bool,
@@ -70,7 +73,8 @@ impl Emitter {
         };
         let mut s = format!("{{let mut completion={};", wrap(body, self.asynchronous));
         if !v["handler"].is_null() {
-            let mut catch = "let scope=cx.scope(Some(scope));".to_string();
+            let mut catch =
+                "cx.diagnostic_caught(&error);let scope=cx.scope(Some(scope));".to_string();
             if !v["handler"]["param"].is_null() {
                 catch += &self.bind(&v["handler"]["param"], "error")?;
             }
@@ -285,6 +289,14 @@ impl Emitter {
                 "asynchronous/generator function requires additional lowering",
             );
         }
+        let hook = if self.diagnostics && self.function_depth == 0 {
+            crate::diagnostic::HOOKS
+                .iter()
+                .find(|h| h.module == self.module && h.symbol == self.symbol)
+        } else {
+            None
+        };
+        self.function_depth += 1;
         let id = self.next;
         self.next += 1;
         let previous = (
@@ -318,11 +330,37 @@ impl Emitter {
             body += &format!("return Ok({});\n", self.expr(&v["body"])?);
         }
         let asynchronous = v["async"] == true;
-        if asynchronous {
-            self.functions.push(format!("fn f{id}(engine:Engine,parent:usize,this:V,args:Vec<V>)->crate::runtime::JFuture {{Box::pin(async move {{let cx=&engine;let scope=cx.scope(Some(parent));{body} Ok(V::Undefined)}})}}\n"));
+        let stage = hook
+            .and_then(|h| h.stage)
+            .map(|s| format!("Some(crate::FailureStage::{s})"))
+            .unwrap_or("None".into());
+        let validation = hook.is_some_and(|h| h.validation);
+        let protocol =
+            self.module.starts_with("lib/http/") || self.module.starts_with("lib/fetch/");
+        let preflight = if hook.is_some_and(|h| h.finish == "idx") {
+            "cx.diagnostic_idx_input(args.get(1).unwrap_or(&V::Undefined))?;"
+        } else if hook.is_some_and(|h| h.finish == "scopes") {
+            "cx.diagnostic_oauth_input(args.get(2).unwrap_or(&V::Undefined))?;"
         } else {
-            self.functions.push(format!("fn f{id}(cx:&Engine,parent:usize,this:V,args:Vec<V>)->JResult {{\nlet scope=cx.scope(Some(parent));\n{body}\nOk(V::Undefined)\n}}\n"));
+            ""
+        };
+        let capture = if hook.is_some_and(|h| matches!(h.finish, "transfer" | "scopes")) {
+            "let diagnostic_args=args.clone();"
+        } else {
+            ""
+        };
+        let finish = match hook.map(|h| h.finish) {
+            Some("transfer") => "cx.diagnostic_transfer(diagnostic_args.get(1).unwrap_or(&V::Undefined), result)",
+            Some("scopes") => "cx.diagnostic_token_scopes(diagnostic_args.get(2).unwrap_or(&V::Undefined), result)",
+            Some("interact") => "cx.diagnostic_interact_result(result)",
+            _ => "cx.diagnostic_result(result)",
+        };
+        if asynchronous {
+            self.functions.push(format!("fn f{id}(engine:Engine,parent:usize,this:V,args:Vec<V>)->crate::runtime::JFuture {{Box::pin(async move {{let engine=engine.diagnostic_frame({stage},{validation},{protocol});let cx=&engine;{capture}let scope=cx.scope(Some(parent));let result=async{{{preflight}{body} Ok(V::Undefined)}}.await;{finish}}})}}\n"));
+        } else {
+            self.functions.push(format!("fn f{id}(engine:&Engine,parent:usize,this:V,args:Vec<V>)->JResult {{let engine=engine.diagnostic_frame({stage},{validation},{protocol});let cx=&engine;{capture}let scope=cx.scope(Some(parent));let result=(||{{{preflight}{body} Ok(V::Undefined)}})();{finish}}}\n"));
         }
+        self.function_depth -= 1;
         self.in_try = previous.0;
         self.asynchronous = previous.1;
         self.loop_depth = previous.2;
@@ -757,6 +795,9 @@ impl Emitter {
 pub fn generate(graph: &Graph, manifest: &Manifest) -> Result<String> {
     let mut emitter = Emitter {
         module: String::new(),
+        symbol: String::new(),
+        function_depth: 0,
+        diagnostics: graph.native_profile,
         functions: vec![],
         next: 0,
         in_try: false,
@@ -814,6 +855,7 @@ pub fn generate(graph: &Graph, manifest: &Manifest) -> Result<String> {
     }
     for (module, symbol) in &ordered {
         emitter.module = module.clone();
+        emitter.symbol = symbol.clone();
         let d = &graph.modules[module].definitions[symbol];
         let expr = emitter.expr(d)?;
         initialize += &format!(

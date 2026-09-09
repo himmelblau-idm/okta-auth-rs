@@ -1,5 +1,7 @@
 //! Native Okta authentication translated from pinned upstream source.
 mod credential;
+mod failure;
+pub use failure::{FailureKind, FailureStage, OperationFailure, RequestOutcome};
 #[doc(hidden)]
 pub mod generated;
 #[doc(hidden)]

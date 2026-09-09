@@ -15,6 +15,9 @@ pub struct Reply {
     pub status: u16,
     pub delay: Duration,
     pub headers: Vec<(String, String)>,
+    pub raw_body: Option<Vec<u8>>,
+    pub body_delay: Duration,
+    pub declared_length: Option<usize>,
 }
 impl Reply {
     pub fn ok(prefix: &'static str, body: Value) -> Self {
@@ -24,7 +27,20 @@ impl Reply {
             status: 200,
             delay: Duration::ZERO,
             headers: vec![],
+            raw_body: None,
+            body_delay: Duration::ZERO,
+            declared_length: None,
         }
+    }
+    pub fn status(mut self, status: u16) -> Self {
+        self.status = status;
+        self
+    }
+    pub fn raw(mut self, content_type: &str, body: impl Into<Vec<u8>>) -> Self {
+        self.raw_body = Some(body.into());
+        self.headers
+            .push(("Content-Type".into(), content_type.into()));
+        self
     }
     pub fn header(mut self, name: impl Into<String>, value: impl Into<String>) -> Self {
         self.headers.push((name.into(), value.into()));
@@ -93,16 +109,35 @@ impl Server {
                     "unexpected fixture request: {request}"
                 );
                 requests.push(request);
-                let body = reply.body.to_string();
+                let body = reply
+                    .raw_body
+                    .unwrap_or_else(|| reply.body.to_string().into_bytes());
                 std::thread::sleep(reply.delay);
                 let headers = reply
                     .headers
                     .iter()
                     .map(|(name, value)| format!("{name}: {value}\r\n"))
                     .collect::<String>();
-                let sent=write!(stream,"HTTP/1.1 {} Fixture\r\nContent-Type: application/json\r\n{}Content-Length: {}\r\nConnection: close\r\n\r\n{}",reply.status,headers,body.len(),body);
-                if reply.delay.is_zero() {
-                    sent.unwrap();
+                let content_type = if reply
+                    .headers
+                    .iter()
+                    .any(|(name, _)| name.eq_ignore_ascii_case("content-type"))
+                {
+                    ""
+                } else {
+                    "Content-Type: application/json\r\n"
+                };
+                let sent = write!(
+                    stream,
+                    "HTTP/1.1 {} Fixture\r\n{}{}Content-Length: {}\r\nConnection: close\r\n\r\n",
+                    reply.status,
+                    content_type,
+                    headers,
+                    reply.declared_length.unwrap_or(body.len())
+                );
+                if sent.is_ok() {
+                    std::thread::sleep(reply.body_delay);
+                    let _ = stream.write_all(&body);
                 }
             }
             requests

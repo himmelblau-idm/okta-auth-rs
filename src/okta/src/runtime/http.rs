@@ -1,10 +1,12 @@
 //! HTTP platform service. Request serialization and response interpretation are generated.
 use super::{Engine, JResult, V};
+use crate::{FailureKind, OperationFailure, RequestOutcome};
 use reqwest::{
     header::{HeaderName, HeaderValue},
     redirect::Policy,
     Client, Url,
 };
+use std::time::SystemTime;
 use std::{
     sync::{Arc, Mutex},
     time::Duration,
@@ -89,7 +91,8 @@ impl HttpTransport {
             let builder = Client::builder()
                 .use_rustls_tls()
                 .timeout(timeout)
-                .redirect(Policy::none());
+                .redirect(Policy::none())
+                .retry(reqwest::retry::never());
             // Match libhimmelblau's opt-in interception feature. Certificate
             // verification is relaxed only when an explicit proxy is configured.
             #[cfg(feature = "proxyable")]
@@ -133,13 +136,24 @@ impl HttpTransport {
         Ok(())
     }
     async fn request(&self, cx: &Engine, args: Vec<V>) -> JResult {
+        // A source-level retry (including an unexpected DPoP challenge) must not
+        // reuse an interaction code or a potentially rotated refresh credential.
+        if let Some(failure) = cx.mutation_evidence() {
+            let error = cx.error("mutation replay prohibited");
+            cx.attach_evidence(&error, failure);
+            return Err(error);
+        }
+        cx.request_evidence(OperationFailure::local(FailureKind::Protocol, cx.1.stage));
         let url = Url::parse(&args.first().unwrap_or(&V::Undefined).text())
             .map_err(|_| cx.error("invalid request URL"))?;
         if !self.origins.contains(&url.origin().ascii_serialization())
             || !url.username().is_empty()
             || url.password().is_some()
         {
-            return Err(cx.error("request origin is not trusted"));
+            let mut failure = cx.current_evidence();
+            failure.kind = FailureKind::Trust;
+            cx.request_evidence(failure);
+            return cx.diagnostic_result(Err(cx.error("request origin is not trusted")));
         }
         let options = args.get(1).cloned().unwrap_or(V::Undefined);
         let method = reqwest::Method::from_bytes(cx.get(&options, "method")?.text().as_bytes())
@@ -168,11 +182,36 @@ impl HttpTransport {
             }
             request = request.body(body.text());
         }
-        let mut response = request
-            .send()
-            .await
-            .map_err(|_| cx.error("native request failed"))?;
+        let request = request.build().map_err(|_| cx.error("invalid request"))?;
+        let mut pending = cx.current_evidence();
+        pending.outcome = RequestOutcome::Unknown;
+        cx.request_evidence(pending);
+        let mut response = client.execute(request).await.map_err(|error| {
+            let mut failure = cx.current_evidence();
+            failure.kind = classify_send_error(&error);
+            failure.outcome = RequestOutcome::Unknown;
+            cx.request_evidence(failure.clone());
+            let error = cx.error("native request failed");
+            cx.attach_evidence(&error, failure);
+            error
+        })?;
         let status = response.status();
+        let mut failure = OperationFailure::local(
+            if status.is_success() {
+                FailureKind::Protocol
+            } else {
+                FailureKind::Http
+            },
+            cx.1.stage,
+        );
+        failure.http_status = Some(status.as_u16());
+        failure.outcome = RequestOutcome::ResponseReceived;
+        failure.retry_after = response
+            .headers()
+            .get("retry-after")
+            .and_then(|h| h.to_str().ok())
+            .and_then(|h| retry_after(h, SystemTime::now()));
+        cx.request_evidence(failure);
         let headers = cx.object();
         for (name, value) in response.headers() {
             cx.put(
@@ -195,6 +234,35 @@ impl HttpTransport {
                 return Err(cx.error("response exceeds configured limit"));
             }
             bytes.extend_from_slice(&chunk);
+        }
+        if let Ok(body) = serde_json::from_slice::<serde_json::Value>(&bytes) {
+            let mut failure = cx.current_evidence();
+            failure.oauth_error =
+                crate::failure::safe_code(body.get("error").and_then(|v| v.as_str()));
+            failure.okta_error_code =
+                crate::failure::safe_code(body.get("errorCode").and_then(|v| v.as_str()));
+            cx.request_evidence(failure);
+            if status.is_success() {
+                let usable = (body.is_object() || cx.1.stage == crate::FailureStage::Revoke)
+                    && match cx.1.stage {
+                        crate::FailureStage::Interact => body
+                            .get("interaction_handle")
+                            .and_then(|v| v.as_str())
+                            .is_some_and(|s| !s.is_empty()),
+                        crate::FailureStage::Discovery => {
+                            body.get("issuer").is_some_and(|v| v.is_string())
+                        }
+                        crate::FailureStage::Jwks => body.get("keys").is_some_and(|v| v.is_array()),
+                        _ => true,
+                    };
+                if !usable {
+                    let mut failure = cx.current_evidence();
+                    failure.kind = FailureKind::Protocol;
+                    let error = cx.error("invalid protocol response");
+                    cx.attach_evidence(&error, failure);
+                    return Err(error);
+                }
+            }
         }
         let body_text = V::string(String::from_utf8_lossy(&bytes).into_owned());
         let scope = cx.scope(None);
@@ -228,9 +296,30 @@ impl HttpTransport {
             Ok(cx.promise(Box::pin(async move { Ok(body) })))
         }
         fn json(cx: &Engine, scope: usize, _this: V, _args: Vec<V>) -> JResult {
-            let value = serde_json::from_str(&cx.lookup(scope, "body")?.text())
+            let body = cx.lookup(scope, "body")?.text();
+            // Revocation has no required response representation. Treat an
+            // empty successful body as the empty result expected by httpRequest.
+            if body.is_empty()
+                && cx.1.stage == crate::FailureStage::Revoke
+                && cx
+                    .current_evidence()
+                    .http_status
+                    .is_some_and(|s| (200..300).contains(&s))
+            {
+                let empty = cx.object();
+                return Ok(cx.promise(Box::pin(async move { Ok(empty) })));
+            }
+            let value = serde_json::from_str(&body)
                 .map(|v| cx.from_json(&v))
-                .map_err(|_| cx.error("invalid JSON response"));
+                .map_err(|_| {
+                    let error = cx.error("invalid JSON response");
+                    let mut failure = cx.current_evidence();
+                    if failure.http_status.is_some_and(|s| (200..300).contains(&s)) {
+                        failure.kind = FailureKind::Protocol;
+                    }
+                    cx.attach_evidence(&error, failure);
+                    error
+                });
             Ok(cx.promise(Box::pin(async move { value })))
         }
         let header_api = cx.object();
@@ -242,6 +331,7 @@ impl HttpTransport {
         cx.put(&result, "ok", V::Bool(status.is_success()))?;
         cx.put(&result, "text", cx.function(scope, text))?;
         cx.put(&result, "json", cx.function(scope, json))?;
+        cx.attach_evidence(&result, cx.current_evidence());
         Ok(result)
     }
 }
@@ -263,7 +353,69 @@ impl Engine {
         let transport = self
             .http_transport()
             .ok_or_else(|| self.error("no HTTP transport configured"))?;
-        let cx = self.clone();
-        Ok(self.schedule(Box::pin(async move { transport.request(&cx, args).await })))
+        let mut cx = self.clone();
+        // A fresh slot identifies this specific request, not the last request
+        // made by another callback. Values carry immutable evidence snapshots.
+        cx.1.request = Arc::default();
+        Ok(self.schedule(Box::pin(async move {
+            let result = transport.request(&cx, args).await;
+            // Body and header failures retain the request's already-received status.
+            if let Err(error) = &result {
+                let mut failure = cx.current_evidence();
+                if failure.http_status.is_some_and(|s| (200..300).contains(&s)) {
+                    failure.kind = FailureKind::Protocol;
+                }
+                cx.attach_evidence(error, failure);
+            }
+            result
+        })))
+    }
+}
+
+/// The public retry delay is capped at one day, including enormous decimal values.
+fn retry_after(value: &str, now: SystemTime) -> Option<Duration> {
+    const MAX: Duration = Duration::from_secs(24 * 60 * 60);
+    let value = value.trim();
+    if !value.is_empty() && value.bytes().all(|b| b.is_ascii_digit()) {
+        let seconds = value.bytes().fold(0u64, |n, b| {
+            n.saturating_mul(10).saturating_add(u64::from(b - b'0'))
+        });
+        return Some(Duration::from_secs(seconds).min(MAX));
+    }
+    let date = httpdate::parse_http_date(value).ok()?;
+    Some(date.duration_since(now).unwrap_or_default().min(MAX))
+}
+
+fn classify_send_error(error: &reqwest::Error) -> FailureKind {
+    fn tls_kind(error: &(dyn std::error::Error + 'static), depth: usize) -> Option<FailureKind> {
+        if depth == 32 {
+            return None;
+        }
+        if let Some(tls) = error.downcast_ref::<rustls::Error>() {
+            return Some(match tls {
+                rustls::Error::InvalidCertificate(_)
+                | rustls::Error::InvalidCertRevocationList(_) => FailureKind::Trust,
+                _ => FailureKind::Protocol,
+            });
+        }
+        // io::Error::source can skip its boxed inner error, including nested io
+        // wrappers around rustls. Inspect get_ref at every level, not just one.
+        if let Some(inner) = error
+            .downcast_ref::<std::io::Error>()
+            .and_then(|e| e.get_ref())
+        {
+            if let Some(kind) = tls_kind(inner, depth + 1) {
+                return Some(kind);
+            }
+        }
+        error.source().and_then(|e| tls_kind(e, depth + 1))
+    }
+    if let Some(kind) = tls_kind(error, 0) {
+        return kind;
+    }
+    if error.is_timeout() || error.is_connect() || error.is_request() {
+        FailureKind::Transport
+    } else {
+        FailureKind::Protocol
     }
 }

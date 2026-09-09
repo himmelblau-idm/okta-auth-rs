@@ -80,7 +80,7 @@ fn accept(listener: &TcpListener) -> TcpStream {
 
 async fn get(transport: &HttpTransport, url: &str, credentials: &str) -> JResult {
     let cx = Engine::new();
-    transport
+    let result = transport
         .request(
             &cx,
             vec![
@@ -88,7 +88,16 @@ async fn get(transport: &HttpTransport, url: &str, credentials: &str) -> JResult
                 cx.from_json(&json!({"method": "GET", "credentials": credentials})),
             ],
         )
-        .await
+        .await;
+    if let Err(error) = &result {
+        // With feature-disabled ambient proxy variables, the failure can occur
+        // at CONNECT before TLS. The absent-proxy case reaches the certificate.
+        if url == "https://untrusted.invalid/" || std::env::var(CASE_ENV).as_deref() == Ok("absent")
+        {
+            assert_eq!(cx.evidence(error).unwrap().kind, FailureKind::Trust);
+        }
+    }
+    result
 }
 
 #[test]
@@ -226,4 +235,135 @@ fn proxy_case() {
         assert!(!requests[2].contains("cookie:"));
         assert!(!requests[3].contains("cookie:"));
     }
+}
+
+#[test]
+fn retry_after_is_bounded_and_handles_http_dates() {
+    use std::time::{SystemTime, UNIX_EPOCH};
+    let now = UNIX_EPOCH + Duration::from_secs(1_000_000_000);
+    for (header, expected) in [
+        ("0", Some(0)),
+        ("17", Some(17)),
+        ("99999999999999999999999999", Some(86400)),
+        ("-1", None),
+        ("1.5", None),
+        ("bad", None),
+        ("", None),
+    ] {
+        assert_eq!(retry_after(header, now), expected.map(Duration::from_secs));
+    }
+    for (time, expected) in [
+        (now - Duration::from_secs(1), 0),
+        (now + Duration::from_secs(12), 12),
+        (now + Duration::from_secs(864000), 86400),
+    ] {
+        assert_eq!(
+            retry_after(&httpdate::fmt_http_date(time), now),
+            Some(Duration::from_secs(expected))
+        );
+    }
+    assert_eq!(
+        retry_after("Sun, 06 Nov 1994 08:49:37 GMT", SystemTime::now()),
+        Some(Duration::ZERO)
+    );
+}
+
+async fn request_failure(origin: &str, timeout: Duration) -> crate::OperationFailure {
+    fn fetch(cx: &Engine, _: usize, _: V, args: Vec<V>) -> JResult {
+        cx.fetch(args)
+    }
+    let cx = Engine::new();
+    cx.set_http_transport(HttpTransport::new(&[origin.into()], timeout, true).unwrap());
+    let function = cx.function(cx.scope(None), fetch);
+    let error = cx
+        .execute(
+            function,
+            V::Undefined,
+            vec![V::string(origin), cx.from_json(&json!({"method":"GET"}))],
+        )
+        .await
+        .unwrap_err();
+    let crate::OktaError::OperationFailed(failure) =
+        cx.operation_error(&error, crate::FailureStage::Remediation)
+    else {
+        panic!("untyped error")
+    };
+    failure
+}
+
+#[tokio::test]
+async fn body_failures_keep_status_and_response_outcome() {
+    use crate::test_server::{Reply, Server};
+    for status in [200, 404, 503] {
+        for mode in ["truncated", "timeout", "oversize"] {
+            let server = Server::new(|_| {
+                let mut reply = Reply::ok("GET / ", json!({})).status(status);
+                match mode {
+                    "truncated" => reply.declared_length = Some(100),
+                    "timeout" => reply.body_delay = Duration::from_millis(150),
+                    _ => reply = reply.raw("application/json", vec![b'x'; 4 * 1024 * 1024 + 1]),
+                }
+                vec![reply]
+            });
+            let f = request_failure(
+                &server.origin,
+                Duration::from_millis(if mode == "timeout" { 30 } else { 2000 }),
+            )
+            .await;
+            assert_eq!(
+                f.kind,
+                if status == 200 {
+                    FailureKind::Protocol
+                } else {
+                    FailureKind::Http
+                }
+            );
+            assert_eq!(f.http_status, Some(status));
+            assert_eq!(f.outcome, RequestOutcome::ResponseReceived);
+            server.finish();
+        }
+    }
+}
+
+#[tokio::test]
+async fn connection_failure_has_no_response_and_no_replay_promise() {
+    let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+    let origin = format!("http://{}", listener.local_addr().unwrap());
+    drop(listener);
+    let f = request_failure(&origin, Duration::from_secs(1)).await;
+    assert_eq!(f.kind, FailureKind::Transport);
+    assert_eq!(f.http_status, None);
+    assert_eq!(f.outcome, RequestOutcome::Unknown);
+}
+
+#[tokio::test]
+async fn dns_failure_is_transport_without_system_dns() {
+    struct Unavailable;
+    impl reqwest::dns::Resolve for Unavailable {
+        fn resolve(&self, _: reqwest::dns::Name) -> reqwest::dns::Resolving {
+            Box::pin(async {
+                Err(std::io::Error::new(std::io::ErrorKind::NotFound, "fixture DNS failure").into())
+            })
+        }
+    }
+    let origin = "https://dns-fixture.invalid";
+    let mut transport =
+        HttpTransport::new(&[origin.into()], Duration::from_secs(1), false).unwrap();
+    transport.anonymous = Client::builder()
+        .no_proxy()
+        .dns_resolver(Arc::new(Unavailable))
+        .build()
+        .unwrap();
+    let cx = Engine::new();
+    let error = transport
+        .request(
+            &cx,
+            vec![V::string(origin), cx.from_json(&json!({"method":"GET"}))],
+        )
+        .await
+        .unwrap_err();
+    let failure = cx.evidence(&error).unwrap();
+    assert_eq!(failure.kind, FailureKind::Transport);
+    assert_eq!(failure.outcome, RequestOutcome::Unknown);
+    assert_eq!(failure.http_status, None);
 }

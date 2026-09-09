@@ -188,6 +188,21 @@ impl Sdk {
             storage: stores,
         })
     }
+    pub fn has_interaction_handle(&self) -> Result<bool, V> {
+        let store = self
+            .storage
+            .get("getTransactionStorage")
+            .ok_or_else(|| self.engine.error("missing transaction storage"))?;
+        let meta = self.engine.method(store.clone(), "getStorage", vec![])?;
+        Ok(matches!(self.engine.get(&meta, "interactionHandle")?, V::String(s) if !s.is_empty()))
+    }
+    pub fn clear(&mut self) {
+        self.engine.cancel_pending();
+        self.storage.clear();
+        self.exports.clear();
+        self.client = V::Undefined;
+        self.engine = Engine::new();
+    }
     pub async fn call(&self, name: &str, mut args: Vec<V>) -> JResult {
         let f = self
             .exports

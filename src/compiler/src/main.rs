@@ -1,3 +1,4 @@
+mod diagnostic;
 mod emit;
 mod frontend;
 mod profile;
@@ -229,6 +230,9 @@ fn run() -> Result<()> {
         return Ok(());
     }
     graph.validate()?;
+    if manifest.native_profile {
+        diagnostic::validate(&graph)?;
+    }
     if !manifest.constants.is_empty() {
         return Err(
             "manifest constants are not implemented; use the documented native profile".into(),
@@ -249,6 +253,8 @@ fn run() -> Result<()> {
             include_str!("frontend.rs"),
             include_str!("emit.rs"),
             include_str!("profile.rs"),
+            include_str!("diagnostic.rs"),
+            include_str!("diagnostic-sources.json"),
             include_str!("../Cargo.toml")
         )
         .as_bytes(),
@@ -260,11 +266,20 @@ fn run() -> Result<()> {
             include_str!("../../okta/src/runtime/value.rs"),
             include_str!("../../okta/src/runtime/native.rs"),
             include_str!("../../okta/src/runtime/http.rs"),
+            include_str!("../../okta/src/runtime/diagnostic.rs"),
+            include_str!("../../okta/src/failure.rs"),
+            include_str!("../../okta/src/client.rs"),
+            include_str!("../../okta/src/sdk.rs"),
+            include_str!("../../okta/src/credential.rs"),
             include_str!("../../okta/Cargo.toml")
         )
         .as_bytes(),
     )
     .into();
+    report["diagnostic_annotations"] = serde_json::json!(diagnostic::HOOKS
+        .iter()
+        .map(|h| (h.module, h.symbol, h.stage, h.validation, h.finish))
+        .collect::<Vec<_>>());
     report["rustfmt_version"] = rustfmt_version.into();
     report["generated_sha256"] = hash(rust.as_bytes()).into();
     let report = serde_json::to_string_pretty(&report).map_err(|e| e.to_string())? + "\n";

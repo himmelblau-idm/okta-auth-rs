@@ -1,6 +1,6 @@
 //! Caller-driven authentication flows. Authentication decisions execute generated code.
 use crate::runtime::{HttpTransport, V};
-use crate::{sdk::Sdk, RefreshCredential};
+use crate::{sdk::Sdk, FailureKind, FailureStage, OperationFailure, RefreshCredential};
 use ring::rand::{SecureRandom, SystemRandom};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value as Json};
@@ -49,6 +49,8 @@ impl std::fmt::Debug for AuthOptions {
 }
 #[derive(Debug, thiserror::Error)]
 pub enum OktaError {
+    #[error("{0}")]
+    OperationFailed(crate::OperationFailure),
     #[error("invalid client configuration")]
     Configuration,
     #[error("step belongs to a different or older flow response")]
@@ -61,8 +63,6 @@ pub enum OktaError {
     Canceled,
     #[error("input conflicts with a reserved SDK option")]
     ReservedInput,
-    #[error("authentication operation failed")]
-    Authentication,
     #[error("generated SDK returned an unsupported result")]
     UnsupportedResult,
     #[error("sensitive continuation is invalid")]
@@ -177,13 +177,31 @@ pub enum AuthInput {
 pub struct UserToken {
     data: SensitiveJson,
     refresh: Option<RefreshCredential>,
+    scopes: Option<Vec<String>>,
+    expires_at: Option<u64>,
 }
 impl std::fmt::Debug for UserToken {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str("UserToken { [redacted] }")
     }
 }
+impl Drop for UserToken {
+    fn drop(&mut self) {
+        self.scopes.zeroize();
+    }
+}
 impl UserToken {
+    pub fn token_type(&self) -> Option<&str> {
+        self.data.0["accessToken"]["tokenType"].as_str()
+    }
+    /// Returned/granted scopes; None when the server omitted scope.
+    pub fn scopes(&self) -> Option<&[String]> {
+        self.scopes.as_deref()
+    }
+    /// Absolute UNIX seconds for the access token's expiration.
+    pub fn expires_at(&self) -> Option<u64> {
+        self.expires_at
+    }
     pub fn access_token(&self) -> Option<&str> {
         self.data.0["accessToken"]["accessToken"].as_str()
     }
@@ -222,6 +240,7 @@ struct ContinuationEnvelope {
     schema: u32,
     binding: String,
     upstream_commit: String,
+    build: String,
     stores: BTreeMap<String, Json>,
     cookies: Vec<u8>,
 }
@@ -354,7 +373,7 @@ impl PublicClientApplication {
             .sdk
             .call("startTransaction", vec![input])
             .await
-            .map_err(|_| OktaError::Authentication)?;
+            .map_err(|e| flow.sdk.engine.operation_error(&e, FailureStage::Interact))?;
         self.accept(&mut flow, response)?;
         Ok(flow)
     }
@@ -385,7 +404,11 @@ impl PublicClientApplication {
             .engine
             .execute(action, V::Undefined, vec![args])
             .await
-            .map_err(|_| OktaError::Authentication)?;
+            .map_err(|e| {
+                flow.sdk
+                    .engine
+                    .operation_error(&e, FailureStage::Remediation)
+            })?;
         self.accept(flow, response)
     }
     pub async fn cancel_auth_flow(&self, flow: &mut AuthFlow) -> Result<(), OktaError> {
@@ -399,21 +422,26 @@ impl PublicClientApplication {
             .clone();
         self.continue_auth_flow(flow, &cancel, AuthInput::Form(FormInput::empty()))
             .await?;
-        flow.closed = true;
+        self.close_flow(flow);
         Ok(())
     }
     /// Discard local state without making a network request.
     pub fn abandon_auth_flow(&self, flow: &mut AuthFlow) -> Result<(), OktaError> {
         self.check(flow, true)?;
-        flow.sdk.engine.cancel_pending();
         flow.status = AuthStatus::Canceled;
+        self.close_flow(flow);
+        Ok(())
+    }
+    fn close_flow(&self, flow: &mut AuthFlow) {
+        flow.sdk.engine.cancel_pending();
         flow.in_flight = false;
         flow.closed = true;
         flow.steps.clear();
         flow.step_actions.clear();
         flow.tokens = None;
         flow.snapshot = SensitiveJson(json!({}));
-        Ok(())
+        flow.current = V::Undefined;
+        flow.sdk.clear();
     }
     /// Reconcile after a canceled future or uncertain transport outcome; never replay a form submission.
     pub async fn introspect_auth_flow(&self, flow: &mut AuthFlow) -> Result<(), OktaError> {
@@ -428,15 +456,25 @@ impl PublicClientApplication {
             .engine
             .method(manager, "clearIdxResponse", vec![])
             .map_err(|_| OktaError::UnsupportedResult)?;
+        if !flow.sdk.has_interaction_handle().map_err(|e| {
+            flow.sdk
+                .engine
+                .operation_error(&e, FailureStage::Introspect)
+        })? {
+            return Err(OktaError::OperationFailed(OperationFailure::local(
+                FailureKind::Protocol,
+                FailureStage::Introspect,
+            )));
+        }
         let args = flow
             .sdk
             .engine
             .from_json(&json!({"autoRemediate":false,"exchangeCodeForTokens":false}));
-        let response = flow
-            .sdk
-            .call("proceed", vec![args])
-            .await
-            .map_err(|_| OktaError::Authentication)?;
+        let response = flow.sdk.call("proceed", vec![args]).await.map_err(|e| {
+            flow.sdk
+                .engine
+                .operation_error(&e, FailureStage::Introspect)
+        })?;
         self.accept(flow, response)
     }
     /// Continue an email verification callback using the transaction already held by this flow.
@@ -452,10 +490,9 @@ impl PublicClientApplication {
             .sdk
             .call("handleEmailVerifyCallback", vec![input])
             .await
-            .map_err(|_| OktaError::Authentication)?;
+            .map_err(|e| flow.sdk.engine.operation_error(&e, FailureStage::Callback))?;
         if response.nullish() {
-            flow.in_flight = false;
-            return Err(OktaError::UnsupportedResult);
+            return Err(callback_failure());
         }
         self.accept(flow, response)
     }
@@ -466,9 +503,10 @@ impl PublicClientApplication {
             return Err(OktaError::InvalidContinuation);
         }
         let envelope = ContinuationEnvelope {
-            schema: 1,
+            schema: 2,
             binding: self.binding.clone(),
             upstream_commit: crate::generated::UPSTREAM_COMMIT.to_string(),
+            build: build_binding(),
             stores: flow
                 .sdk
                 .export_storage()
@@ -515,11 +553,11 @@ impl PublicClientApplication {
             .sdk
             .engine
             .from_json(&json!({"autoRemediate":false,"exchangeCodeForTokens":true}));
-        let response = flow
-            .sdk
-            .call("proceed", vec![args])
-            .await
-            .map_err(|_| OktaError::InvalidContinuation)?;
+        let response = flow.sdk.call("proceed", vec![args]).await.map_err(|e| {
+            flow.sdk
+                .engine
+                .operation_error(&e, FailureStage::Introspect)
+        })?;
         self.accept(&mut flow, response)?;
         Ok(flow)
     }
@@ -531,13 +569,13 @@ impl PublicClientApplication {
     ) -> Result<UserToken, OktaError> {
         let expected =
             url::Url::parse(&self.config.redirect_uri).map_err(|_| OktaError::Configuration)?;
-        let actual = url::Url::parse(callback_url).map_err(|_| OktaError::Authentication)?;
+        let actual = url::Url::parse(callback_url).map_err(|_| callback_failure())?;
         if expected.scheme() != actual.scheme()
             || expected.host_str() != actual.host_str()
             || expected.port_or_known_default() != actual.port_or_known_default()
             || expected.path() != actual.path()
         {
-            return Err(OktaError::Authentication);
+            return Err(callback_failure());
         }
         let envelope = self.decode_continuation(continuation)?;
         let sdk = self.restore_sdk(&envelope)?;
@@ -546,20 +584,34 @@ impl PublicClientApplication {
             vec![V::string(callback_url)],
         )
         .await
-        .map_err(|_| OktaError::Authentication)?;
+        .map_err(|e| sdk.engine.operation_error(&e, FailureStage::Callback))?;
         let data = sdk
             .storage_value("tokens")
             .map_err(|_| OktaError::UnsupportedResult)?;
         if !data.is_object() {
             return Err(OktaError::UnsupportedResult);
         }
-        Ok(self.token(data))
+        Ok(self.token(data, sdk.engine.take_token_scopes()))
     }
     /// Renew access and ID tokens through the translated refresh-token implementation.
     pub async fn refresh_tokens(
         &self,
         credential: &RefreshCredential,
     ) -> Result<UserToken, OktaError> {
+        self.refresh_tokens_with_scopes(credential, &[]).await
+    }
+    /// Refresh using explicit requested scopes; an empty list uses configured scopes.
+    /// Okta remains authoritative for the credential's authorized grant.
+    pub async fn refresh_tokens_with_scopes(
+        &self,
+        credential: &RefreshCredential,
+        scopes: &[String],
+    ) -> Result<UserToken, OktaError> {
+        let scopes = if scopes.is_empty() {
+            &self.config.scopes[..]
+        } else {
+            scopes
+        };
         if credential.issuer() != self.config.issuer
             || credential.client_id() != self.config.client_id
         {
@@ -569,13 +621,13 @@ impl PublicClientApplication {
         let urls = sdk
             .call("getOAuthUrls", vec![sdk.engine.object()])
             .await
-            .map_err(|_| OktaError::Authentication)?;
+            .map_err(|e| sdk.engine.operation_error(&e, FailureStage::Refresh))?;
         let urls = sdk
             .engine
             .to_json(&urls)
             .map_err(|_| OktaError::UnsupportedResult)?;
-        let refresh = json!({"refreshToken":credential.secret(),"scopes":self.config.scopes,"tokenUrl":urls["tokenUrl"],"authorizeUrl":urls["authorizeUrl"],"issuer":urls["issuer"]});
-        let params = json!({"scopes":self.config.scopes});
+        let refresh = json!({"refreshToken":credential.expose_secret(),"scopes":scopes,"tokenUrl":urls["tokenUrl"],"authorizeUrl":urls["authorizeUrl"],"issuer":urls["issuer"]});
+        let params = json!({"scopes":scopes});
         let response = sdk
             .call(
                 "renewTokensWithRefresh",
@@ -585,7 +637,7 @@ impl PublicClientApplication {
                 ],
             )
             .await
-            .map_err(|_| OktaError::Authentication)?;
+            .map_err(|e| sdk.engine.operation_error(&e, FailureStage::Refresh))?;
         let mut data = sdk
             .engine
             .to_json(&response)
@@ -595,7 +647,7 @@ impl PublicClientApplication {
                 .ok_or(OktaError::UnsupportedResult)?
                 .insert("refreshToken".into(), refresh);
         }
-        Ok(self.token(data))
+        Ok(self.token(data, sdk.engine.take_token_scopes()))
     }
     /// Revoke the refresh credential at Okta's translated revocation endpoint.
     pub async fn revoke_refresh_token(
@@ -610,10 +662,10 @@ impl PublicClientApplication {
         let sdk = self.sdk()?;
         let token = sdk
             .engine
-            .from_json(&json!({"refreshToken":credential.secret()}));
+            .from_json(&json!({"refreshToken":credential.expose_secret()}));
         sdk.call("revokeToken", vec![token])
             .await
-            .map_err(|_| OktaError::Authentication)?;
+            .map_err(|e| sdk.engine.operation_error(&e, FailureStage::Revoke))?;
         Ok(())
     }
     /// Revoke this token's access token at Okta's translated revocation endpoint.
@@ -627,7 +679,7 @@ impl PublicClientApplication {
         let sdk = self.sdk()?;
         sdk.call("revokeToken", vec![sdk.engine.from_json(&access)])
             .await
-            .map_err(|_| OktaError::Authentication)?;
+            .map_err(|e| sdk.engine.operation_error(&e, FailureStage::Revoke))?;
         Ok(())
     }
     /// Fetch user claims and enforce the translated access-token/ID-token subject match.
@@ -649,7 +701,7 @@ impl PublicClientApplication {
                 vec![sdk.engine.from_json(access), sdk.engine.from_json(id)],
             )
             .await
-            .map_err(|_| OktaError::Authentication)?;
+            .map_err(|e| sdk.engine.operation_error(&e, FailureStage::UserInfo))?;
         sdk.engine
             .to_json(&response)
             .map_err(|_| OktaError::UnsupportedResult)
@@ -660,7 +712,8 @@ impl PublicClientApplication {
     ) -> Result<ContinuationEnvelope, OktaError> {
         let envelope: ContinuationEnvelope = serde_json::from_slice(continuation.as_bytes())
             .map_err(|_| OktaError::InvalidContinuation)?;
-        if envelope.schema != 1
+        if envelope.schema != 2
+            || envelope.build != build_binding()
             || envelope.binding != self.binding
             || envelope.upstream_commit != crate::generated::UPSTREAM_COMMIT
         {
@@ -669,6 +722,22 @@ impl PublicClientApplication {
         Ok(envelope)
     }
     fn restore_sdk(&self, envelope: &ContinuationEnvelope) -> Result<Sdk, OktaError> {
+        if envelope.stores.values().any(|value| !value.is_object())
+            || !envelope
+                .stores
+                .get("getTransactionStorage")
+                .is_some_and(|meta| {
+                    ["state", "codeVerifier", "interactionHandle"]
+                        .iter()
+                        .all(|key| {
+                            meta.get(*key)
+                                .and_then(Json::as_str)
+                                .is_some_and(|s| !s.is_empty())
+                        })
+                })
+        {
+            return Err(OktaError::InvalidContinuation);
+        }
         let sdk = self.sdk()?;
         sdk.import_storage(&envelope.stores)
             .map_err(|_| OktaError::InvalidContinuation)?;
@@ -677,7 +746,7 @@ impl PublicClientApplication {
             .map_err(|_| OktaError::InvalidContinuation)?;
         Ok(sdk)
     }
-    fn token(&self, data: Json) -> UserToken {
+    fn token(&self, data: Json, scopes: Option<Vec<String>>) -> UserToken {
         let refresh = data["refreshToken"]["refreshToken"].as_str().map(|secret| {
             RefreshCredential::import(
                 self.config.issuer.clone(),
@@ -685,44 +754,39 @@ impl PublicClientApplication {
                 secret.to_string(),
             )
         });
+        let access = &data["accessToken"];
+        let expires_at = access["expiresAt"].as_u64().or_else(|| {
+            let n = access["expiresAt"].as_f64()?;
+            (n.is_finite() && n >= 0.0 && n < u64::MAX as f64 && n.fract() == 0.0)
+                .then_some(n as u64)
+        });
         UserToken {
             data: SensitiveJson(data),
             refresh,
+            scopes,
+            expires_at,
         }
     }
     fn accept(&self, flow: &mut AuthFlow, response: V) -> Result<(), OktaError> {
         let cx = &flow.sdk.engine;
-        let snapshot = cx
-            .to_json(&response)
-            .map_err(|_| OktaError::UnsupportedResult)?;
+        let invalid = || cx.operation_error(&response, FailureStage::Remediation);
+        let snapshot = cx.to_json(&response).map_err(|_| invalid())?;
         let status = match snapshot["status"].as_str() {
             Some("PENDING") => AuthStatus::Pending,
             Some("SUCCESS") => AuthStatus::Success,
             Some("TERMINAL") => AuthStatus::Terminal,
             Some("CANCELED") => AuthStatus::Canceled,
-            _ => return Err(OktaError::UnsupportedResult),
+            _ => return Err(invalid()),
         };
-        flow.generation = flow
-            .generation
-            .checked_add(1)
-            .ok_or(OktaError::UnsupportedResult)?;
-        let available = cx
-            .get(&response, "availableSteps")
-            .map_err(|_| OktaError::UnsupportedResult)?;
+        let generation = flow.generation.checked_add(1).ok_or_else(invalid)?;
+        let available = cx.get(&response, "availableSteps").map_err(|_| invalid())?;
         let mut steps = vec![];
         let mut step_actions = vec![];
         if !available.nullish() {
-            for item in cx
-                .items(&available)
-                .map_err(|_| OktaError::UnsupportedResult)?
-            {
-                let data = cx
-                    .to_json(&item)
-                    .map_err(|_| OktaError::UnsupportedResult)?;
-                let name = data["name"].as_str().ok_or(OktaError::UnsupportedResult)?;
-                let action = cx
-                    .get(&item, "action")
-                    .map_err(|_| OktaError::UnsupportedResult)?;
+            for item in cx.items(&available).map_err(|_| invalid())? {
+                let data = cx.to_json(&item).map_err(|_| invalid())?;
+                let name = data["name"].as_str().ok_or_else(invalid)?;
+                let action = cx.get(&item, "action").map_err(|_| invalid())?;
                 let kind = if name == "poll" || name.ends_with("-poll") {
                     StepKind::Poll
                 } else if !action.nullish() {
@@ -736,7 +800,7 @@ impl PublicClientApplication {
                 steps.push(AuthStep {
                     id: StepId {
                         flow: flow.id,
-                        generation: flow.generation,
+                        generation,
                         index: steps.len(),
                     },
                     kind,
@@ -746,15 +810,17 @@ impl PublicClientApplication {
         }
         flow.tokens = snapshot
             .get("tokens")
-            .filter(|v| v.is_object())
+            .filter(|v| status == AuthStatus::Success && v.is_object())
             .cloned()
-            .map(|data| self.token(data));
+            .map(|data| self.token(data, cx.take_token_scopes()));
+        flow.generation = generation;
         flow.snapshot = SensitiveJson(snapshot);
         flow.current = response;
         flow.steps = steps;
         flow.step_actions = step_actions;
         flow.status = status;
         flow.in_flight = false;
+        cx.clear_diagnostics();
         Ok(())
     }
 }
@@ -989,6 +1055,9 @@ mod cancellation_tests {
                     status: 200,
                     delay: Duration::from_millis(200),
                     headers: vec![],
+                    raw_body: None,
+                    body_delay: Duration::ZERO,
+                    declared_length: None,
                 },
                 Reply::ok(
                     "POST /idp/idx/introspect",
@@ -1154,7 +1223,11 @@ mod lifecycle_tests {
                     "http://localhost/callback?state=wrong&interaction_code=code"
                 )
                 .await,
-            Err(OktaError::Authentication)
+            Err(OktaError::OperationFailed(OperationFailure {
+                kind: FailureKind::Protocol,
+                stage: FailureStage::Callback,
+                ..
+            }))
         ));
         let callback = format!("http://localhost/callback?state={state}&interaction_code=code");
         let tokens = client
@@ -1167,3 +1240,25 @@ mod lifecycle_tests {
         assert!(requests[3].contains("interaction_code=code"));
     }
 }
+
+fn callback_failure() -> OktaError {
+    OktaError::OperationFailed(OperationFailure::local(
+        FailureKind::Protocol,
+        FailureStage::Callback,
+    ))
+}
+
+fn build_binding() -> String {
+    ring::digest::digest(
+        &ring::digest::SHA256,
+        include_bytes!("generated/provenance.json"),
+    )
+    .as_ref()
+    .iter()
+    .map(|b| format!("{b:02x}"))
+    .collect()
+}
+
+#[cfg(test)]
+#[path = "client_contract_tests.rs"]
+mod contract_tests;

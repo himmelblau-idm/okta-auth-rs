@@ -121,6 +121,7 @@ struct Function {
     scope: usize,
     properties: IndexMap<String, V>,
     lexical_this: Option<V>,
+    context: super::diagnostic::Context,
 }
 struct Scope {
     parent: Option<usize>,
@@ -133,7 +134,7 @@ struct RegExp {
     last_index: usize,
 }
 #[derive(Default)]
-struct Heap {
+pub(super) struct Heap {
     objects: Vec<IndexMap<String, V>>,
     prototypes: BTreeMap<(bool, usize), V>,
     getters: BTreeMap<(bool, usize, String), V>,
@@ -146,13 +147,20 @@ struct Heap {
     regexes: Vec<RegExp>,
     tasks: Vec<JFuture>,
     executing: bool,
+    epoch: u64,
+    pub(super) granted_scopes: Option<Vec<String>>,
+    pub(super) mutations: BTreeMap<u8, crate::OperationFailure>,
+    pub(super) evidence: BTreeMap<(u8, usize), (V, crate::OperationFailure)>,
     http: Option<super::HttpTransport>,
     error_objects: std::collections::BTreeSet<usize>,
     hidden: std::collections::BTreeSet<(usize, String)>,
 }
 /// A flow-local arena owns objects and closure environments, preserving aliases without reference cycles.
 #[derive(Clone, Default)]
-pub struct Engine(Arc<Mutex<Heap>>);
+pub struct Engine(
+    pub(super) Arc<Mutex<Heap>>,
+    pub(super) super::diagnostic::Context,
+);
 impl Engine {
     pub fn regexp(&self, pattern: &str, flags: &str) -> JResult {
         if flags.chars().any(|c| !"gim".contains(c)) {
@@ -337,6 +345,7 @@ impl Engine {
             scope,
             properties: IndexMap::new(),
             lexical_this,
+            context: self.1.clone(),
         });
         V::Function(id)
     }
@@ -371,6 +380,7 @@ impl Engine {
                     .ok_or_else(|| V::error("operation canceled"))?;
                 value = promise.await?;
             } else {
+                self.adopt_evidence(&value);
                 return Ok(value);
             }
         }
@@ -417,11 +427,16 @@ impl Engine {
     /// Runs one entry point. Dropping this future cancels its pending native work.
     /// A caller must serialize executions on an Engine.
     pub async fn execute(&self, f: V, this: V, args: Vec<V>) -> JResult {
-        struct Cancel(Engine);
+        struct Cancel(Engine, bool);
         impl Drop for Cancel {
             fn drop(&mut self) {
                 self.0.cancel_pending();
-                self.0 .0.lock().unwrap().executing = false;
+                let mut heap = self.0 .0.lock().unwrap();
+                heap.executing = false;
+                if !self.1 {
+                    heap.evidence.clear();
+                    heap.granted_scopes = None;
+                }
             }
         }
         {
@@ -430,11 +445,24 @@ impl Engine {
                 return Err(V::error("concurrent execution on one flow"));
             }
             h.executing = true;
+            h.epoch += 1;
+            h.evidence.clear();
+            h.mutations.clear();
+            h.granted_scopes = None;
         }
-        let _cancel = Cancel(self.clone());
-        let value = self.call(f, this, args)?;
+        let mut cancel = Cancel(self.clone(), false);
+        let mut cx = self.clone();
+        cx.1 = super::diagnostic::Context::default();
+        cx.1.epoch = self.0.lock().unwrap().epoch;
+        let value = match cx.call(f, this, args) {
+            Ok(value) => value,
+            Err(error) => {
+                cancel.1 = true;
+                return Err(error);
+            }
+        };
         let mut result = Box::pin(self.await_value(value));
-        std::future::poll_fn(|context| {
+        let output = std::future::poll_fn(|context| {
             let tasks = std::mem::take(&mut self.0.lock().unwrap().tasks);
             let mut pending = vec![];
             for mut task in tasks {
@@ -451,7 +479,9 @@ impl Engine {
             drop(h);
             result.as_mut().poll(context)
         })
-        .await
+        .await;
+        cancel.1 = true;
+        output
     }
     pub fn set_prototype(&self, obj: &V, proto: V) -> JResult {
         let identity = Self::identity(obj).ok_or_else(|| V::error("invalid prototype target"))?;
@@ -762,19 +792,38 @@ impl Engine {
     pub fn call(&self, f: V, this: V, args: Vec<V>) -> JResult {
         match f {
             V::Function(id) => {
-                let (code, scope, lexical) = {
+                let (code, scope, lexical, context, epoch) = {
                     let h = self.0.lock().unwrap();
                     (
                         h.functions[id].code,
                         h.functions[id].scope,
                         h.functions[id].lexical_this.clone(),
+                        h.functions[id].context.clone(),
+                        h.epoch,
                     )
                 };
                 let this = lexical.unwrap_or(this);
+                let mut cx = self.clone();
+                if context.epoch != 0 && context.epoch == epoch {
+                    cx.1 = context;
+                }
+                let request = cx.1.request.lock().unwrap().clone();
+                cx.1.request = Arc::new(Mutex::new(request));
+                // Parameters tie callbacks and error normalization to their
+                // own response, independent of promise completion order.
+                for arg in &args {
+                    cx.adopt_evidence(arg);
+                }
                 match code {
-                    Callable::Sync(code) => code(self, scope, this, args),
+                    Callable::Sync(code) => {
+                        let result = code(&cx, scope, this, args);
+                        if let Ok(value) = &result {
+                            self.adopt_evidence(value);
+                        }
+                        result
+                    }
                     Callable::Async(code) => {
-                        let future = code(self.clone(), scope, this, args);
+                        let future = code(cx.clone(), scope, this, args);
                         Ok(self.schedule(future))
                     }
                 }
@@ -908,7 +957,10 @@ impl Engine {
         if let V::Builtin(b) = obj {
             return match (b, key) {
                 ("Promise", "resolve") => Ok(self.promise(Box::pin(async move { Ok(a) }))),
-                ("Promise", "reject") => Ok(self.promise(Box::pin(async move { Err(a) }))),
+                ("Promise", "reject") => {
+                    self.attach_evidence(&a, self.current_evidence());
+                    Ok(self.promise(Box::pin(async move { Err(a) })))
+                }
                 ("Object", "setPrototypeOf") => {
                     self.set_prototype(&a, args.get(1).cloned().unwrap_or(V::Null))
                 }

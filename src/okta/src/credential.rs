@@ -33,7 +33,8 @@ impl RefreshCredential {
     pub fn client_id(&self) -> &str {
         &self.client_id
     }
-    pub(crate) fn secret(&self) -> &str {
+    /// Explicit sensitive accessor; never use in logs.
+    pub fn expose_secret(&self) -> &str {
         &self.secret
     }
 }

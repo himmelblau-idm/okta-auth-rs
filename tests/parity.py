@@ -35,10 +35,16 @@ sdk={'options':{'maxClockSkew':0}}
 case('validateClaims',sdk,claims,validation)
 case('validateClaims',sdk,{**claims,'aud':['other','client']},validation)
 signature=json.loads((ROOT/'tests/fixtures/signature.json').read_text())
+signature_positive_index = len(cases)
 case('verifySignature',signature['token'],signature['key'])
 parts=signature['token'].split('.')
 parts[1]=base64.urlsafe_b64encode(b'{"sub":"tampered"}').decode().rstrip('=')
 case('verifySignature','.'.join(parts),signature['key'])
+# Error normalization retains the pinned SDK object shape; native diagnostics
+# are carried separately and must not change these enumerable properties.
+for status in [400, 404, 429, 503]:
+    for body in [None, {'error': 'invalid_grant'}, {'error': 'invalid_grant', 'error_description': 'fixture'}, {'errorCode': 'E0000004'}, {'errorCode': 'invalid code', 'errorSummary': 'fixture'}]:
+        case('formatHttpError', {'options': {}}, {'status': status, 'headers': {}, 'responseText': '<html>fixture</html>' if body is None else json.dumps(body)})
 positive_count=len(cases)
 for changed in [{'iss':'wrong'},{'aud':'wrong'},{'nonce':'wrong'},{'exp':0},{'iat':4102444801}]:
     case('validateClaims',sdk,{**claims,**changed},validation)
@@ -54,6 +60,6 @@ for i,(expected,actual) in enumerate(zip(js,rs)):
     assert expected==actual, (cases[i],expected,actual)
 assert all('ok' in result for result in js[:positive_count]), 'positive oracle fixture failed'
 assert all('error' in result for result in js[positive_count:]), 'negative oracle fixture unexpectedly succeeded'
-assert rs[positive_count-2] == {'ok':True}, 'valid signature must verify'
-assert rs[positive_count-1] == {'ok':False}, 'tampered payload must fail verification'
+assert rs[signature_positive_index] == {'ok':True}, 'valid signature must verify'
+assert rs[signature_positive_index+1] == {'ok':False}, 'tampered payload must fail verification'
 print(f'{len(cases)} upstream/Rust comparisons passed')

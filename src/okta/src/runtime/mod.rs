@@ -6,3 +6,5 @@ mod native;
 
 mod http;
 pub use http::HttpTransport;
+
+mod diagnostic;

@@ -2,7 +2,7 @@
   "schema": 1,
   "upstream_version": "8.0.1",
   "upstream_commit": "f30496d66c42e1d0a4de56b00b1e4041dbd543ab",
-  "manifest_sha256": "21d86935a65cccec0f1a3a55fea8b3e6033f6c0d48c0b6733459db8542a427a4",
+  "manifest_sha256": "d691f73afd3a48d4ce7c925c4b4908c81853aeec72a090c2b9f590e12729cec4",
   "syntax": {
     "ArrayExpression": 58,
     "ArrayPattern": 7,
@@ -808,8 +808,150 @@
     "lib/util/url.ts::toAbsoluteUrl",
     "lib/util/url.ts::toRelativeUrl"
   ],
-  "compiler_sha256": "d85d3fa2eb77f9797d22578de2cf22d2e230b30c574a8e4cd73cff819eecfaa0",
-  "native_support_sha256": "811ebbaabdb21ec242faa76278e1461fb8c1f4e2e4fd495a88d7461c592c912a",
-  "rustfmt_version": "rustfmt 1.9.0",
-  "generated_sha256": "53250f4f946df175f376c00c978d9d0822a6bb98046d210bfa46a5e41af7ee0c"
+  "compiler_sha256": "12a21bb7d2c421f78bc473900846c35add18779f23e338f8ef1ad9feff3d7be4",
+  "native_support_sha256": "c0d709bac527aa4165ba1e84d577f205c35b31c1f7ae69a54092d9b741463c7c",
+  "diagnostic_annotations": [
+    [
+      "lib/oidc/util/prepareTokenParams.ts",
+      "validateCodeChallengeMethod",
+      "Discovery",
+      false,
+      "normal"
+    ],
+    [
+      "lib/oidc/endpoints/well-known.ts",
+      "getWellKnown",
+      "Discovery",
+      false,
+      "normal"
+    ],
+    [
+      "lib/oidc/endpoints/well-known.ts",
+      "getKey",
+      "Jwks",
+      true,
+      "normal"
+    ],
+    [
+      "lib/idx/interact.ts",
+      "interact",
+      "Interact",
+      false,
+      "interact"
+    ],
+    [
+      "lib/idx/introspect.ts",
+      "introspect",
+      "Introspect",
+      false,
+      "normal"
+    ],
+    [
+      "lib/idx/idxState/v1/generateIdxAction.ts",
+      "generateDirectFetch",
+      "Remediation",
+      false,
+      "normal"
+    ],
+    [
+      "lib/oidc/exchangeCodeForTokens.ts",
+      "exchangeCodeForTokens",
+      "TokenExchange",
+      false,
+      "normal"
+    ],
+    [
+      "lib/oidc/endpoints/token.ts",
+      "postToTokenEndpoint",
+      "TokenExchange",
+      false,
+      "normal"
+    ],
+    [
+      "lib/oidc/renewTokensWithRefresh.ts",
+      "renewTokensWithRefresh",
+      "Refresh",
+      false,
+      "normal"
+    ],
+    [
+      "lib/oidc/endpoints/token.ts",
+      "postRefreshToken",
+      "Refresh",
+      false,
+      "normal"
+    ],
+    [
+      "lib/oidc/revokeToken.ts",
+      "revokeToken",
+      "Revoke",
+      false,
+      "normal"
+    ],
+    [
+      "lib/oidc/getUserInfo.ts",
+      "getUserInfo",
+      "UserInfo",
+      true,
+      "normal"
+    ],
+    [
+      "lib/idx/handleInteractionCodeRedirect.ts",
+      "handleInteractionCodeRedirect",
+      "Callback",
+      false,
+      "normal"
+    ],
+    [
+      "lib/idx/emailVerify.ts",
+      "handleEmailVerifyCallback",
+      "Callback",
+      false,
+      "normal"
+    ],
+    [
+      "lib/oidc/verifyToken.ts",
+      "verifyToken",
+      null,
+      true,
+      "normal"
+    ],
+    [
+      "lib/oidc/decodeToken.ts",
+      "decodeToken",
+      null,
+      true,
+      "normal"
+    ],
+    [
+      "lib/oidc/util/validateClaims.ts",
+      "validateClaims",
+      null,
+      true,
+      "normal"
+    ],
+    [
+      "lib/http/request.ts",
+      "formatError",
+      null,
+      false,
+      "transfer"
+    ],
+    [
+      "lib/oidc/handleOAuthResponse.ts",
+      "handleOAuthResponse",
+      null,
+      false,
+      "scopes"
+    ],
+    [
+      "lib/idx/idxState/index.ts",
+      "makeIdxState",
+      null,
+      false,
+      "idx"
+    ]
+  ],
+  "rustfmt_version": "rustfmt 1.8.0-stable (6b00bc3880 2025-06-23)",
+  "generated_sha256": "7d04bca0cad5e2a80b3b96d5ccbca986db481587c409fe3fffef5ccdc89eb6b2"
 }

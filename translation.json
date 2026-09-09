@@ -150,6 +150,11 @@
     {
       "module": "lib/idx/proceed.ts",
       "symbol": "canProceed"
+    },
+    {
+      "module": "lib/http/request.ts",
+      "symbol": "formatError",
+      "export_as": "formatHttpError"
     }
   ],
   "constants": {},

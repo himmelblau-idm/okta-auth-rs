@@ -299,9 +299,11 @@ let mut flow = client.resume_auth_flow(&continuation).await?;
 Continuations are limited to 4 MiB and bound to:
 
 - the issuer, client ID, redirect URI, scopes, and trusted-origin configuration
-- the exact generated Auth JS commit
+- the exact generated Auth JS commit and a deterministic build fingerprint covering translation provenance, compiler, and maintained native/wrapper sources
 
 A continuation fails closed if either binding changes or its serialized data is invalid.
+Invalid envelopes are rejected as `InvalidContinuation` before network access.
+A valid envelope whose remote resume fails returns `OperationFailed`.
 
 ## Complete a redirect callback
 
@@ -328,7 +330,7 @@ client
 
 ## Use and revoke tokens
 
-On success, `UserToken` exposes the access token, ID token, verified ID-token claims, and an optional refresh credential:
+On success, `UserToken` exposes the access token, ID token, verified ID-token claims, and an optional refresh credential. `token_type()`, `scopes()`, and `expires_at()` expose the returned access token’s type, granted scopes, and absolute UNIX expiration time. Missing metadata returns `None`; expiration is never inferred from the ID token. `scopes()` returns only server-returned scopes and is `None` when the response omits `scope`, even though Auth JS internally defaults to requested scopes:
 
 ```rust
 let token = flow.tokens().ok_or("missing token set")?;
@@ -354,6 +356,17 @@ if let Some(refresh) = token.refresh_credential() {
     client.revoke_refresh_token(refresh).await?;
 }
 ```
+
+To request specific refresh scopes, use `refresh_tokens_with_scopes(refresh, &scopes)`.
+An empty slice uses the configured scopes, as does `refresh_tokens`. A nonempty
+slice is sent to Okta, which remains authoritative for the credential’s original
+grant; it is not restricted locally to `ClientConfig.scopes`. Issuer and client
+binding checks still apply. Successful refresh preserves the old credential when
+no replacement is returned, and returns any rotated replacement to the caller.
+
+`RefreshCredential::expose_secret()` explicitly borrows the sensitive refresh
+value for a caller-owned credential broker or protected storage boundary. Never
+log it or other sensitive accessor results.
 
 `UserToken`, `RefreshCredential`, and `AuthContinuation` redact secrets from `Debug`; sensitive strings and buffers are zeroized when dropped. Avoid logging values obtained from their explicit accessors.
 
@@ -434,7 +447,39 @@ Review this list as a security boundary. Do not populate it from an untrusted se
 
 ## Error handling
 
-Public errors are intentionally coarse and do not include credentials or server response bodies.
+Public errors preserve structured failure evidence without including credentials,
+URLs, freeform server summaries, response bodies, or native error chains.
+
+`OktaError::OperationFailed(OperationFailure)` exposes:
+
+| Field | Meaning |
+| --- | --- |
+| `kind` | `Transport`, `Http`, `Protocol`, `TokenValidation`, or `Trust`. |
+| `stage` | The failed protocol operation, including nested `Discovery` or `Jwks` work. |
+| `http_status` | Received HTTP status, retained even when reading or decoding the body fails. |
+| `oauth_error` / `okta_error_code` | Separate, bounded structured codes; OAuth descriptions are not required. |
+| `retry_after` | Parsed seconds or HTTP date, clamped to zero for past dates and to 24 hours for large delays. |
+| `outcome` | `NotSent`, `ResponseReceived`, or conservative `Unknown` request evidence. |
+
+The classification enums are non-exhaustive. Codes must be 1–128 ASCII letters,
+digits, underscores, hyphens, or dots; invalid codes and invalid retry headers
+are omitted. `Display` uses only classifications and status. Library-produced
+`Debug` output includes only sanitized structured fields.
+
+DNS/connect/timeouts are transport failures. Certificate validation and origin
+rejection are trust failures. Non-success HTTP statuses are HTTP failures;
+unusable successful responses are protocol failures. Token and userinfo-subject
+validation failures never expose a successful token set. Unknown translation
+failures remain protocol failures, without inferred grant or connectivity codes.
+
+Neither receipt of headers nor `RequestOutcome` permits replay. An unsuccessful
+credential submission can still yield a valid next IDX step: the flow updates
+its messages and step IDs and remains pending. When state cannot be reconciled,
+it remains uncertain until introspection succeeds. Code exchange, refresh, and
+revocation have no automatic retries; dropped standalone futures cancel local
+work but cannot return an outcome to the caller.
+
+Local errors:
 
 | Error | Meaning |
 | --- | --- |
@@ -443,7 +488,6 @@ Public errors are intentionally coarse and do not include credentials or server 
 | `WrongClient` | A flow or refresh credential belongs to another client configuration. |
 | `Uncertain` | A mutating request may have completed; introspection is required. |
 | `ReservedInput` | Form data attempted to override SDK or protocol state, or used the wrong input kind. |
-| `Authentication` | Okta, transport, callback, or token validation rejected the operation. |
 | `UnsupportedResult` | The response cannot be represented by the current translation profile. |
 | `InvalidContinuation` | Continuation data is malformed, oversized, or bound to another build/configuration. |
 
@@ -535,7 +579,17 @@ on those sources before writing them or computing provenance. The initial pass
 keeps complex blocks readable even where rustfmt leaves expressions untouched. The `check` command uses the same formatting step
 before comparing output, without rewriting checked-in files.
 
-The provenance file records selected declarations, source hashes, syntax inventory, native-profile changes, and hashes of the compiler, manifest, runtime, and formatted generated output.
+The provenance file records selected declarations, source hashes, syntax inventory,
+native-profile changes, diagnostic annotations, and hashes of the compiler,
+manifest, maintained native/wrapper sources, and formatted generated output.
+
+The compiler’s diagnostic annotations identify protocol and validation boundaries
+by source module and declaration. Their reviewed source hashes are in
+`src/compiler/src/diagnostic-sources.json`. When updating those upstream files,
+review the annotations and declaration signatures before updating these hashes.
+Diagnostic propagation and metadata hooks are emitted by the generator; do not
+patch generated Rust. The native annotations preserve non-enumerable error
+evidence and keep granted-scope metadata out of translated token objects.
 
 ## Update the pinned Auth JS source
 
