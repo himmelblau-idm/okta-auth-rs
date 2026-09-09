@@ -1,5 +1,5 @@
 //! JSON-lines bridge for differential tests. Never use with real credentials.
-use okta_native_support::{Engine, V};
+use okta::runtime::{Engine, V};
 use std::io::{self, BufRead};
 #[tokio::main(flavor = "current_thread")]
 async fn main() {

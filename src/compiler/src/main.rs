@@ -6,7 +6,9 @@ use serde_json::Value;
 use sha2::{Digest, Sha256};
 use std::{
     env, fs,
+    io::Write,
     path::{Path, PathBuf},
+    process::{Command, Stdio},
 };
 pub type Result<T> = std::result::Result<T, String>;
 #[derive(Deserialize, Serialize)]
@@ -76,6 +78,46 @@ fn source_tree_hash(root: &Path) -> Result<String> {
     }
     Ok(format!("{:x}", digest.finalize()))
 }
+fn rustfmt_version() -> Result<String> {
+    let output = Command::new("rustfmt")
+        .arg("--version")
+        .output()
+        .map_err(|e| format!("failed to run rustfmt: {e}"))?;
+    if !output.status.success() {
+        return Err(format!(
+            "rustfmt --version failed: {}",
+            String::from_utf8_lossy(&output.stderr).trim()
+        ));
+    }
+    String::from_utf8(output.stdout)
+        .map(|version| version.trim().to_string())
+        .map_err(|_| "rustfmt returned non-UTF-8 version output".into())
+}
+fn format_rust(source: &str) -> Result<String> {
+    let mut child = Command::new("rustfmt")
+        .args(["--edition", "2021", "--emit", "stdout"])
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .map_err(|e| format!("failed to run rustfmt: {e}"))?;
+    child
+        .stdin
+        .take()
+        .ok_or("failed to open rustfmt stdin")?
+        .write_all(source.as_bytes())
+        .map_err(|e| format!("failed to write rustfmt input: {e}"))?;
+    let output = child
+        .wait_with_output()
+        .map_err(|e| format!("failed to wait for rustfmt: {e}"))?;
+    if !output.status.success() {
+        return Err(format!(
+            "rustfmt failed: {}",
+            String::from_utf8_lossy(&output.stderr).trim()
+        ));
+    }
+    String::from_utf8(output.stdout).map_err(|_| "rustfmt returned non-UTF-8 output".into())
+}
 fn run() -> Result<()> {
     let mut args = env::args().skip(1);
     let command = args.next().ok_or(
@@ -83,7 +125,7 @@ fn run() -> Result<()> {
     )?;
     let mut source = PathBuf::from("vendor/okta-auth-js");
     let mut manifest_path = PathBuf::from("translation.json");
-    let mut output = PathBuf::from("crates/okta/src/generated");
+    let mut output = PathBuf::from("src/okta/src/generated");
     while let Some(flag) = args.next() {
         let value = args
             .next()
@@ -151,7 +193,8 @@ fn run() -> Result<()> {
             return Err(format!("duplicate exported name {}", entry.public_name()));
         }
     }
-    let rust = emit::generate(&graph, &manifest)?;
+    let rust = format_rust(&emit::generate(&graph, &manifest)?)?;
+    let rustfmt_version = rustfmt_version()?;
     let mut report = inventory;
     report["compiler_sha256"] = hash(
         concat!(
@@ -166,14 +209,16 @@ fn run() -> Result<()> {
     .into();
     report["native_support_sha256"] = hash(
         concat!(
-            include_str!("../../runtime/src/value.rs"),
-            include_str!("../../runtime/src/native.rs"),
-            include_str!("../../runtime/src/http.rs"),
-            include_str!("../../runtime/Cargo.toml")
+            include_str!("../../okta/src/runtime/mod.rs"),
+            include_str!("../../okta/src/runtime/value.rs"),
+            include_str!("../../okta/src/runtime/native.rs"),
+            include_str!("../../okta/src/runtime/http.rs"),
+            include_str!("../../okta/Cargo.toml")
         )
         .as_bytes(),
     )
     .into();
+    report["rustfmt_version"] = rustfmt_version.into();
     report["generated_sha256"] = hash(rust.as_bytes()).into();
     let report = serde_json::to_string_pretty(&report).map_err(|e| e.to_string())? + "\n";
     if command == "check" {

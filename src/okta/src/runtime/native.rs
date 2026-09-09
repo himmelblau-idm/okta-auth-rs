@@ -1,5 +1,5 @@
 //! Platform primitives used by translated source. Protocol logic stays generated.
-use crate::{Engine, JResult, V};
+use super::{Engine, JResult, V};
 use base64::{
     alphabet,
     engine::{

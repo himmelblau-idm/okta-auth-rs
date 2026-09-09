@@ -154,7 +154,7 @@ impl Emitter {
                 "true".into()
             } else {
                 format!(
-                    "okta_native_support::eq(&discriminant,&{})",
+                    "crate::runtime::eq(&discriminant,&{})",
                     self.expr(&case["test"])?
                 )
             };
@@ -319,7 +319,7 @@ impl Emitter {
         }
         let asynchronous = v["async"] == true;
         if asynchronous {
-            self.functions.push(format!("fn f{id}(engine:Engine,parent:usize,this:V,args:Vec<V>)->okta_native_support::JFuture {{Box::pin(async move {{let cx=&engine;let scope=cx.scope(Some(parent));{body} Ok(V::Undefined)}})}}\n"));
+            self.functions.push(format!("fn f{id}(engine:Engine,parent:usize,this:V,args:Vec<V>)->crate::runtime::JFuture {{Box::pin(async move {{let cx=&engine;let scope=cx.scope(Some(parent));{body} Ok(V::Undefined)}})}}\n"));
         } else {
             self.functions.push(format!("fn f{id}(cx:&Engine,parent:usize,this:V,args:Vec<V>)->JResult {{\nlet scope=cx.scope(Some(parent));\n{body}\nOk(V::Undefined)\n}}\n"));
         }
@@ -859,5 +859,5 @@ pub fn generate(graph: &Graph, manifest: &Manifest) -> Result<String> {
             q(&e.symbol)
         );
     }
-    Ok(format!("// Generated from Okta Auth JS {} ({}). DO NOT EDIT.\n// Upstream source: Apache-2.0; see vendor/okta-auth-js/LICENSE.\n#![allow(unused_variables,unused_mut,unused_labels,unused_assignments,unreachable_code)]\nuse okta_native_support::{{Engine,V,JResult,binary,Completion}};\npub const UPSTREAM_COMMIT:&str={:?};\n{}\npub fn initialize(cx:&Engine)->Result<std::collections::BTreeMap<String,V>,V>{{\nlet this=V::Undefined;let scopes:Vec<_>=(0..{}).map(|_|cx.scope(None)).collect();\n{aliases}{initialize}{namespaces}let mut exports=std::collections::BTreeMap::new();{exports}Ok(exports)}}\n",manifest.upstream_version,manifest.upstream_commit,manifest.upstream_commit,emitter.functions.join("\n"),modules.len()))
+    Ok(format!("// Generated from Okta Auth JS {} ({}). DO NOT EDIT.\n// Upstream source: Apache-2.0; see LICENSE-APACHE-OKTA.\n#![allow(unused_variables,unused_mut,unused_labels,unused_assignments,unreachable_code)]\nuse crate::runtime::{{Engine,V,JResult,binary,Completion}};\npub const UPSTREAM_COMMIT:&str={:?};\n{}\npub fn initialize(cx:&Engine)->Result<std::collections::BTreeMap<String,V>,V>{{\nlet this=V::Undefined;let scopes:Vec<_>=(0..{}).map(|_|cx.scope(None)).collect();\n{aliases}{initialize}{namespaces}let mut exports=std::collections::BTreeMap::new();{exports}Ok(exports)}}\n",manifest.upstream_version,manifest.upstream_commit,manifest.upstream_commit,emitter.functions.join("\n"),modules.len()))
 }

@@ -54,11 +54,11 @@ https://example.okta.com/oauth2/default
 
 ## Add the library
 
-The crate is not currently published to crates.io. Add it as a path dependency from a checkout of this repository:
+The merged public API is not yet published to crates.io. Add it as a path dependency from a checkout of this repository:
 
 ```toml
 [dependencies]
-okta = { package = "libokta", path = "../okta-auth-rs/src/okta" }
+okta = { package = "okta-auth-rs", path = "../okta-auth-rs/src/okta" }
 serde_json = "1"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 ```
@@ -66,7 +66,7 @@ tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 The repository's `rust-toolchain.toml` selects Rust 1.85 automatically. Build the library with:
 
 ```sh
-cargo build --locked -p libokta
+cargo build --locked -p okta-auth-rs
 ```
 
 ## Try the terminal client
@@ -74,7 +74,7 @@ cargo build --locked -p libokta
 The included terminal client displays the complete schema for every step and accepts form values as a JSON object:
 
 ```sh
-cargo run --locked -p libokta --example okta-mfa -- \
+cargo run --locked -p okta-auth-rs --example okta-mfa -- \
   https://example.okta.com/oauth2/default \
   YOUR_CLIENT_ID \
   http://127.0.0.1:8765/callback
@@ -277,7 +277,7 @@ For direct USB CTAP2 support, enable `webauthn-usb`:
 
 ```toml
 okta = {
-    package = "libokta",
+    package = "okta-auth-rs",
     path = "../okta-auth-rs/src/okta",
     features = ["webauthn-usb"],
 }
@@ -309,7 +309,7 @@ Enable `hsm` to seal refresh credentials and authentication continuations with a
 
 ```toml
 okta = {
-    package = "libokta",
+    package = "okta-auth-rs",
     path = "../okta-auth-rs/src/okta",
     features = ["hsm"],
 }
@@ -362,24 +362,24 @@ Public errors are intentionally coarse and do not include credentials or server 
 Run the normal Rust 1.85 checks with:
 
 ```sh
-cargo run --locked -p okta-translator -- check --output src/okta/src/generated
+cargo run --locked -p okta-translator -- check
 cargo test --locked --workspace --all-targets
-cargo test --locked -p libokta --features hsm
+cargo test --locked -p okta-auth-rs --features hsm
 ```
 
 The optional upstream/Rust parity suite needs Python 3 and Node.js. Node is only a test oracle; it is never used by the translator or Rust runtime.
 
 ```sh
 npm ci --prefix tests/oracle
-cargo build --locked -p libokta --example parity
+cargo build --locked -p okta-auth-rs --example parity
 python3 tests/parity.py
 ```
 
 Check optional platform integrations with the corresponding system development libraries installed:
 
 ```sh
-cargo check --locked -p libokta --features webauthn-usb
-cargo check --locked -p libokta --features tpm
+cargo check --locked -p okta-auth-rs --features webauthn-usb
+cargo check --locked -p okta-auth-rs --features tpm
 ```
 
 ## How translation works
@@ -399,7 +399,7 @@ selected dependency graph ──► validated native substitutions
  generated Rust functions
         │
         ▼
-native support runtime ──► typed libokta API
+native support runtime ──► typed `okta` API
 ```
 
 The compiler resolves imports and lexical bindings, computes the selected dependency closure, checks every syntax and native operation against the supported profile, and emits Rust. New syntax, module effects, ambiguous exports, native APIs, namespace escapes, or side-effectful omitted initializers cause generation to fail instead of being silently ignored.
@@ -433,8 +433,8 @@ An upstream update is a reviewed compiler change:
 6. Regenerate and verify exact reproducibility:
 
    ```sh
-   cargo run --locked -p okta-translator -- generate --output src/okta/src/generated
-   cargo run --locked -p okta-translator -- check --output src/okta/src/generated
+   cargo run --locked -p okta-translator -- generate
+   cargo run --locked -p okta-translator -- check
    ```
 
 7. Run the complete Rust and parity test suites.

@@ -1,5 +1,5 @@
 //! WebAuthn request/response bridge. The wire-shape conversions are generated from Auth JS.
-use okta_native_support::{Engine, JResult, V};
+use crate::runtime::{Engine, JResult, V};
 use serde_json::Value as Json;
 use std::collections::BTreeMap;
 

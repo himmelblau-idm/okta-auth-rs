@@ -1,5 +1,5 @@
 //! HTTP platform service. Request serialization and response interpretation are generated.
-use crate::{Engine, JResult, V};
+use super::{Engine, JResult, V};
 use reqwest::{
     header::{HeaderName, HeaderValue},
     redirect::Policy,

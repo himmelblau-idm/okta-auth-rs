@@ -1,6 +1,6 @@
 //! Caller-driven authentication flows. Authentication decisions execute generated code.
+use crate::runtime::{HttpTransport, V};
 use crate::{sdk::Sdk, RefreshCredential};
-use okta_native_support::{HttpTransport, V};
 use ring::rand::{SecureRandom, SystemRandom};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value as Json};

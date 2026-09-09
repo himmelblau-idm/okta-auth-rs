@@ -2,6 +2,8 @@
 mod credential;
 #[doc(hidden)]
 pub mod generated;
+#[doc(hidden)]
+pub mod runtime;
 pub use credential::RefreshCredential;
 #[cfg(feature = "hsm")]
 pub mod hsm;

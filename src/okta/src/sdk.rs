@@ -1,5 +1,5 @@
 //! Wiring for generated functions; platform storage contains no protocol decisions.
-use okta_native_support::{Engine, HttpTransport, JResult, V};
+use crate::runtime::{Engine, HttpTransport, JResult, V};
 use std::collections::BTreeMap;
 
 pub(crate) struct Sdk {
@@ -56,7 +56,7 @@ fn storage(cx: &Engine) -> JResult {
     cx.define(scope, "data", cx.object());
     let object = cx.object();
     for (name, code) in [
-        ("getStorage", get as okta_native_support::Code),
+        ("getStorage", get as crate::runtime::Code),
         ("setStorage", set),
         ("clearStorage", clear),
         ("updateStorage", update),

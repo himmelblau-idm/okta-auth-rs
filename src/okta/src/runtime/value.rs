@@ -146,7 +146,7 @@ struct Heap {
     regexes: Vec<RegExp>,
     tasks: Vec<JFuture>,
     executing: bool,
-    http: Option<crate::HttpTransport>,
+    http: Option<super::HttpTransport>,
     error_objects: std::collections::BTreeSet<usize>,
     hidden: std::collections::BTreeSet<(usize, String)>,
 }
@@ -227,10 +227,10 @@ impl Engine {
     pub fn new() -> Self {
         Self::default()
     }
-    pub fn set_http_transport(&self, transport: crate::HttpTransport) {
+    pub fn set_http_transport(&self, transport: super::HttpTransport) {
         self.0.lock().unwrap().http = Some(transport);
     }
-    pub(crate) fn http_transport(&self) -> Option<crate::HttpTransport> {
+    pub(crate) fn http_transport(&self) -> Option<super::HttpTransport> {
         self.0.lock().unwrap().http.clone()
     }
     pub fn error(&self, message: &str) -> V {
@@ -286,7 +286,7 @@ impl Engine {
             "Math" => Ok(V::Builtin("Math")),
             "Promise" => Ok(V::Builtin("Promise")),
             "Error" => Ok(V::Builtin("Error")),
-            _ => crate::native::global(name)
+            _ => super::native::global(name)
                 .ok_or_else(|| V::error(format!("unbound identifier {name}"))),
         }
     }

@@ -1,12 +1,12 @@
 [workspace]
-members = ["src/compiler", "src/runtime", "src/okta"]
+members = ["src/compiler", "src/okta"]
 resolver = "2"
 
 [workspace.package]
 edition = "2021"
 rust-version = "1.85"
 license = "LGPL-3.0-or-later"
-version = "8.0.1"
+version = "8.0.1001"
 
 [workspace.dependencies]
 serde = { version = "1", features = ["derive"] }

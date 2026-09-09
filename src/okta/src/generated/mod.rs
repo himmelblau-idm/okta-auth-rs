@@ -1,5 +1,5 @@
 // Generated from Okta Auth JS 8.0.1 (f30496d66c42e1d0a4de56b00b1e4041dbd543ab). DO NOT EDIT.
-// Upstream source: Apache-2.0; see vendor/okta-auth-js/LICENSE.
+// Upstream source: Apache-2.0; see LICENSE-APACHE-OKTA.
 #![allow(
     unused_variables,
     unused_mut,
@@ -7,7 +7,7 @@
     unused_assignments,
     unreachable_code
 )]
-use okta_native_support::{binary, Completion, Engine, JResult, V};
+use crate::runtime::{binary, Completion, Engine, JResult, V};
 pub const UPSTREAM_COMMIT: &str = "f30496d66c42e1d0a4de56b00b1e4041dbd543ab";
 fn f0(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
@@ -173,11 +173,11 @@ fn f5(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             V::Number(4f64),
         )?;
         let mut matched = false;
-        if matched || okta_native_support::eq(&discriminant, &V::Number(0f64)) {
+        if matched || crate::runtime::eq(&discriminant, &V::Number(0f64)) {
             matched = true;
             break 'switch6;
         }
-        if matched || okta_native_support::eq(&discriminant, &V::Number(2f64)) {
+        if matched || crate::runtime::eq(&discriminant, &V::Number(2f64)) {
             matched = true;
             let _ = cx.assign(
                 scope,
@@ -186,7 +186,7 @@ fn f5(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             )?;
             break 'switch6;
         }
-        if matched || okta_native_support::eq(&discriminant, &V::Number(3f64)) {
+        if matched || crate::runtime::eq(&discriminant, &V::Number(3f64)) {
             matched = true;
             let _ = cx.assign(
                 scope,
@@ -2432,7 +2432,7 @@ fn f41(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     Ok(V::Undefined)
 }
 
-fn f42(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f42(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -2592,7 +2592,7 @@ fn f44(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     Ok(V::Undefined)
 }
 
-fn f45(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f45(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -2925,7 +2925,7 @@ fn f51(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     Ok(V::Undefined)
 }
 
-fn f50(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f50(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -3169,7 +3169,7 @@ fn f54(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     Ok(V::Undefined)
 }
 
-fn f55(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f55(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -3515,7 +3515,7 @@ fn f55(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_supp
     })
 }
 
-fn f57(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f57(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -3862,7 +3862,7 @@ fn f58(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     Ok(V::Undefined)
 }
 
-fn f59(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f59(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -4144,7 +4144,7 @@ fn f66(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     Ok(V::Undefined)
 }
 
-fn f64(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f64(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -5427,7 +5427,7 @@ fn f83(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     Ok(V::Undefined)
 }
 
-fn f82(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f82(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -5735,7 +5735,7 @@ fn f82(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_supp
     })
 }
 
-fn f85(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f85(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -5962,7 +5962,7 @@ fn f85(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_supp
     })
 }
 
-fn f87(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f87(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -6095,7 +6095,7 @@ fn f87(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_supp
     })
 }
 
-fn f88(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f88(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -6382,7 +6382,7 @@ fn f92(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     Ok(V::Undefined)
 }
 
-fn f94(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f94(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -6783,7 +6783,7 @@ fn f94(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_supp
     })
 }
 
-fn f97(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f97(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -6850,7 +6850,7 @@ fn f97(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_supp
     })
 }
 
-fn f98(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f98(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -7604,7 +7604,7 @@ fn f115(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     Ok(V::Undefined)
 }
 
-fn f116(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f116(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -9760,7 +9760,7 @@ fn f147(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     Ok(V::Undefined)
 }
 
-fn f148(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f148(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -9872,7 +9872,7 @@ fn f151(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     Ok(V::Undefined)
 }
 
-fn f150(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f150(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -10023,7 +10023,7 @@ fn f150(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_sup
     })
 }
 
-fn f153(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f153(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -10416,7 +10416,7 @@ fn f159(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     Ok(V::Undefined)
 }
 
-fn f160(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f160(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -10827,7 +10827,7 @@ fn f164(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     Ok(V::Undefined)
 }
 
-fn f161(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f161(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -11018,7 +11018,7 @@ fn f161(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_sup
     })
 }
 
-fn f165(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f165(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -11774,7 +11774,7 @@ fn f167(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     Ok(V::Undefined)
 }
 
-fn f168(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f168(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -11998,7 +11998,7 @@ fn f168(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_sup
     })
 }
 
-fn f169(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f169(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -13388,7 +13388,7 @@ fn f191(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     Ok(V::Undefined)
 }
 
-fn f192(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f192(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -13504,7 +13504,7 @@ fn f192(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_sup
     })
 }
 
-fn f193(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f193(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -13596,7 +13596,7 @@ fn f193(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_sup
     })
 }
 
-fn f194(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f194(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -14580,7 +14580,7 @@ fn f202(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     Ok(V::Undefined)
 }
 
-fn f203(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f203(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -16674,14 +16674,14 @@ fn f246(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     'switch247: {
         let discriminant = cx.lookup(scope, "version")?;
         let mut matched = false;
-        if matched || okta_native_support::eq(&discriminant, &V::string("1.0.0")) {
+        if matched || crate::runtime::eq(&discriminant, &V::string("1.0.0")) {
             matched = true;
             return Ok(cx.lookup(scope, "v1")?);
         }
-        if matched || okta_native_support::eq(&discriminant, &cx.lookup(scope, "undefined")?) {
+        if matched || crate::runtime::eq(&discriminant, &cx.lookup(scope, "undefined")?) {
             matched = true;
         }
-        if matched || okta_native_support::eq(&discriminant, &V::Null) {
+        if matched || crate::runtime::eq(&discriminant, &V::Null) {
             matched = true;
             return Err(cx.construct(cx.lookup(scope, "Error")?, {
                 let mut argv = Vec::new();
@@ -16989,7 +16989,7 @@ fn f250(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     Ok(V::Undefined)
 }
 
-fn f252(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f252(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
@@ -19617,7 +19617,7 @@ fn f302(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     Ok(V::Undefined)
 }
 
-fn f305(engine: Engine, parent: usize, this: V, args: Vec<V>) -> okta_native_support::JFuture {
+fn f305(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
         let scope = cx.scope(Some(parent));
