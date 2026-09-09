@@ -2,11 +2,20 @@
 members = ["src/compiler", "src/okta"]
 resolver = "2"
 
+[patch.crates-io]
+serde_cbor-0-11-2 = { package = "serde_cbor", path = "src/overrides/serde_cbor" }
+paste-1-0-15 = { package = "paste", path = "src/overrides/paste" }
+
 [workspace.package]
 edition = "2021"
-rust-version = "1.85"
+rust-version = "1.88"
 license = "LGPL-3.0-or-later"
 version = "8.0.1001"
+authors = [
+    "David Mulder <dmulder@suse.com>"
+]
+homepage = "https://himmelblau-idm.org/"
+repository = "https://github.com/himmelblau-idm/okta-auth-rs"
 
 [workspace.dependencies]
 serde = { version = "1", features = ["derive"] }
