@@ -78,11 +78,28 @@ impl HttpTransport {
             .collect::<Result<Vec<_>, &str>>()
             .map_err(str::to_string)?;
         let jar = Arc::new(CookieJar::default());
+        #[cfg(feature = "proxyable")]
+        let proxy = std::env::var("HTTPS_PROXY")
+            .ok()
+            .or_else(|| std::env::var("ALL_PROXY").ok())
+            .map(reqwest::Proxy::https)
+            .transpose()
+            .map_err(|_| "invalid HTTPS proxy configuration")?;
         let builder = || {
-            Client::builder()
+            let builder = Client::builder()
                 .use_rustls_tls()
                 .timeout(timeout)
-                .redirect(Policy::none())
+                .redirect(Policy::none());
+            // Match libhimmelblau's opt-in interception feature. Certificate
+            // verification is relaxed only when an explicit proxy is configured.
+            #[cfg(feature = "proxyable")]
+            let builder = match &proxy {
+                Some(proxy) => builder
+                    .proxy(proxy.clone())
+                    .danger_accept_invalid_certs(true),
+                None => builder,
+            };
+            builder
         };
         let credentialed = builder()
             .cookie_provider(jar.clone())
@@ -228,6 +245,9 @@ impl HttpTransport {
         Ok(result)
     }
 }
+
+#[cfg(test)]
+mod tests;
 impl Engine {
     pub fn export_cookies(&self) -> Result<zeroize::Zeroizing<Vec<u8>>, String> {
         self.http_transport()

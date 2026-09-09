@@ -13,6 +13,7 @@ name = "okta"
 
 [features]
 default = []
+proxyable = []
 hsm = ["dep:kanidm-hsm-crypto", "dep:crypto-glue"]
 tpm = ["hsm", "kanidm-hsm-crypto/tpm"]
 webauthn-usb = ["dep:authenticator", "dep:serde_cbor"]
@@ -36,3 +37,6 @@ base64 = "0.22"
 
 ring = "0.17"
 url = "2"
+
+[dev-dependencies]
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }

@@ -82,7 +82,9 @@ make run-mfa-example \
 ```
 
 `run-mfa-example` depends on `build-mfa-example`, so it builds the example
-automatically. All three variables are required; missing or empty values produce
+automatically. Both targets always enable `proxyable` for traffic inspection;
+regular `make` and `make release` builds keep it disabled. All three variables
+are required; missing or empty values produce
 an error and a usage message. `ISSUER` is the Okta organization or authorization
 server URL described above, and `REDIRECT_URI` must match a registered sign-in
 redirect URI for your application.
@@ -106,6 +108,57 @@ For example, an identify step may ask for input resembling:
 Always use the displayed schema as the source of truth. The required fields and available authenticators depend on the tenant's current policies and the user's enrollment state.
 
 The example intentionally does not open a browser or run a callback listener. If Okta returns a redirect or external step, it prints the step and the size of the continuation that a production caller would protect and persist.
+
+### Inspect HTTPS traffic with mitmproxy
+
+Enable the optional `proxyable` feature to inspect the library's HTTPS traffic,
+including discovery, IDX/MFA, and token requests. It mirrors libhimmelblau's
+debugging behavior: when `HTTPS_PROXY` (or, if unset, `ALL_PROXY`) is configured,
+both HTTP clients use that proxy and disable TLS certificate verification.
+No mitmproxy CA installation is required. Use this feature for debugging only:
+the proxy can see passwords, MFA responses, cookies, and tokens.
+
+Start mitmproxy in one terminal:
+
+```sh
+mitmproxy --listen-host 127.0.0.1 --listen-port 8080
+```
+
+Run the example in another:
+
+```sh
+HTTPS_PROXY=http://127.0.0.1:8080 \
+  cargo run --locked -p okta-auth-rs --features proxyable --example okta-mfa -- \
+  https://example.okta.com/oauth2/default \
+  YOUR_CLIENT_ID \
+  http://127.0.0.1:8765/callback
+```
+
+The MFA example Make targets always enable the feature:
+
+```sh
+HTTPS_PROXY=http://127.0.0.1:8080 make run-mfa-example \
+  ISSUER='https://example.okta.com/oauth2/default' \
+  CLIENT_ID='YOUR_CLIENT_ID' \
+  REDIRECT_URI='http://127.0.0.1:8765/callback'
+```
+
+Downstream applications enable it in their dependency configuration:
+
+```toml
+okta = { package = "okta-auth-rs", version = "8.0.1001", features = ["proxyable"] }
+```
+
+The explicit proxy selection reads only uppercase `HTTPS_PROXY` and `ALL_PROXY`;
+`HTTPS_PROXY` takes precedence, including when its value is invalid or empty.
+An invalid selected value produces a configuration error. Both variables select
+a proxy for HTTPS destinations only; loopback HTTP test requests remain direct.
+`NO_PROXY` does not bypass this explicit proxy. The proxy is not an additional
+trusted origin: requests must still target the configured Okta origins.
+
+The feature is disabled by default. Without it, or with neither variable set,
+certificate verification and existing transport behavior remain unchanged.
+Unset the proxy variables to restore certificate verification in a debug build.
 
 ## Drive an authentication flow
 

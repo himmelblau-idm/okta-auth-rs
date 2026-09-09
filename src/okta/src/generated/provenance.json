@@ -809,7 +809,7 @@
     "lib/util/url.ts::toRelativeUrl"
   ],
   "compiler_sha256": "d85d3fa2eb77f9797d22578de2cf22d2e230b30c574a8e4cd73cff819eecfaa0",
-  "native_support_sha256": "54b4fb6d32b0d16500cc03da58fa07a3092007ab915bda3b3015b3aa1d46d3ee",
+  "native_support_sha256": "811ebbaabdb21ec242faa76278e1461fb8c1f4e2e4fd495a88d7461c592c912a",
   "rustfmt_version": "rustfmt 1.9.0",
   "generated_sha256": "53250f4f946df175f376c00c978d9d0822a6bb98046d210bfa46a5e41af7ee0c"
 }

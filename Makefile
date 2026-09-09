@@ -12,8 +12,8 @@ help: ## Show available maintenance commands
 build: ## Build the workspace in the development profile
 	cargo build --locked --workspace
 
-build-mfa-example: ## Build the interactive MFA example
-	cargo build --locked -p okta-auth-rs --example okta-mfa
+build-mfa-example: ## Build the interactive MFA example with proxyable support
+	cargo build --locked -p okta-auth-rs --features proxyable --example okta-mfa
 
 run-mfa-example: export ISSUER := $(ISSUER)
 run-mfa-example: export CLIENT_ID := $(CLIENT_ID)
@@ -24,7 +24,7 @@ run-mfa-example: build-mfa-example ## Run MFA example (ISSUER=... CLIENT_ID=... 
 			'Usage: make run-mfa-example ISSUER=https://YOUR_ORG.okta.com/oauth2/default CLIENT_ID=YOUR_CLIENT_ID REDIRECT_URI=http://127.0.0.1:8765/callback' >&2; \
 		exit 1; \
 	fi
-	cargo run --locked -p okta-auth-rs --example okta-mfa -- "$$ISSUER" "$$CLIENT_ID" "$$REDIRECT_URI"
+	cargo run --locked -p okta-auth-rs --features proxyable --example okta-mfa -- "$$ISSUER" "$$CLIENT_ID" "$$REDIRECT_URI"
 
 release: ## Build the workspace in the release profile
 	cargo build --locked --workspace --release

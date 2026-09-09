@@ -1373,6 +1373,7 @@ dependencies = [
  "regex",
  "reqwest",
  "ring",
+ "rustls",
  "serde",
  "serde_cbor",
  "serde_json",
