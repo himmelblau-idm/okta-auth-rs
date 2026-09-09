@@ -40,6 +40,15 @@ For a native application, configure at least:
 3. **Sign-in redirect URI:** The exact URI the caller will later give to `handle_interaction_code_callback`.
 4. **Assignments and policies:** Assign the intended users and configure the authenticators the Linux client must support.
 
+If **Interaction Code** does not appear under the application's **Advanced** grant types, enable the hidden organization-level setting first in the Okta Admin Console:
+
+1. Go to **Settings → Account → Embedded widget sign-in support**.
+2. Click **Edit**.
+3. Enable **Interaction Code** and save the change.
+4. Return to the application's **General** settings.
+5. Expand **Advanced** under **Grant types**.
+6. Enable **Interaction Code** and save the application settings.
+
 The issuer is normally either the Okta organization URL:
 
 ```text
