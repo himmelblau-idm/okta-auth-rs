@@ -359,6 +359,18 @@ Public errors are intentionally coarse and do not include credentials or server 
 
 ## Build and test the repository
 
+The root Makefile provides maintenance shortcuts. Run `make help` to list
+all targets. Rust commands require Cargo and the pinned Rust 1.85 toolchain with
+rustfmt; the underlying Cargo commands can also be used directly.
+
+```sh
+make                     # Development build of the workspace
+make release             # Optimized workspace build
+make check-generated     # Verify generated code and provenance
+make test                # Workspace tests with default features
+make test-hsm            # Library tests with HSM support
+```
+
 Run the normal Rust 1.85 checks with:
 
 ```sh
@@ -367,7 +379,7 @@ cargo test --locked --workspace --all-targets
 cargo test --locked -p okta-auth-rs --features hsm
 ```
 
-The optional upstream/Rust parity suite needs Python 3 and Node.js. Node is only a test oracle; it is never used by the translator or Rust runtime.
+The optional upstream/Rust parity suite needs Python 3, Node.js, and npm. Node is only a test oracle; it is never used by the translator or Rust runtime. Run `make parity` to install the locked oracle dependencies, build the example, and run the suite, or use:
 
 ```sh
 npm ci --prefix tests/oracle
@@ -381,6 +393,22 @@ Check optional platform integrations with the corresponding system development l
 cargo check --locked -p okta-auth-rs --features webauthn-usb
 cargo check --locked -p okta-auth-rs --features tpm
 ```
+
+Use `make fmt` to format Rust source, `make fmt-check` to check formatting, and
+`make clean` to remove Cargo build artifacts.
+
+To publish the library, prepare and commit the intended version and source changes,
+configure Cargo registry credentials, then run:
+
+```sh
+make publish-dry-run
+make publish
+```
+
+These wrap `cargo publish --locked -p okta-auth-rs` with and without `--dry-run`.
+The translator is private and is not published. Version changes, commits, and tags
+remain manual; publishing does not automatically regenerate code or run the test
+suites.
 
 ## How translation works
 
@@ -419,25 +447,29 @@ An upstream update is a reviewed compiler change:
 2. Calculate the new deterministic tree hash:
 
    ```sh
-   cargo run --locked -p okta-translator -- source-hash
+   make source-hash
    ```
 
 3. Update the version, commit, and `source_tree_sha256` in `translation.json` and `translation.bootstrap.json`.
 4. Inspect the selected graph and native substitutions:
 
    ```sh
-   cargo run --locked -p okta-translator -- inspect
+   make inspect
    ```
 
 5. Implement support for any newly rejected syntax, native operation, or module behavior.
 6. Regenerate and verify exact reproducibility:
 
    ```sh
-   cargo run --locked -p okta-translator -- generate
-   cargo run --locked -p okta-translator -- check
+   make generate
+   make check-generated
    ```
 
-7. Run the complete Rust and parity test suites.
+7. Run `make test`, `make test-hsm`, and `make parity`, plus the optional
+   platform checks above where supported.
+
+Source replacement and edits to both translation manifests remain manual. The
+Makefile provides helpers for reviewing and validating the update.
 
 Translation depends only on the checked-in compiler, manifest, and upstream source. A changed upstream requirement that the compiler cannot translate is a build failure requiring an explicit compiler or runtime update.
 
