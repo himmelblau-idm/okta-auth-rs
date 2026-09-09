@@ -15,13 +15,13 @@ build: ## Build the workspace in the development profile
 release: ## Build the workspace in the release profile
 	cargo build --locked --workspace --release
 
-test: ## Run workspace tests with default features
+test: check-generated fmt-check ## Run workspace tests with default features
 	cargo test --locked --workspace --all-targets
 
-test-hsm: ## Run library tests with HSM support
+test-hsm: check-generated fmt-check ## Run library tests with HSM support
 	cargo test --locked -p okta-auth-rs --features hsm
 
-parity: ## Install oracle dependencies and compare upstream/Rust behavior
+parity: check-generated fmt-check ## Install oracle dependencies and compare upstream/Rust behavior
 	npm ci --prefix tests/oracle
 	cargo build --locked -p okta-auth-rs --example parity --target-dir target
 	python3 tests/parity.py

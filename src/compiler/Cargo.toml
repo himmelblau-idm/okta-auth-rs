@@ -16,3 +16,5 @@ oxc_resolver = "=11.9.0"
 serde.workspace = true
 serde_json.workspace = true
 sha2 = "0.10"
+prettyplease = "=0.2.37"
+syn = { version = "=2.0.119", features = ["full"] }

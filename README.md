@@ -361,7 +361,9 @@ Public errors are intentionally coarse and do not include credentials or server 
 
 The root Makefile provides maintenance shortcuts. Run `make help` to list
 all targets. Rust commands require Cargo and the pinned Rust 1.85 toolchain with
-rustfmt; the underlying Cargo commands can also be used directly.
+rustfmt; the underlying Cargo commands can also be used directly. The test and
+parity targets check generated-output reproducibility and Rust formatting before
+running tests.
 
 ```sh
 make                     # Development build of the workspace
@@ -375,6 +377,7 @@ Run the normal Rust 1.85 checks with:
 
 ```sh
 cargo run --locked -p okta-translator -- check
+cargo fmt --all -- --check
 cargo test --locked --workspace --all-targets
 cargo test --locked -p okta-auth-rs --features hsm
 ```
@@ -437,7 +440,12 @@ The generated files are:
 - [`src/okta/src/generated/mod.rs`](src/okta/src/generated/mod.rs)
 - [`src/okta/src/generated/provenance.json`](src/okta/src/generated/provenance.json)
 
-The provenance file records selected declarations, source hashes, syntax inventory, native-profile changes, and hashes of the compiler, manifest, runtime, and generated output.
+The generator pretty-prints the generated syntax, then always runs `cargo fmt`
+on those sources before writing them or computing provenance. The initial pass
+keeps complex blocks readable even where rustfmt leaves expressions untouched. The `check` command uses the same formatting step
+before comparing output, without rewriting checked-in files.
+
+The provenance file records selected declarations, source hashes, syntax inventory, native-profile changes, and hashes of the compiler, manifest, runtime, and formatted generated output.
 
 ## Update the pinned Auth JS source
 

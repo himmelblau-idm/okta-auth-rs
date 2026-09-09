@@ -6,9 +6,9 @@ use serde_json::Value;
 use sha2::{Digest, Sha256};
 use std::{
     env, fs,
-    io::Write,
     path::{Path, PathBuf},
-    process::{Command, Stdio},
+    process::Command,
+    sync::atomic::{AtomicUsize, Ordering},
 };
 pub type Result<T> = std::result::Result<T, String>;
 #[derive(Deserialize, Serialize)]
@@ -79,13 +79,13 @@ fn source_tree_hash(root: &Path) -> Result<String> {
     Ok(format!("{:x}", digest.finalize()))
 }
 fn rustfmt_version() -> Result<String> {
-    let output = Command::new("rustfmt")
-        .arg("--version")
+    let output = Command::new("cargo")
+        .args(["fmt", "--version"])
         .output()
-        .map_err(|e| format!("failed to run rustfmt: {e}"))?;
+        .map_err(|e| format!("failed to run cargo fmt: {e}"))?;
     if !output.status.success() {
         return Err(format!(
-            "rustfmt --version failed: {}",
+            "cargo fmt --version failed: {}",
             String::from_utf8_lossy(&output.stderr).trim()
         ));
     }
@@ -93,30 +93,77 @@ fn rustfmt_version() -> Result<String> {
         .map(|version| version.trim().to_string())
         .map_err(|_| "rustfmt returned non-UTF-8 version output".into())
 }
+// Format a staged crate so `check` never rewrites the output it is validating.
+struct FormattingCrate(PathBuf);
+impl FormattingCrate {
+    fn new() -> Result<Self> {
+        static NEXT: AtomicUsize = AtomicUsize::new(0);
+        loop {
+            let path = env::temp_dir().join(format!(
+                "okta-format-{}-{}",
+                std::process::id(),
+                NEXT.fetch_add(1, Ordering::Relaxed)
+            ));
+            match fs::create_dir(&path) {
+                Ok(()) => return Ok(Self(path)),
+                Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => continue,
+                Err(error) => return Err(format!("failed to create formatting crate: {error}")),
+            }
+        }
+    }
+}
+impl Drop for FormattingCrate {
+    fn drop(&mut self) {
+        let _ = fs::remove_dir_all(&self.0);
+    }
+}
 fn format_rust(source: &str) -> Result<String> {
-    let mut child = Command::new("rustfmt")
-        .args(["--edition", "2021", "--emit", "stdout"])
-        .stdin(Stdio::piped())
-        .stdout(Stdio::piped())
-        .stderr(Stdio::piped())
-        .spawn()
-        .map_err(|e| format!("failed to run rustfmt: {e}"))?;
-    child
-        .stdin
-        .take()
-        .ok_or("failed to open rustfmt stdin")?
-        .write_all(source.as_bytes())
-        .map_err(|e| format!("failed to write rustfmt input: {e}"))?;
-    let output = child
-        .wait_with_output()
-        .map_err(|e| format!("failed to wait for rustfmt: {e}"))?;
+    let staging = FormattingCrate::new()?;
+    let manifest = staging.0.join("Cargo.toml");
+    let module = staging.0.join("mod.rs");
+    fs::write(
+        &manifest,
+        r#"[package]
+name = "okta-generated-format"
+version = "0.0.0"
+edition = "2021"
+[lib]
+path = "mod.rs"
+[workspace]
+"#,
+    )
+    .map_err(|e| e.to_string())?;
+    // rustfmt can leave entire expressions/async blocks untouched when a long
+    // string exceeds its width limit. Give it readable syntax to start with.
+    let syntax = syn::parse_file(source).map_err(|e| format!("invalid generated Rust: {e}"))?;
+    let header: String = source
+        .lines()
+        .take_while(|line| line.starts_with("//"))
+        .map(|line| format!("{line}\n"))
+        .collect();
+    fs::write(&module, header + &prettyplease::unparse(&syntax)).map_err(|e| e.to_string())?;
+    let mut command = Command::new("cargo");
+    command.args(["fmt", "--manifest-path"]).arg(&manifest);
+    // Match rustfmt's config lookup in the invoking project when one exists.
+    let current_dir = env::current_dir().map_err(|e| e.to_string())?;
+    if let Some(config) = current_dir.ancestors().find_map(|dir| {
+        [".rustfmt.toml", "rustfmt.toml"]
+            .into_iter()
+            .map(|name| dir.join(name))
+            .find(|path| path.is_file())
+    }) {
+        command.args(["--", "--config-path"]).arg(config);
+    }
+    let output = command
+        .output()
+        .map_err(|e| format!("failed to run cargo fmt: {e}"))?;
     if !output.status.success() {
         return Err(format!(
-            "rustfmt failed: {}",
+            "cargo fmt failed: {}",
             String::from_utf8_lossy(&output.stderr).trim()
         ));
     }
-    String::from_utf8(output.stdout).map_err(|_| "rustfmt returned non-UTF-8 output".into())
+    fs::read_to_string(&module).map_err(|e| format!("failed to read cargo fmt output: {e}"))
 }
 fn run() -> Result<()> {
     let mut args = env::args().skip(1);
@@ -247,5 +294,37 @@ fn main() {
     if let Err(error) = run() {
         eprintln!("{error}");
         std::process::exit(1);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn formatting_produces_stable_sources() {
+        let source = "pub fn generated()->u32{42}";
+        let formatted = format_rust(source).unwrap();
+        assert_eq!(formatted, "pub fn generated() -> u32 {\n    42\n}\n");
+        assert_eq!(format_rust(&formatted).unwrap(), formatted);
+    }
+
+    #[test]
+    fn formatting_rejects_invalid_sources() {
+        assert!(format_rust("pub fn generated( {")
+            .unwrap_err()
+            .contains("invalid generated Rust"));
+    }
+    #[test]
+    fn formatting_expands_blocks_containing_long_strings() {
+        let literal = "long generated error message ".repeat(12);
+        let source = format!(
+            "// Generated source.\nasync fn generated() {{let mut completion=async{{}}.await;completion=(async{{let message={literal:?};let count=message.len();}}).await;}}"
+        );
+        let formatted = format_rust(&source).unwrap();
+        assert!(formatted.starts_with("// Generated source.\n"));
+        assert!(formatted.contains("\n        let message = "));
+        assert!(formatted.contains("\n        let count = message.len();"));
+        assert_eq!(format_rust(&formatted).unwrap(), formatted);
     }
 }

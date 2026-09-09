@@ -47,10 +47,8 @@ fn f0(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f1(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -72,10 +70,8 @@ fn f1(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f2(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -103,10 +99,8 @@ fn f2(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f4(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "c", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -121,10 +115,8 @@ fn f4(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f3(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -149,10 +141,8 @@ fn f3(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f5(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -261,10 +251,8 @@ fn f5(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             }
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f8(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "s", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -280,10 +268,8 @@ fn f8(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     })?);
-
     Ok(V::Undefined)
 }
-
 fn f7(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -312,10 +298,8 @@ fn f7(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f9(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -338,10 +322,8 @@ fn f9(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f10(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -400,10 +382,8 @@ fn f10(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "buffer")?);
-
     Ok(V::Undefined)
 }
-
 fn f12(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -455,10 +435,8 @@ fn f12(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.call(function, V::Undefined, argv)?
     });
     return Ok(cx.lookup(scope, "b64u")?);
-
     Ok(V::Undefined)
 }
-
 fn f11(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -499,10 +477,8 @@ fn f11(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f14(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -571,10 +547,8 @@ fn f14(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f13(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -633,10 +607,8 @@ fn f13(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f15(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -646,10 +618,8 @@ fn f15(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.lookup(scope, "obj")?,
         cx.lookup(scope, "AuthApiError")?,
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f16(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -659,10 +629,8 @@ fn f16(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.lookup(scope, "obj")?,
         cx.lookup(scope, "OAuthError")?,
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f17(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -672,10 +640,8 @@ fn f17(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.lookup(scope, "obj")?,
         cx.lookup(scope, "WWWAuthError")?,
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f19(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     {
@@ -703,10 +669,8 @@ fn f19(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         text.push_str("");
         V::string(text)
     });
-
     Ok(V::Undefined)
 }
-
 fn f21(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -738,10 +702,8 @@ fn f21(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "result")?);
-
     Ok(V::Undefined)
 }
-
 fn f23(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "data", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -756,10 +718,8 @@ fn f23(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f20(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -807,10 +767,8 @@ fn f20(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f18(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -1012,10 +970,8 @@ fn f18(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f24(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -1110,10 +1066,8 @@ fn f24(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "result")?);
-
     Ok(V::Undefined)
 }
-
 fn f26(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "e", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -1127,10 +1081,8 @@ fn f26(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         )?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f25(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -1230,10 +1182,8 @@ fn f25(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             });
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f27(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -1304,10 +1254,8 @@ fn f27(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f29(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -1345,10 +1293,8 @@ fn f29(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Err(cx.lookup(scope, "err")?);
-
     Ok(V::Undefined)
 }
-
 fn f31(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "item", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -1358,10 +1304,8 @@ fn f31(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         let value = cx.get(&cx.lookup(scope, "resp")?, &"headers")?;
         cx.put(&object, &key, value)?
     };
-
     Ok(V::Undefined)
 }
-
 fn f30(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -1587,10 +1531,8 @@ fn f30(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "res")?);
-
     Ok(V::Undefined)
 }
-
 fn f28(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -1915,10 +1857,8 @@ fn f28(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f32(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -1992,10 +1932,8 @@ fn f32(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f34(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -2009,10 +1947,8 @@ fn f34(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         argv.push(cx.lookup(scope, "options")?);
         argv
     })?;
-
     Ok(V::Undefined)
 }
-
 fn f35(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -2059,10 +1995,8 @@ fn f35(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             };
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f36(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -2100,10 +2034,8 @@ fn f36(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     };
-
     Ok(V::Undefined)
 }
-
 fn f37(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -2233,10 +2165,8 @@ fn f37(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "storedValue")?);
-
     Ok(V::Undefined)
 }
-
 fn f38(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -2271,10 +2201,8 @@ fn f38(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             cx.call(function, receiver, argv)?
         }
     };
-
     Ok(V::Undefined)
 }
-
 fn f33(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -2309,10 +2237,8 @@ fn f33(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.put(&prototype, &"clearIdxResponse", cx.function(scope, f38))?;
         constructor
     });
-
     Ok(V::Undefined)
 }
-
 fn f40(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -2372,10 +2298,8 @@ fn f40(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(V::Bool(false));
-
     Ok(V::Undefined)
 }
-
 fn f41(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -2428,10 +2352,8 @@ fn f41(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "authenticator")?);
-
     Ok(V::Undefined)
 }
-
 fn f42(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -2530,7 +2452,6 @@ fn f42(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::
         Ok(V::Undefined)
     })
 }
-
 fn f43(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -2567,10 +2488,8 @@ fn f43(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             left
         }
     });
-
     Ok(V::Undefined)
 }
-
 fn f44(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -2588,10 +2507,8 @@ fn f44(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f45(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -2757,7 +2674,6 @@ fn f45(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::
         Ok(V::Undefined)
     })
 }
-
 fn f46(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -2830,10 +2746,8 @@ fn f46(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f48(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -2905,10 +2819,8 @@ fn f48(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     };
-
     Ok(V::Undefined)
 }
-
 fn f51(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -2921,10 +2833,8 @@ fn f51(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.get(&cx.lookup(scope, "remediation")?, &"name")?,
         cx.lookup(scope, "remediationChoice")?,
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f50(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -3027,7 +2937,6 @@ fn f50(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::
         Ok(V::Undefined)
     })
 }
-
 fn f52(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "item", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -3036,10 +2945,8 @@ fn f52(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.get(&cx.lookup(scope, "item")?, &"name")?,
         V::string("interaction_code"),
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f49(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -3142,10 +3049,8 @@ fn f49(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         )?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f54(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -3165,10 +3070,8 @@ fn f54(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         )?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f55(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -3514,7 +3417,6 @@ fn f55(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::
         Ok(V::Undefined)
     })
 }
-
 fn f57(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -3813,7 +3715,6 @@ fn f57(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::
         Ok(V::Undefined)
     })
 }
-
 fn f58(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -3858,10 +3759,8 @@ fn f58(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         )
         .truthy(),
     ));
-
     Ok(V::Undefined)
 }
-
 fn f59(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -3961,7 +3860,6 @@ fn f59(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::
         Ok(V::Undefined)
     })
 }
-
 fn f62(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -3988,10 +3886,8 @@ fn f62(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             left
         }
     });
-
     Ok(V::Undefined)
 }
-
 fn f61(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -4026,10 +3922,8 @@ fn f61(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f63(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -4108,10 +4002,8 @@ fn f63(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.put(&object, &"nextStep", cx.lookup(scope, "nextStep")?)?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f65(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     {
@@ -4123,10 +4015,8 @@ fn f65(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.lookup(scope, "name")?,
         cx.lookup(scope, "action")?,
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f66(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "acc", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -4140,10 +4030,8 @@ fn f66(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     } else {
         cx.get(&cx.lookup(scope, "curr")?, &"name")?
     });
-
     Ok(V::Undefined)
 }
-
 fn f64(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -4681,7 +4569,39 @@ fn f64(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::
                         });
                     }
                 }
-                return Err(cx.construct(cx.lookup(scope,"AuthSdkError")?, {let mut argv=Vec::new();argv.push({let mut text=String::new();text.push_str("\n      No remediation can match current flow, check policy settings in your org.\n      Remediations: [");text.push_str(&{let receiver=cx.lookup(scope,"neededToProceed")?;let method="reduce";let function=cx.resolve_method(&receiver,&method)?;let argv={let mut argv=Vec::new();argv.push(cx.arrow(scope,this.clone(),f66));argv.push(V::string(""));argv};cx.call(function,receiver,argv)?}.text());text.push_str("]\n    ");V::string(text)});argv})?);
+                return Err(
+                    cx
+                        .construct(
+                            cx.lookup(scope, "AuthSdkError")?,
+                            {
+                                let mut argv = Vec::new();
+                                argv.push({
+                                    let mut text = String::new();
+                                    text.push_str(
+                                        "\n      No remediation can match current flow, check policy settings in your org.\n      Remediations: [",
+                                    );
+                                    text.push_str(
+                                        &{
+                                            let receiver = cx.lookup(scope, "neededToProceed")?;
+                                            let method = "reduce";
+                                            let function = cx.resolve_method(&receiver, &method)?;
+                                            let argv = {
+                                                let mut argv = Vec::new();
+                                                argv.push(cx.arrow(scope, this.clone(), f66));
+                                                argv.push(V::string(""));
+                                                argv
+                                            };
+                                            cx.call(function, receiver, argv)?
+                                        }
+                                            .text(),
+                                    );
+                                    text.push_str("]\n    ");
+                                    V::string(text)
+                                });
+                                argv
+                            },
+                        )?,
+                );
             }
         }
         if V::Bool(
@@ -4856,7 +4776,6 @@ fn f64(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::
         Ok(V::Undefined)
     })
 }
-
 fn f68(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "entry", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -4881,10 +4800,8 @@ fn f68(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.get(&cx.lookup(scope, "entry")?, &"name")?,
         cx.lookup(scope, "actionName")?,
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f67(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -4926,10 +4843,8 @@ fn f67(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.put(&object, &"actions", cx.lookup(scope, "actions")?)?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f69(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -4944,10 +4859,8 @@ fn f69(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.put(&object, &"resend", cx.lookup(scope, "undefined")?)?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f71(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "item", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -4994,10 +4907,8 @@ fn f71(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f72(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     {
@@ -5011,10 +4922,8 @@ fn f72(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         let value = cx.lookup(scope, "value")?;
         cx.put(&object, &key, value)?
     };
-
     Ok(V::Undefined)
 }
-
 fn f70(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -5234,18 +5143,14 @@ fn f70(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "res")?);
-
     Ok(V::Undefined)
 }
-
 fn f75(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "r", args.get(0).cloned().unwrap_or(V::Undefined));
     return Ok(cx.get(&cx.lookup(scope, "r")?, &"name")?);
-
     Ok(V::Undefined)
 }
-
 fn f73(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -5270,10 +5175,8 @@ fn f73(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             cx.call(function, receiver, argv)?
         }
     });
-
     Ok(V::Undefined)
 }
-
 fn f77(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     {
@@ -5285,10 +5188,8 @@ fn f77(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.lookup(scope, "name")?,
         V::string("authenticator"),
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f76(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -5308,10 +5209,8 @@ fn f76(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f80(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -5337,10 +5236,8 @@ fn f80(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "required")?);
-
     Ok(V::Undefined)
 }
-
 fn f78(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -5369,10 +5266,8 @@ fn f78(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             cx.call(function, receiver, argv)?
         }
     });
-
     Ok(V::Undefined)
 }
-
 fn f81(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -5411,10 +5306,8 @@ fn f81(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             cx.call(function, receiver, argv)?
         },
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f83(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "msg", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -5423,10 +5316,8 @@ fn f83(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.get(&cx.lookup(scope, "msg")?, &"class")?,
         V::string("ERROR"),
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f82(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -5734,7 +5625,6 @@ fn f82(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::
         Ok(V::Undefined)
     })
 }
-
 fn f85(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -5961,7 +5851,6 @@ fn f85(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::
         Ok(V::Undefined)
     })
 }
-
 fn f87(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -6094,7 +5983,6 @@ fn f87(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::
         Ok(V::Undefined)
     })
 }
-
 fn f88(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -6170,7 +6058,6 @@ fn f88(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::
         Ok(V::Undefined)
     })
 }
-
 fn f89(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -6322,10 +6209,8 @@ fn f89(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.put(&object, &"status", cx.lookup(scope, "status")?)?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f93(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -6337,10 +6222,8 @@ fn f93(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         &cx.lookup(scope, "values")?,
         &cx.lookup(scope, "option")?.text(),
     )?;
-
     Ok(V::Undefined)
 }
-
 fn f92(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -6378,10 +6261,8 @@ fn f92(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.call(function, receiver, argv)?
     };
     return Ok(cx.lookup(scope, "values")?);
-
     Ok(V::Undefined)
 }
-
 fn f94(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -6782,7 +6663,6 @@ fn f94(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::
         Ok(V::Undefined)
     })
 }
-
 fn f97(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -6849,7 +6729,6 @@ fn f97(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::
         Ok(V::Undefined)
     })
 }
-
 fn f98(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -6990,7 +6869,6 @@ fn f98(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::
         Ok(V::Undefined)
     })
 }
-
 fn f99(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -7101,10 +6979,8 @@ fn f99(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     };
-
     Ok(V::Undefined)
 }
-
 fn f100(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -7181,10 +7057,8 @@ fn f100(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(V::Bool(true));
-
     Ok(V::Undefined)
 }
-
 fn f101(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -7223,10 +7097,8 @@ fn f101(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(V::Bool(true));
-
     Ok(V::Undefined)
 }
-
 fn f103(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "key", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -7257,10 +7129,8 @@ fn f103(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             return Ok(V::Bool(true));
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f102(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -7283,10 +7153,8 @@ fn f102(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.call(function, receiver, argv)?
     });
     return Ok(V::Bool(!cx.lookup(scope, "mismatch")?.truthy()));
-
     Ok(V::Undefined)
 }
-
 fn f104(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -7312,10 +7180,8 @@ fn f104(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     };
-
     Ok(V::Undefined)
 }
-
 fn f105(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -7335,10 +7201,8 @@ fn f105(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             left
         }
     });
-
     Ok(V::Undefined)
 }
-
 fn f106(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -7351,10 +7215,8 @@ fn f106(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             left
         }
     });
-
     Ok(V::Undefined)
 }
-
 fn f108(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -7373,10 +7235,8 @@ fn f108(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f107(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -7406,10 +7266,8 @@ fn f107(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f110(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     {
@@ -7417,10 +7275,8 @@ fn f110(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.define(scope, "name", cx.get(&binding, &"name")?);
     }
     return Ok(binary("===", cx.lookup(scope, "name")?, V::string("skip"))?);
-
     Ok(V::Undefined)
 }
-
 fn f109(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -7440,10 +7296,8 @@ fn f109(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f112(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "r", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -7452,10 +7306,8 @@ fn f112(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.get(&cx.lookup(scope, "r")?, &"name")?,
         cx.lookup(scope, "remediationName")?,
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f113(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "res", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -7490,10 +7342,8 @@ fn f113(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "res")?);
-
     Ok(V::Undefined)
 }
-
 fn f111(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -7571,10 +7421,8 @@ fn f111(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.call(function, receiver, argv)?
     });
     return Ok(cx.lookup(scope, "valuesForRemediation")?);
-
     Ok(V::Undefined)
 }
-
 fn f115(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "map", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -7600,10 +7448,8 @@ fn f115(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "map")?);
-
     Ok(V::Undefined)
 }
-
 fn f116(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -7640,7 +7486,6 @@ fn f116(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
         Ok(V::Undefined)
     })
 }
-
 fn f118(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "item", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -7649,10 +7494,8 @@ fn f118(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.get(&cx.lookup(scope, "item")?, &"name")?,
         V::string("stateHandle"),
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f114(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -7917,10 +7760,8 @@ fn f114(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "res")?);
-
     Ok(V::Undefined)
 }
-
 fn f120(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     {
@@ -7932,10 +7773,8 @@ fn f120(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.lookup(scope, "name")?,
         V::string("select-enroll-profile"),
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f121(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     {
@@ -7947,10 +7786,8 @@ fn f121(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.lookup(scope, "name")?,
         V::string("redirect-idp"),
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f122(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     {
@@ -7962,10 +7799,8 @@ fn f122(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.lookup(scope, "name")?,
         V::string("unlock-account"),
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f119(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -8094,10 +7929,8 @@ fn f119(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "res")?);
-
     Ok(V::Undefined)
 }
-
 fn f123(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -8127,10 +7960,8 @@ fn f123(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f126(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -8163,10 +7994,8 @@ fn f126(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         values.push(cx.get(&cx.lookup(scope, "option")?, &"value")?);
         cx.array(values)
     })?;
-
     Ok(V::Undefined)
 }
-
 fn f125(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -8266,10 +8095,8 @@ fn f125(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "messages")?);
-
     Ok(V::Undefined)
 }
-
 fn f124(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -8317,10 +8144,8 @@ fn f124(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f129(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -8329,10 +8154,8 @@ fn f129(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         args.get(0).cloned().unwrap_or(V::Undefined),
     );
     return Ok(cx.lookup(scope, "message")?);
-
     Ok(V::Undefined)
 }
-
 fn f130(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -8396,10 +8219,8 @@ fn f130(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.array(values)
     })?;
     return Ok(cx.lookup(scope, "filtered")?);
-
     Ok(V::Undefined)
 }
-
 fn f127(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -8513,10 +8334,8 @@ fn f127(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.call(function, receiver, argv)?
     })?;
     return Ok(cx.lookup(scope, "messages")?);
-
     Ok(V::Undefined)
 }
-
 fn f132(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -8594,10 +8413,8 @@ fn f132(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         })?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f134(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     {
@@ -8609,10 +8426,8 @@ fn f134(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.lookup(scope, "name")?,
         cx.get(&cx.lookup(scope, "options")?, &"step")?,
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f133(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -8836,10 +8651,8 @@ fn f133(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         &cx.lookup(scope, "remediatorCandidates")?,
         &V::Number(0f64).text(),
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f135(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -8878,10 +8691,8 @@ fn f135(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         &cx.lookup(scope, "remediators")?,
         &cx.get(&cx.lookup(scope, "remediation")?, &"name")?.text(),
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f136(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -8992,10 +8803,8 @@ fn f136(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             });
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f137(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -9028,10 +8837,8 @@ fn f137(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             left
         }
     });
-
     Ok(V::Undefined)
 }
-
 fn f139(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -9084,10 +8891,8 @@ fn f139(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         let value = cx.lookup(scope, "options")?;
         cx.put(&object, &key, value)?
     };
-
     Ok(V::Undefined)
 }
-
 fn f140(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -9182,10 +8987,8 @@ fn f140(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             }
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f142(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -9249,7 +9052,11 @@ fn f142(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
                 let function = cx.lookup(scope, "warn")?;
                 let argv = {
                     let mut argv = Vec::new();
-                    argv.push(V::string("a saved auth transaction exists in storage. This may indicate another auth flow is already in progress."));
+                    argv.push(
+                        V::string(
+                            "a saved auth transaction exists in storage. This may indicate another auth flow is already in progress.",
+                        ),
+                    );
                     argv
                 };
                 cx.call(function, V::Undefined, argv)?
@@ -9292,10 +9099,8 @@ fn f142(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             };
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f143(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -9355,10 +9160,8 @@ fn f143(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             }
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f144(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -9461,10 +9264,8 @@ fn f144(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(V::Null);
-
     Ok(V::Undefined)
 }
-
 fn f138(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -9491,10 +9292,8 @@ fn f138(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.put(&prototype, &"load", cx.function(scope, f144))?;
         constructor
     });
-
     Ok(V::Undefined)
 }
-
 fn f145(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -9598,10 +9397,8 @@ fn f145(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "decodedToken")?);
-
     Ok(V::Undefined)
 }
-
 fn f146(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -9641,10 +9438,8 @@ fn f146(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             left
         }
     });
-
     Ok(V::Undefined)
 }
-
 fn f147(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -9756,10 +9551,8 @@ fn f147(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f148(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -9815,20 +9608,111 @@ fn f148(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
             })
             .await;
             if let Err(error) = completion {
-                completion=(async{let scope=cx.scope(Some(scope));cx.define(scope,"err",error);
-{let scope=cx.scope(Some(scope));
-if {let left={let function=cx.lookup(scope,"isDPoPNonceError")?;let argv={let mut argv=Vec::new();argv.push(cx.lookup(scope,"err")?);argv};cx.call(function,V::Undefined,argv)?};if left.truthy(){V::Bool(!cx.lookup(scope,"nonce")?.truthy())}else{left}}.truthy(){{let scope=cx.scope(Some(scope));
-cx.define(scope,"dpopNonce",'chain149:{cx.get(&{let object=cx.get(&cx.lookup(scope,"err")?,&"resp")?;if object.nullish(){break 'chain149 V::Undefined;}cx.get(&object,&"headers")?},&V::string("dpop-nonce").text())?});
-if V::Bool(!cx.lookup(scope,"dpopNonce")?.truthy()).truthy(){{let scope=cx.scope(Some(scope));
-return Err(cx.construct(cx.lookup(scope,"AuthApiError")?, {let mut argv=Vec::new();argv.push({let object=cx.object();cx.put(&object,&"errorSummary", V::string("No `dpop-nonce` header found when required"))?;object});argv.push({let left=cx.get(&cx.lookup(scope,"err")?,&"resp")?;if left.nullish(){cx.lookup(scope,"undefined")?}else{left}});argv})?);
-}
-}
-return Ok(Completion::Return({let function=cx.lookup(scope,"makeTokenRequest")?;let argv={let mut argv=Vec::new();argv.push(cx.lookup(scope,"sdk")?);argv.push({let object=cx.object();cx.put(&object,&"url", cx.lookup(scope,"url")?)?;cx.put(&object,&"data", cx.lookup(scope,"data")?)?;cx.put(&object,&"dpopKeyPair", cx.lookup(scope,"dpopKeyPair")?)?;cx.put(&object,&"nonce", cx.lookup(scope,"dpopNonce")?)?;object});argv};cx.call(function,V::Undefined,argv)?}));
-}
-}
-return Err(cx.lookup(scope,"err")?);
-}
-Ok::<Completion,V>(Completion::Normal)}).await;
+                completion = (async {
+                    let scope = cx.scope(Some(scope));
+                    cx.define(scope, "err", error);
+                    {
+                        let scope = cx.scope(Some(scope));
+                        if {
+                            let left = {
+                                let function = cx.lookup(scope, "isDPoPNonceError")?;
+                                let argv = {
+                                    let mut argv = Vec::new();
+                                    argv.push(cx.lookup(scope, "err")?);
+                                    argv
+                                };
+                                cx.call(function, V::Undefined, argv)?
+                            };
+                            if left.truthy() {
+                                V::Bool(!cx.lookup(scope, "nonce")?.truthy())
+                            } else {
+                                left
+                            }
+                        }
+                            .truthy()
+                        {
+                            {
+                                let scope = cx.scope(Some(scope));
+                                cx.define(
+                                    scope,
+                                    "dpopNonce",
+                                    'chain149: {
+                                        cx.get(
+                                            &{
+                                                let object = cx.get(&cx.lookup(scope, "err")?, &"resp")?;
+                                                if object.nullish() {
+                                                    break 'chain149 V::Undefined;
+                                                }
+                                                cx.get(&object, &"headers")?
+                                            },
+                                            &V::string("dpop-nonce").text(),
+                                        )?
+                                    },
+                                );
+                                if V::Bool(!cx.lookup(scope, "dpopNonce")?.truthy())
+                                    .truthy()
+                                {
+                                    {
+                                        let scope = cx.scope(Some(scope));
+                                        return Err(
+                                            cx
+                                                .construct(
+                                                    cx.lookup(scope, "AuthApiError")?,
+                                                    {
+                                                        let mut argv = Vec::new();
+                                                        argv.push({
+                                                            let object = cx.object();
+                                                            cx.put(
+                                                                &object,
+                                                                &"errorSummary",
+                                                                V::string("No `dpop-nonce` header found when required"),
+                                                            )?;
+                                                            object
+                                                        });
+                                                        argv.push({
+                                                            let left = cx.get(&cx.lookup(scope, "err")?, &"resp")?;
+                                                            if left.nullish() {
+                                                                cx.lookup(scope, "undefined")?
+                                                            } else {
+                                                                left
+                                                            }
+                                                        });
+                                                        argv
+                                                    },
+                                                )?,
+                                        );
+                                    }
+                                }
+                                return Ok(
+                                    Completion::Return({
+                                        let function = cx.lookup(scope, "makeTokenRequest")?;
+                                        let argv = {
+                                            let mut argv = Vec::new();
+                                            argv.push(cx.lookup(scope, "sdk")?);
+                                            argv.push({
+                                                let object = cx.object();
+                                                cx.put(&object, &"url", cx.lookup(scope, "url")?)?;
+                                                cx.put(&object, &"data", cx.lookup(scope, "data")?)?;
+                                                cx.put(
+                                                    &object,
+                                                    &"dpopKeyPair",
+                                                    cx.lookup(scope, "dpopKeyPair")?,
+                                                )?;
+                                                cx.put(&object, &"nonce", cx.lookup(scope, "dpopNonce")?)?;
+                                                object
+                                            });
+                                            argv
+                                        };
+                                        cx.call(function, V::Undefined, argv)?
+                                    }),
+                                );
+                            }
+                        }
+                        return Err(cx.lookup(scope, "err")?);
+                    }
+                    Ok::<Completion, V>(Completion::Normal)
+                })
+                    .await;
             }
             match completion? {
                 Completion::Normal => {}
@@ -9846,7 +9730,6 @@ Ok::<Completion,V>(Completion::Normal)}).await;
         Ok(V::Undefined)
     })
 }
-
 fn f151(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -9868,10 +9751,8 @@ fn f151(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             cx.call(function, V::Undefined, argv)?
         },
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f150(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -10022,7 +9903,6 @@ fn f150(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
         Ok(V::Undefined)
     })
 }
-
 fn f153(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -10086,7 +9966,6 @@ fn f153(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
         Ok(V::Undefined)
     })
 }
-
 fn f155(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -10159,13 +10038,25 @@ fn f155(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     {
         {
             let scope = cx.scope(Some(scope));
-            return Err(cx.construct(cx.lookup(scope,"AuthSdkError")?, {let mut argv=Vec::new();argv.push(V::string("The \"codeVerifier\" (generated and saved by your app) must be passed to /token"));argv})?);
+            return Err(
+                cx
+                    .construct(
+                        cx.lookup(scope, "AuthSdkError")?,
+                        {
+                            let mut argv = Vec::new();
+                            argv.push(
+                                V::string(
+                                    "The \"codeVerifier\" (generated and saved by your app) must be passed to /token",
+                                ),
+                            );
+                            argv
+                        },
+                    )?,
+            );
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f158(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -10199,10 +10090,8 @@ fn f158(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         )?);
         argv
     })?);
-
     Ok(V::Undefined)
 }
-
 fn f157(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -10327,10 +10216,8 @@ fn f157(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f156(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -10372,10 +10259,8 @@ fn f156(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f159(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -10412,10 +10297,8 @@ fn f159(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f160(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -10664,7 +10547,6 @@ fn f160(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
         Ok(V::Undefined)
     })
 }
-
 fn f162(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -10780,10 +10662,8 @@ fn f162(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Err(cx.lookup(scope, "err")?);
-
     Ok(V::Undefined)
 }
-
 fn f164(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -10823,10 +10703,8 @@ fn f164(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f161(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -11017,7 +10895,6 @@ fn f161(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
         Ok(V::Undefined)
     })
 }
-
 fn f165(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -11271,7 +11148,21 @@ fn f165(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
                 {
                     {
                         let scope = cx.scope(Some(scope));
-                        return Err(cx.construct(cx.lookup(scope,"AuthSdkError")?, {let mut argv=Vec::new();argv.push(V::string("Unable to parse OAuth flow response: DPoP was configured but \"token_type\" was not DPoP"));argv})?);
+                        return Err(
+                            cx
+                                .construct(
+                                    cx.lookup(scope, "AuthSdkError")?,
+                                    {
+                                        let mut argv = Vec::new();
+                                        argv.push(
+                                            V::string(
+                                                "Unable to parse OAuth flow response: DPoP was configured but \"token_type\" was not DPoP",
+                                            ),
+                                        );
+                                        argv
+                                    },
+                                )?,
+                        );
                     }
                 }
             }
@@ -11662,7 +11553,21 @@ fn f165(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
         {
             {
                 let scope = cx.scope(Some(scope));
-                return Err(cx.construct(cx.lookup(scope,"AuthSdkError")?, {let mut argv=Vec::new();argv.push(V::string("Unable to parse OAuth flow response: response type \"token\" was requested but \"access_token\" was not returned."));argv})?);
+                return Err(
+                    cx
+                        .construct(
+                            cx.lookup(scope, "AuthSdkError")?,
+                            {
+                                let mut argv = Vec::new();
+                                argv.push(
+                                    V::string(
+                                        "Unable to parse OAuth flow response: response type \"token\" was requested but \"access_token\" was not returned.",
+                                    ),
+                                );
+                                argv
+                            },
+                        )?,
+                );
             }
         }
         if {
@@ -11694,7 +11599,21 @@ fn f165(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
         {
             {
                 let scope = cx.scope(Some(scope));
-                return Err(cx.construct(cx.lookup(scope,"AuthSdkError")?, {let mut argv=Vec::new();argv.push(V::string("Unable to parse OAuth flow response: response type \"id_token\" was requested but \"id_token\" was not returned."));argv})?);
+                return Err(
+                    cx
+                        .construct(
+                            cx.lookup(scope, "AuthSdkError")?,
+                            {
+                                let mut argv = Vec::new();
+                                argv.push(
+                                    V::string(
+                                        "Unable to parse OAuth flow response: response type \"id_token\" was requested but \"id_token\" was not returned.",
+                                    ),
+                                );
+                                argv
+                            },
+                        )?,
+                );
             }
         }
         return Ok({
@@ -11716,7 +11635,6 @@ fn f165(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
         Ok(V::Undefined)
     })
 }
-
 fn f167(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -11770,10 +11688,8 @@ fn f167(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             })?);
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f168(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -11997,7 +11913,6 @@ fn f168(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
         Ok(V::Undefined)
     })
 }
-
 fn f169(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -12059,7 +11974,21 @@ fn f169(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
         if V::Bool(!cx.lookup(scope, "clientId")?.truthy()).truthy() {
             {
                 let scope = cx.scope(Some(scope));
-                return Err(cx.construct(cx.lookup(scope,"AuthSdkError")?, {let mut argv=Vec::new();argv.push(V::string("A clientId must be specified in the OktaAuth constructor to revoke a token"));argv})?);
+                return Err(
+                    cx
+                        .construct(
+                            cx.lookup(scope, "AuthSdkError")?,
+                            {
+                                let mut argv = Vec::new();
+                                argv.push(
+                                    V::string(
+                                        "A clientId must be specified in the OktaAuth constructor to revoke a token",
+                                    ),
+                                );
+                                argv
+                            },
+                        )?,
+                );
             }
         }
         cx.define(
@@ -12182,7 +12111,6 @@ fn f169(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
         Ok(V::Undefined)
     })
 }
-
 fn f170(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -12195,10 +12123,8 @@ fn f170(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             left
         }
     });
-
     Ok(V::Undefined)
 }
-
 fn f171(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -12211,10 +12137,8 @@ fn f171(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             left
         }
     });
-
     Ok(V::Undefined)
 }
-
 fn f173(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "value", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -12223,10 +12147,8 @@ fn f173(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         V::string(cx.lookup(scope, "value")?.typeof_()),
         V::string("string"),
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f172(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -12280,10 +12202,8 @@ fn f172(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         )?,
     );
     return Ok(cx.lookup(scope, "isAllStringValues")?);
-
     Ok(V::Undefined)
 }
-
 fn f174(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -12319,10 +12239,8 @@ fn f174(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             )
         }
     });
-
     Ok(V::Undefined)
 }
-
 fn f175(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -12371,10 +12289,8 @@ fn f175(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(V::Bool(true));
-
     Ok(V::Undefined)
 }
-
 fn f176(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -12411,10 +12327,8 @@ fn f176(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(V::Bool(false));
-
     Ok(V::Undefined)
 }
-
 fn f177(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -12518,10 +12432,8 @@ fn f177(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f178(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -12557,10 +12469,8 @@ fn f178(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             left
         }
     });
-
     Ok(V::Undefined)
 }
-
 fn f179(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -12573,10 +12483,8 @@ fn f179(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f180(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -12589,10 +12497,8 @@ fn f180(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f181(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -12626,10 +12532,8 @@ fn f181(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     });
     return Ok(cx.lookup(scope, "issuer")?);
-
     Ok(V::Undefined)
 }
-
 fn f182(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -12682,10 +12586,8 @@ fn f182(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         },
     );
     return Ok(cx.lookup(scope, "baseUrl")?);
-
     Ok(V::Undefined)
 }
-
 fn f183(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -12731,10 +12633,8 @@ fn f183(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         )?,
     );
     return Ok(cx.lookup(scope, "domain")?);
-
     Ok(V::Undefined)
 }
-
 fn f184(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -12939,10 +12839,8 @@ fn f184(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.put(&object, &"logoutUrl", cx.lookup(scope, "logoutUrl")?)?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f185(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -13056,10 +12954,8 @@ fn f185(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         object
     });
     return Ok(cx.lookup(scope, "pkceMeta")?);
-
     Ok(V::Undefined)
 }
-
 fn f187(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -13094,10 +12990,8 @@ fn f187(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.call(function, V::Undefined, argv)?
     });
     return Ok(cx.lookup(scope, "b64u")?);
-
     Ok(V::Undefined)
 }
-
 fn f186(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -13138,10 +13032,8 @@ fn f186(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f188(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -13167,10 +13059,8 @@ fn f188(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f189(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -13235,10 +13125,8 @@ fn f189(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f190(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -13311,10 +13199,8 @@ fn f190(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f191(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -13336,7 +13222,13 @@ fn f191(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     {
         {
             let scope = cx.scope(Some(scope));
-            cx.define(scope,"errorMessage",V::string("PKCE requires a modern browser with encryption support running in a secure context."));
+            cx.define(
+                scope,
+                "errorMessage",
+                V::string(
+                    "PKCE requires a modern browser with encryption support running in a secure context.",
+                ),
+            );
             if V::Bool(
                 !{
                     let receiver = cx.get(&cx.lookup(scope, "sdk")?, &"features")?;
@@ -13354,7 +13246,18 @@ fn f191(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             {
                 {
                     let scope = cx.scope(Some(scope));
-                    let _=cx.assign(scope,"errorMessage", binary("+", cx.lookup(scope,"errorMessage")?, V::string("\nThe current page is not being served with HTTPS protocol. PKCE requires secure HTTPS protocol."))?)?;
+                    let _ = cx
+                        .assign(
+                            scope,
+                            "errorMessage",
+                            binary(
+                                "+",
+                                cx.lookup(scope, "errorMessage")?,
+                                V::string(
+                                    "\nThe current page is not being served with HTTPS protocol. PKCE requires secure HTTPS protocol.",
+                                ),
+                            )?,
+                        )?;
                 }
             }
             if V::Bool(
@@ -13374,7 +13277,18 @@ fn f191(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             {
                 {
                     let scope = cx.scope(Some(scope));
-                    let _=cx.assign(scope,"errorMessage", binary("+", cx.lookup(scope,"errorMessage")?, V::string("\n\"TextEncoder\" is not defined. To use PKCE, you may need to include a polyfill/shim for this browser."))?)?;
+                    let _ = cx
+                        .assign(
+                            scope,
+                            "errorMessage",
+                            binary(
+                                "+",
+                                cx.lookup(scope, "errorMessage")?,
+                                V::string(
+                                    "\n\"TextEncoder\" is not defined. To use PKCE, you may need to include a polyfill/shim for this browser.",
+                                ),
+                            )?,
+                        )?;
                 }
             }
             return Err(cx.construct(cx.lookup(scope, "AuthSdkError")?, {
@@ -13384,10 +13298,8 @@ fn f191(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             })?);
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f192(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -13503,7 +13415,6 @@ fn f192(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
         Ok(V::Undefined)
     })
 }
-
 fn f193(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -13595,7 +13506,6 @@ fn f193(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
         Ok(V::Undefined)
     })
 }
-
 fn f194(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -13683,7 +13593,6 @@ fn f194(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
         Ok(V::Undefined)
     })
 }
-
 fn f195(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -13694,10 +13603,8 @@ fn f195(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.get(&cx.lookup(scope, "a")?, &"refreshToken")?,
         cx.get(&cx.lookup(scope, "b")?, &"refreshToken")?,
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f196(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -13742,10 +13649,8 @@ fn f196(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     };
-
     Ok(V::Undefined)
 }
-
 fn f197(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -13814,10 +13719,8 @@ fn f197(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(V::Null);
-
     Ok(V::Undefined)
 }
-
 fn f199(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "state", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -13862,10 +13765,8 @@ fn f199(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             )?;
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f198(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -13926,10 +13827,8 @@ fn f198(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     };
-
     Ok(V::Undefined)
 }
-
 fn f200(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -13991,10 +13890,8 @@ fn f200(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     };
-
     Ok(V::Undefined)
 }
-
 fn f201(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -14213,10 +14110,8 @@ fn f201(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "obj")?);
-
     Ok(V::Undefined)
 }
-
 fn f202(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -14576,10 +14471,8 @@ fn f202(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             }
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f203(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -14828,35 +14721,26 @@ fn f203(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
         Ok(V::Undefined)
     })
 }
-
 fn f206(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
-
     Ok(V::Undefined)
 }
-
 fn f207(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
-
     Ok(V::Undefined)
 }
-
 fn f208(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
-
     Ok(V::Undefined)
 }
-
 fn f209(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
-
     Ok(V::Undefined)
 }
-
 fn f205(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -14891,10 +14775,8 @@ fn f205(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.put(&object, &"groupEnd", cx.function(scope, f209))?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f210(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -14915,10 +14797,8 @@ fn f210(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             return Ok(cx.lookup(scope, "undefined")?);
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f211(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -14945,10 +14825,8 @@ fn f211(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     };
-
     Ok(V::Undefined)
 }
-
 fn f212(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -15116,10 +14994,8 @@ fn f212(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         &cx.lookup(scope, "curr")?,
         &cx.lookup(scope, "lastStep")?.text(),
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f215(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -15198,10 +15074,8 @@ fn f215(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "random")?);
-
     Ok(V::Undefined)
 }
-
 fn f216(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -15245,10 +15119,8 @@ fn f216(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         });
         cx.array(values)
     });
-
     Ok(V::Undefined)
 }
-
 fn f217(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -15286,10 +15158,8 @@ fn f217(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "obj")?);
-
     Ok(V::Undefined)
 }
-
 fn f218(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -15385,10 +15255,8 @@ fn f218(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             }
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f219(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -15455,10 +15323,8 @@ fn f219(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "cleaned")?);
-
     Ok(V::Undefined)
 }
-
 fn f220(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -15491,10 +15357,8 @@ fn f220(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             left
         }
     });
-
     Ok(V::Undefined)
 }
-
 fn f221(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -15517,10 +15381,8 @@ fn f221(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         },
         V::string("[object String]"),
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f222(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -15536,10 +15398,8 @@ fn f222(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f223(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -15575,10 +15435,8 @@ fn f223(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.call(function, receiver, argv)?
     })?;
     return Ok(cx.lookup(scope, "trimmed")?);
-
     Ok(V::Undefined)
 }
-
 fn f224(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -15696,10 +15554,8 @@ fn f224(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             return Ok(V::string(""));
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f225(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -15725,10 +15581,8 @@ fn f225(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     };
-
     Ok(V::Undefined)
 }
-
 fn f226(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -15803,10 +15657,8 @@ fn f226(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             };
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f227(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -15867,10 +15719,8 @@ fn f227(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             };
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f228(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -15937,10 +15787,8 @@ fn f228(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             };
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f229(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -16002,58 +15850,44 @@ fn f229(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             };
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f230(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
     return Ok(cx.get(&cx.get(&this.clone(), &"parameters")?, &"error")?);
-
     Ok(V::Undefined)
 }
-
 fn f231(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
     return Ok(cx.get(&this.clone(), &"error")?);
-
     Ok(V::Undefined)
 }
-
 fn f232(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
     return Ok(cx.get(&cx.get(&this.clone(), &"parameters")?, &"error_description")?);
-
     Ok(V::Undefined)
 }
-
 fn f233(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
     return Ok(cx.get(&this.clone(), &"error_description")?);
-
     Ok(V::Undefined)
 }
-
 fn f234(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
     return Ok(cx.get(&this.clone(), &"errorDescription")?);
-
     Ok(V::Undefined)
 }
-
 fn f235(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
     return Ok(cx.get(&cx.get(&this.clone(), &"parameters")?, &"realm")?);
-
     Ok(V::Undefined)
 }
-
 fn f236(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -16068,7 +15902,15 @@ fn f236(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             return Ok(V::Null);
         }
     }
-    cx.define(scope,"regex",cx.regexp("(?:,|, )?([a-zA-Z0-9!#$%&'*+\\-.^_`|~]+)=(?:\"([a-zA-Z0-9!#$%&'*+\\-.,^_`|~ /:]+)\"|([a-zA-Z0-9!#$%&'*+\\-.^_`|~/:]+))", "g")?);
+    cx.define(
+        scope,
+        "regex",
+        cx
+            .regexp(
+                "(?:,|, )?([a-zA-Z0-9!#$%&'*+\\-.^_`|~]+)=(?:\"([a-zA-Z0-9!#$%&'*+\\-.,^_`|~ /:]+)\"|([a-zA-Z0-9!#$%&'*+\\-.^_`|~/:]+))",
+                "g",
+            )?,
+    );
     cx.define(scope, "firstSpace", {
         let receiver = cx.lookup(scope, "header")?;
         let method = "indexOf";
@@ -16154,10 +15996,8 @@ fn f236(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         argv.push(cx.lookup(scope, "params")?);
         argv
     })?);
-
     Ok(V::Undefined)
 }
-
 fn f237(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -16221,10 +16061,8 @@ fn f237(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             left
         }
     });
-
     Ok(V::Undefined)
 }
-
 fn f239(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "sdk", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -16621,10 +16459,8 @@ fn f239(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "err")?);
-
     Ok(V::Undefined)
 }
-
 fn f245(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -16659,10 +16495,8 @@ fn f245(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         let value = cx.lookup(scope, "otp")?;
         cx.put(&object, &key, value)?
     };
-
     Ok(V::Undefined)
 }
-
 fn f246(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -16704,10 +16538,8 @@ fn f246(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             })?);
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f248(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -16717,10 +16549,8 @@ fn f248(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.get(&cx.lookup(scope, "field")?, &"mutable")?,
         V::Bool(false),
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f249(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -16865,10 +16695,8 @@ fn f249(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         )?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f250(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -16985,10 +16813,8 @@ fn f250(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         )?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f252(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -17289,7 +17115,6 @@ fn f252(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
         Ok(V::Undefined)
     })
 }
-
 fn f251(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -17348,10 +17173,8 @@ fn f251(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.get(&cx.lookup(scope, "actionDefinition")?, &"href")?,
     );
     return Ok(cx.async_function(scope, f252));
-
     Ok(V::Undefined)
 }
-
 fn f256(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -17433,10 +17256,8 @@ fn f256(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.put(&object, &key, value)?
     };
     return Ok(cx.lookup(scope, "action")?);
-
     Ok(V::Undefined)
 }
-
 fn f258(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "obj", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -17465,10 +17286,8 @@ fn f258(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         )?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f257(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -17509,10 +17328,8 @@ fn f257(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f259(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -17565,10 +17382,8 @@ fn f259(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "remediation")?);
-
     Ok(V::Undefined)
 }
-
 fn f262(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -17586,10 +17401,8 @@ fn f262(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f261(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "k", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -17705,10 +17518,8 @@ fn f261(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             };
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f260(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -17738,10 +17549,8 @@ fn f260(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     };
-
     Ok(V::Undefined)
 }
-
 fn f265(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     {
@@ -17805,10 +17614,8 @@ fn f265(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             };
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f264(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "field", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -17968,10 +17775,8 @@ fn f264(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     };
-
     Ok(V::Undefined)
 }
-
 fn f266(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "field", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -17982,10 +17787,8 @@ fn f266(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         )?
         .truthy(),
     ));
-
     Ok(V::Undefined)
 }
-
 fn f263(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -18056,10 +17859,8 @@ fn f263(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.put(&object, &"actions", cx.lookup(scope, "actions")?)?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f269(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -18133,10 +17934,8 @@ fn f269(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f272(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -18155,10 +17954,8 @@ fn f272(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f267(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -18247,10 +18044,8 @@ fn f267(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.put(&object, &"actions", cx.lookup(scope, "actions")?)?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f273(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -18319,10 +18114,8 @@ fn f273(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         let value = cx.lookup(scope, "remediation")?;
         cx.put(&object, &key, value)?
     };
-
     Ok(V::Undefined)
 }
-
 fn f275(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -18339,10 +18132,8 @@ fn f275(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f276(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -18360,10 +18151,8 @@ fn f276(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, V::Undefined, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f277(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "acc", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -18419,10 +18208,8 @@ fn f277(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "acc")?);
-
     Ok(V::Undefined)
 }
-
 fn f274(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -18530,18 +18317,14 @@ fn f274(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.put(&object, &key, value)?
     };
-
     Ok(V::Undefined)
 }
-
 fn f278(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
     return Ok(cx.get(&cx.get(&this.clone(), &"remediation")?, &"name")?);
-
     Ok(V::Undefined)
 }
-
 fn f280(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "key", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -18559,10 +18342,8 @@ fn f280(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
         .truthy(),
     ));
-
     Ok(V::Undefined)
 }
-
 fn f279(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -18598,10 +18379,8 @@ fn f279(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(V::Bool(true));
-
     Ok(V::Undefined)
 }
-
 fn f282(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "data", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -18623,10 +18402,8 @@ fn f282(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.put(&object, &key, value)?
     };
     return Ok(cx.lookup(scope, "data")?);
-
     Ok(V::Undefined)
 }
-
 fn f283(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     {
@@ -18638,10 +18415,8 @@ fn f283(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.lookup(scope, "name")?,
         cx.lookup(scope, "key")?,
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f281(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -18831,10 +18606,8 @@ fn f281(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         &cx.get(&this.clone(), &"values")?,
         &cx.lookup(scope, "key")?.text(),
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f284(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -18856,10 +18629,8 @@ fn f284(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         )
         .truthy(),
     ));
-
     Ok(V::Undefined)
 }
-
 fn f285(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -18946,10 +18717,8 @@ fn f285(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         })?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f289(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "name", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -18974,10 +18743,8 @@ fn f289(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f290(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "i", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -18992,10 +18759,8 @@ fn f290(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f288(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -19208,10 +18973,8 @@ fn f288(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             };
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f287(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -19242,10 +19005,8 @@ fn f287(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.call(function, receiver, argv)?
     };
     return Ok(cx.lookup(scope, "inputs")?);
-
     Ok(V::Undefined)
 }
-
 fn f293(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -19268,10 +19029,8 @@ fn f293(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "messages")?);
-
     Ok(V::Undefined)
 }
-
 fn f291(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -19323,10 +19082,8 @@ fn f291(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             cx.call(function, receiver, argv)?
         }
     });
-
     Ok(V::Undefined)
 }
-
 fn f294(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -19369,10 +19126,8 @@ fn f294(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.get(&this.clone(), &"values")?);
-
     Ok(V::Undefined)
 }
-
 fn f297(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     {
@@ -19380,10 +19135,8 @@ fn f297(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.define(scope, "name", cx.get(&binding, &"name")?);
     }
     return Ok(binary("===", cx.lookup(scope, "name")?, V::string("id"))?);
-
     Ok(V::Undefined)
 }
-
 fn f299(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     {
@@ -19395,10 +19148,8 @@ fn f299(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.lookup(scope, "name")?,
         V::string("enrollmentId"),
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f295(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -19482,10 +19233,8 @@ fn f295(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.put(&object, &"enrollmentId", cx.lookup(scope, "enrollmentId")?)?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f300(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -19499,10 +19248,8 @@ fn f300(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         argv.extend(cx.items(&cx.lookup(scope, "args")?)?);
         argv
     })?;
-
     Ok(V::Undefined)
 }
-
 fn f301(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -19560,10 +19307,8 @@ fn f301(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(V::Bool(false));
-
     Ok(V::Undefined)
 }
-
 fn f303(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "acc", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -19581,10 +19326,8 @@ fn f303(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.put(&object, &key, value)?
     };
     return Ok(cx.lookup(scope, "acc")?);
-
     Ok(V::Undefined)
 }
-
 fn f302(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -19613,10 +19356,8 @@ fn f302(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.call(function, receiver, argv)?
     });
     return Ok(cx.lookup(scope, "data")?);
-
     Ok(V::Undefined)
 }
-
 fn f305(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime::JFuture {
     Box::pin(async move {
         let cx = &engine;
@@ -19645,7 +19386,6 @@ fn f305(engine: Engine, parent: usize, this: V, args: Vec<V>) -> crate::runtime:
         Ok(V::Undefined)
     })
 }
-
 fn f304(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -19740,10 +19480,8 @@ fn f304(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.spread(&object, &cx.get(&this.clone(), &"remediation")?)?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f307(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "input", args.get(0).cloned().unwrap_or(V::Undefined));
@@ -19761,10 +19499,8 @@ fn f307(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.put(&object, &key, value)?
     };
     return Ok(cx.lookup(scope, "input")?);
-
     Ok(V::Undefined)
 }
-
 fn f308(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     {
@@ -19776,10 +19512,8 @@ fn f308(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.lookup(scope, "name")?,
         V::string("stateHandle"),
     )?);
-
     Ok(V::Undefined)
 }
-
 fn f306(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -19824,10 +19558,8 @@ fn f306(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         };
         cx.call(function, receiver, argv)?
     });
-
     Ok(V::Undefined)
 }
-
 fn f309(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(scope, "arguments", cx.array(args.clone()));
@@ -19853,10 +19585,8 @@ fn f309(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         })?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f311(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -19939,10 +19669,8 @@ fn f311(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
             };
         }
     }
-
     Ok(V::Undefined)
 }
-
 fn f310(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     {
@@ -19973,10 +19701,8 @@ fn f310(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         cx.call(function, receiver, argv)?
     };
     return Ok(cx.lookup(scope, "credentials")?);
-
     Ok(V::Undefined)
 }
-
 fn f313(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -20086,10 +19812,8 @@ fn f313(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         })?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f314(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -20165,10 +19889,8 @@ fn f314(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         })?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f315(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -20229,10 +19951,8 @@ fn f315(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         )?;
         object
     });
-
     Ok(V::Undefined)
 }
-
 fn f316(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
     let scope = cx.scope(Some(parent));
     cx.define(
@@ -20318,10 +20038,8 @@ fn f316(cx: &Engine, parent: usize, this: V, args: Vec<V>) -> JResult {
         }
     }
     return Ok(cx.lookup(scope, "result")?);
-
     Ok(V::Undefined)
 }
-
 pub fn initialize(cx: &Engine) -> Result<std::collections::BTreeMap<String, V>, V> {
     let this = V::Undefined;
     let scopes: Vec<_> = (0..132).map(|_| cx.scope(None)).collect();

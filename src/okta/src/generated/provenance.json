@@ -808,8 +808,8 @@
     "lib/util/url.ts::toAbsoluteUrl",
     "lib/util/url.ts::toRelativeUrl"
   ],
-  "compiler_sha256": "32a4ffea706d5557da3b47ca53bb39d97e4aab2ca4289f0198487961e6b74faa",
+  "compiler_sha256": "d85d3fa2eb77f9797d22578de2cf22d2e230b30c574a8e4cd73cff819eecfaa0",
   "native_support_sha256": "54b4fb6d32b0d16500cc03da58fa07a3092007ab915bda3b3015b3aa1d46d3ee",
   "rustfmt_version": "rustfmt 1.9.0",
-  "generated_sha256": "7b851fdef40190b8f16efa684903bcb26e133a3bb5c5d2f6d926e94ede13a53e"
+  "generated_sha256": "53250f4f946df175f376c00c978d9d0822a6bb98046d210bfa46a5e41af7ee0c"
 }
