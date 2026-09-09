@@ -25,7 +25,7 @@ Classic Authentication API flows, DPoP, browser popup/iframe behavior, and Auth 
 
 ## Requirements
 
-- Rust 1.85 or newer
+- Rust 1.88 or newer
 - An Okta Identity Engine organization
 - A public OIDC application and its client ID
 - The Interaction Code grant enabled for the organization, application, and any custom authorization server being used
@@ -63,7 +63,7 @@ serde_json = "1"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 ```
 
-The repository's `rust-toolchain.toml` selects Rust 1.85 automatically. Build the library with:
+The repository's `rust-toolchain.toml` selects Rust 1.88 automatically. Build the library with:
 
 ```sh
 cargo build --locked -p okta-auth-rs
@@ -430,7 +430,7 @@ Public errors are intentionally coarse and do not include credentials or server 
 ## Build and test the repository
 
 The root Makefile provides maintenance shortcuts. Run `make help` to list
-all targets. Rust commands require Cargo and the pinned Rust 1.85 toolchain with
+all targets. Rust commands require Cargo and the pinned Rust 1.88 toolchain with
 rustfmt; the underlying Cargo commands can also be used directly. The test and
 parity targets check generated-output reproducibility and Rust formatting before
 running tests.
@@ -443,7 +443,7 @@ make test                # Workspace tests with default features
 make test-hsm            # Library tests with HSM support
 ```
 
-Run the normal Rust 1.85 checks with:
+Run the normal Rust 1.88 checks with:
 
 ```sh
 cargo run --locked -p okta-translator -- check
